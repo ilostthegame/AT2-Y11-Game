@@ -90,28 +90,31 @@ class Character(ActiveEntity):
         Increases character's experience, and increases levels accordingly. Subtracts used experience.
         Runs stat increase method based on levels gained.
         """
+        original_level = self.getLevel()
         self.setExperiencePoints(self.getExperiencePoints() + experience)  # Increase character's experience points
         required_experience = self.calcRequiredExperience() # Calculate experience required for next level
 
         # Level up character while character has enough experience to level up and is below the level cap.
         while self.getExperiencePoints() >= required_experience and self.getLevel() < self.MAX_LEVEL:
-            self.setLevel(self.getLevel() + 1) # Level up the character if sufficient experience.
-            self.setExperiencePoints(self.getExperiencePoints() - required_experience) # Decrease character's experience points based on those used.
+            self.setLevel(self.getLevel() + 1)
+            self.setExperiencePoints(self.getExperiencePoints() - required_experience) # subtract used experience points.
             required_experience = self.calcRequiredExperience() # Re-calculate experience required for next level
 
-        self.updateStats() # TODO have it also print out stat gains. If stat gains are more than 1, then print.
-        print(f"Level up! {self.getName()} is now level {self.getLevel()}.")
+        # Update attack/defence and if levelled up, prints levelup info.
+        level_increase = self.updateStats(original_level)
+        # TODO
 
-    def updateStats(self):
+
+    def updateStats(self, original_level):
         """
-        Updates attack, defence based on level. Formula: 25 + 2 * level
-        Returns tuple: (increase in attack, increase in defence)
+        Updates attack, defence based on change in level. Adds 2 per level. Returns tuple (level_increase, attack_increase, defence_increase)
         """
-        original_attack = self.getAttack()
-        original_defence = self.getDefence()
-        self.setAttack(25 + 2 * self.getLevel())
-        self.setDefence(25 + 2 * self.getLevel())
-        return (self.getAttack() - original_attack, self.getDefence() - original_defence) # returns (gain in attack, gain in defence)
+        level_increase = self.getLeve() - original_level
+        attack_increase = level_increase * 2
+        defence_increase = level_increase * 2
+        self.setAttack(self.getAttack() + attack_increase)
+        self.setDefence(self.getDefence() + defence_increase)
+        return (level_increase, attack_increase, defence_increase)
 
     def calcRequiredExperience(self):
         """
@@ -124,3 +127,4 @@ class Character(ActiveEntity):
         Returns character info
         """
         # TODO maybe this can just be generalised??? idk it's only useful for saving so do it later.
+        pass

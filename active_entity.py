@@ -23,12 +23,9 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         healthbar (Healthbar): Healthbar of entity
 
     Methods:
-        updateSurf(self): Blits the character image, healthbar and weapon onto the entity's surface.
+        updateSurf(self): Blits the character image, healthbar and weapon onto the entity's Surface.
         updatePos(self): Changes position of Rect according to xcoord, ycoord
         getInfo(self) @abstractmethod: Returns the info of entity for saving. TODO might not even be needed with pickling.
-        takeDamage(self, amount): Changes health according to defence and damage.
-        updateHealthbar(self): Updates healthbar position and its health display. To be run whenever 
-        updateScreenPosition(self): Updates the position of 
 
     """
 
@@ -162,19 +159,22 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
     # Methods
     def updateSurf(self):
         """
-        Blits the character image, healthbar and weapon onto the entity's surface.
+        Blits the character image, healthbar and weapon onto the entity's Surface.
         """
         surf = self.getSurf()
         surf.fill((0,0,0,0))
         surf.blit(self.getImage(), (0,0))
         surf.blit(self.getHealthbar().getSurf(), (0, 48))
         # surf.blit(self.getWeapon().getSurf(), (0,0))
+        self.setSurf(surf)
     
     def updatePos(self):
         """
         Changes position of Rect according to xcoord, ycoord
         """
-        self.getRect().topleft = (self.getXcoord() * 64, self.getYcoord() * 64)
+        rect = self.getRect()
+        rect.topleft = (self.getXcoord() * 64, self.getYcoord() * 64)
+        self.setRect(rect)
 
     @abstractmethod
     def getInfo(self):
@@ -182,16 +182,3 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         Returns entity info.
         """
         pass
-
-    def takeDamage(self, amount): # amount = raw damage
-        """
-        Calculate the actual damage taken, taking into account the entity's defence.
-        Then subtract from entity's hitpoint.
-        """
-        actual_damage = max(0, amount - self.defence) # TODO change formula
-        self.setHealth(self.getHealth() - actual_damage)
-        if self.getHealth() <= 0:
-            self.setIsAlive(False)
-            print(f"{self.getName()} takes {actual_damage} damage and has been defeated!")
-        else:
-            print(f"{self.getName()} takes {actual_damage} damage. Remaining health: {self.getHealth()}/{self.getMaxHealth()}")
