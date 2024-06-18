@@ -1,27 +1,36 @@
 import pygame
+from pygame.locals import *
 
 class Button(pygame.sprite.Sprite):
     """
     Class for a generalised button
-    TO USE: if event.type == pygame.MOUSEBUTTONDOWN, and event.button == 1, then return output
+    TO USE: 
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if [Button object].getRect().collidepoint(mouse_pos): 
+                THEN INTERPRET [Button object].getOutput()
+        elif event.type == pygame.KEYDOWN:
+            if event.unicode == [Button object].getConnectedKey().lower() or event.unicode == [Button object].getConnectedKey().upper():
+                THEN INTERPRET [Button object].getOutput()
     
     Attributes:
         surf (pygame.Surface): Surface for the button.
         rect (pygame.Rect): Rectangle underlying the button.
         text (str): What the button says on it
+        font_size (int): Font size of text on button
         colour (tuple[int, int, int]): Colour of button
         output (str): What the button should return when activated (clicked/connected_key pressed)
         centre_coords (tuple[int, int]): Coordinates of the centre of button
-        connected_key (str): Key that when pressed should activate the button.
+        connected_key (str): Key that when pressed activates button. May be None.
 
     Methods:
-        initialiseButtonSurf(self): Blits the button text onto its surface.
+        initialiseButtonSurf(self): Positions, colours and writes text onto button surface
     """
 
     # Attributes
     __surf = None
     __rect = None
     __text = None
+    __font_size = None
     __colour = None
     __output = None
     __centre_coords = None
@@ -29,21 +38,22 @@ class Button(pygame.sprite.Sprite):
 
     # Constructor
     def __init__(self, 
-                 surf: pygame.Surface, 
-                 text: str,
-                 colour: tuple[int, int, int], 
-                 output: str, 
-                 centre_coords: tuple[int, int], 
-                 connected_key: str = None):
+                surf: pygame.Surface, 
+                text: str,
+                font_size: int,
+                colour: tuple[int, int, int], 
+                output: str, 
+                centre_coords: tuple[int, int], 
+                connected_key: str = None):
         super().__init__()
         self.setSurf(surf)
         self.setRect(self.getSurf().get_rect())
         self.setText(text)
+        self.setFontSize(font_size)
         self.setColour(colour)
         self.setOutput(output)
         self.setCentreCoords(centre_coords)
         self.setConnectedKey(connected_key)
-
         self.initialiseButtonSurf()
 
     # Getters
@@ -53,6 +63,8 @@ class Button(pygame.sprite.Sprite):
         return self.__rect
     def getText(self):
         return self.__text
+    def getFontSize(self):
+        return self.__font_size
     def getColour(self):
         return self.__colour
     def getOutput(self):
@@ -69,6 +81,8 @@ class Button(pygame.sprite.Sprite):
         self.__rect = rect
     def setText(self, text):
         self.__text = text
+    def setFontSize(self, font_size):
+        self.__font_size = font_size
     def setColour(self, colour):
         self.__colour = colour
     def setOutput(self, output):
@@ -78,9 +92,30 @@ class Button(pygame.sprite.Sprite):
     def setConnectedKey(self, connected_key):
         self.__connected_key = connected_key
 
+
     # Methods
     def initialiseButtonSurf(self):
         """
-        
+        Positions, colours and writes text onto button surface
         """
+        button_surf = self.getSurf()
+        button_rect = self.getRect()
 
+        # Change position of button surf, and fill it specified colour
+        button_rect.center = self.getCentreCoords()
+        button_surf.fill((self.getColour()))
+
+        # Create text displayed on button
+        text = self.getText()
+        if self.getConnectedKey(): # adds "(connected_key)" to text if key exists
+            text += f" ({self.getConnectedKey().upper()}) " 
+        
+        # Create text surface, and blit onto button surface
+        font = pygame.font.Font(None, self.getFontSize())
+        text_surf = font.render(text, True, (0,0,0))
+        text_rect = text_surf.get_rect()
+        button_surf.blit(text_surf, ((button_rect.width - text_rect.width)/2, (button_rect.height - text_rect.height)/2)) # blits text onto button, at centre
+
+        # Re-set surface and button rect
+        self.setSurf(button_surf)
+        self.setRect(button_rect)
