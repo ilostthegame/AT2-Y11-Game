@@ -54,6 +54,8 @@ class Healthbar:
         """
         Updates the health indicator of healthbar - to be called whenever entity health or max_health updates
         """
-        length = int(self.getEntityHealth()/self.getEntityMaxHealth() * 62) # calculates proportion of healthbar to be filled
-        pygame.draw.rect(self.getSurf(), (50, 50, 50), (0, 0, 64, 16)) # draw background of healthbar
-        pygame.draw.rect(self.getSurf(), (0, 50, 200), (1, 1, length, 14)) # draw health indicator
+        surf = self.getSurf()
+        length = int(self.getEntityHealth()/self.getEntityMaxHealth() * 62) # calculates length of healthbar to be filled based on percent.
+        pygame.draw.rect(surf, (50, 50, 50), (0, 0, 64, 16)) # draw background of healthbar
+        pygame.draw.rect(surf, (0, 50, 200), (1, 1, length, 14)) # draw health indicator
+        self.setSurf(surf)

@@ -5,7 +5,6 @@ from npc import Npc
 from portal import Portal
 from assets import load_assets
 from character import Character
-load_assets()
 import time
 
 class LevelInfo():
@@ -32,7 +31,7 @@ class LevelInfo():
     Methods:
         initialiseLevel(self): Initialises level tiles and entities 
         parseLevelCode(self): Parses the code of the level with name level_name, and returns tuples (tile_code, xcoord, ycoord) - tile_code is X_X_XX strings
-        doStuffWithTileInfo(self, tile_info): Adds a tile_info tuple's information to entity groups and tile dict. TODO make this have a real name
+        interpretTileInfo(self, tile_info): Adds a tile_info tuple's information to entity groups and tile dict
         drawBoardSurface(self): Draws board_surface using position_tile_dict
 
     """
@@ -102,15 +101,14 @@ class LevelInfo():
         self.__all_sprites = all_sprites
 
 
-
     # Methods
     def initialiseLevel(self):
         """
         Initialises the level's tiles and entities.
         """
         tile_info = self.parseLevelCode()
-        for t in tile_info: # iterates through all tuples (tile_code, xcoord, ycoord).
-            self.doStuffWithTileInfo(t)
+        for tile in tile_info: # iterates through all tuples (tile_code, xcoord, ycoord).
+            self.interpretTileInfo(tile)
         self.drawBoardSurface()
         
 
@@ -133,7 +131,7 @@ class LevelInfo():
                     return tile_info
     
 
-    def doStuffWithTileInfo(self, tile_info):
+    def interpretTileInfo(self, tile_info):
         """
         Input tile_info: singular tuple representing a tile: (tile_code, xcoord, ycoord)
         Interprets tile_info, then adds tile entity to tile_list.
@@ -151,23 +149,32 @@ class LevelInfo():
             self.getPositionTileDict()[(xcoord, ycoord)] = 'lava'
 
         # Adding entity (if exists) to respective group, and to all_sprites
+        all_sprites = self.getAllSprites()
         if entity_type == '0': # if no entity exists on tile
             return
-        elif entity_type == 'E': # enemy
+        elif entity_type == 'E':
+            enemy_group = self.getEnemyGroup()
             enemy = Enemy(entity_id, xcoord, ycoord)
-            self.getEnemyGroup().add(enemy)
-            self.getAllSprites().add(enemy)
-        elif entity_type == 'N': #n npc
+            enemy_group.add(enemy)
+            all_sprites.add(enemy)
+            self.setEnemyGroup(enemy_group)
+        elif entity_type == 'N': 
+            npc_group = self.getNpcGroup()
             npc = Npc(entity_id, xcoord, ycoord)
-            self.getNpcGroup().add(npc)
-            self.getAllSprites().add(npc)
-        elif entity_type == 'P': # portal
+            npc_group.add(npc)
+            all_sprites.add(npc)
+            self.setNpcGroup(npc_group)
+        elif entity_type == 'P':
+            portal_group = self.getPortalGroup()
             portal = Portal(entity_id, xcoord, ycoord)
-            self.getPortalGroup().add(portal)
-            self.getAllSprites().add(portal)
+            portal_group.add(portal)
+            all_sprites.add(portal)
+            self.setPortalGroup(portal_group)
         else: # error handling
             raise Exception("entity_type does not exist.")
+        
         return
+
 
     def drawBoardSurface(self):
         """
@@ -184,7 +191,9 @@ class LevelInfo():
                 pygame.draw.rect(board_surf, (0, 0, 0), (xcoord*64, ycoord*64, 64, 64))
             elif tile_type == 'lava':
                 pygame.draw.rect(board_surf, (255, 0, 0), (xcoord*64, ycoord*64, 64, 64))
+        self.setBoardSurf(board_surf)
         
+load_assets()
 x=time.time()
 test = LevelInfo('Dining Hall 1', pygame.Surface((728, 728)), Enemy('RI', 2, 2))
 run = True
