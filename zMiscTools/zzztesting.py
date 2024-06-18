@@ -6,7 +6,6 @@ import time
 # run = True
 # pygame.init()
 
-# eeee
 # screen = pygame.display.set_mode((500,500))
 # font = pygame.font.Font(None, 32)
 # x=pygame.Surface((100, 100))
