@@ -4,13 +4,6 @@ from pygame.locals import *
 class Button(pygame.sprite.Sprite):
     """
     Class for a generalised button
-    TO USE: 
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            if [Button object].getRect().collidepoint(mouse_pos): 
-                THEN INTERPRET [Button object].getOutput()
-        elif event.type == pygame.KEYDOWN:
-            if event.unicode == [Button object].getConnectedKey().lower() or event.unicode == [Button object].getConnectedKey().upper():
-                THEN INTERPRET [Button object].getOutput()
     
     Attributes:
         surf (pygame.Surface): Surface for the button.
