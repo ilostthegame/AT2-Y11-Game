@@ -5,7 +5,7 @@ class FileIdInterpreter:
 
     Attributes:
         file_name (str): string that represents the file containing the ID dict.
-        id (str): ID to look forf
+        id (str): ID to look for
 
     Methods:
         interpretFileInfo(self): interprets file and returns a list with the attributes associated with ID.
