@@ -6,12 +6,12 @@ from button import Button
 
 class TitleScreen:
     """
-    Class that represents the title screen menu.
+    Class for title screen. Loaded automatically when game starts.
 
     Attributes:
         screen (pygame.display): Display on which all objects are blitted.
         button_group (pygame.sprite.Group): Group that contains start_button and quit_button
-        is_running (bool): Represents if the TitleScreen loop is running
+        is_running (bool): Whether TitleScreen loop is running
         output (str): Output to be returned to main once loop finished. Represents next state game will enter:
             ['start' -> run GameMenu, 'quit' -> end game loop]
             

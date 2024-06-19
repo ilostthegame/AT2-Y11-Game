@@ -185,19 +185,20 @@ class LevelInfo():
             elif tile_type == 'lava':
                 pygame.draw.rect(board_surf, (255, 0, 0), (xcoord*64, ycoord*64, 64, 64))
         
-x=time.time()
-test = LevelInfo('Dining Hall 1', pygame.Surface((728, 728)), Enemy('RI', 2, 2))
-run = True
-screen = pygame.display.set_mode((1200, 800))
+## TESTING
+# x=time.time()
+# test = LevelInfo('Dining Hall 1', pygame.Surface((728, 728)), Enemy('RI', 2, 2))
+# run = True
+# screen = pygame.display.set_mode((1200, 800))
 
 
-pygame.init()
-y=time.time()
-print(y-x)
-while run:
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            run = False
-    screen.blit(test.getBoardSurf(), (0, 0)) # Blits the board to the top left of screen.
-    pygame.display.flip()
-pygame.quit()
+# pygame.init()
+# y=time.time()
+# print(y-x)
+# while run:
+#     for event in pygame.event.get():
+#         if event.type == QUIT:
+#             run = False
+#     screen.blit(test.getBoardSurf(), (0, 0)) # Blits the board to the top left of screen.
+#     pygame.display.flip()
+# pygame.quit()
