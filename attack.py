@@ -24,8 +24,7 @@ class Attack:
     # Constructor
     def __init__(self, attack_id: str):
         # Getting and unpacking file info
-        file_interpreter = FileIdInterpreter('gameinfostorage/attack_id.txt', attack_id)
-        attribute_list = file_interpreter.interpretFileInfo() # [name, power, accuracy, range, cooldown]
+        attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/attack_id.txt', attack_id) # [name, power, accuracy, range, cooldown]
         name, power, accuracy, range, cooldown = attribute_list # unpacks attribute_list
         power, accuracy, range, cooldown = [int(i) for i in (power, accuracy, range, cooldown)] # converts some attributes to integers
         

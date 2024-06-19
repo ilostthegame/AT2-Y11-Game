@@ -28,9 +28,11 @@ class Enemy(ActiveEntity):
 
     # Constructor
     def __init__(self, enemy_id: str, xcoord: int, ycoord: int):
-        # Getting and unpacking file info
-        file_interpreter = FileIdInterpreter('gameinfostorage/enemy_id.txt', enemy_id)
-        attribute_list = file_interpreter.interpretFileInfo() # [image, name, attack, defence, health, weapon_id, movement_pattern, xp_yield, gold_yield]
+        # Getting file info
+        # Attributes in attribute_list = [image, name, attack, defence, health, weapon_id, movement_pattern, xp_yield, gold_yield]
+        attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/enemy_id.txt', enemy_id) 
+        
+        # Unpacking file info, and creating additional enemy attributes
         image, name, attack, defence, health, weapon_id, movement_pattern, xp_yield, gold_yield = attribute_list # unpacks attribute_list
         attack, defence, health, xp_yield, gold_yield = [int(i) for i in (attack, defence, health, xp_yield, gold_yield)] # converts some attributes to integers
         weapon = Weapon(weapon_id, xcoord, ycoord) # creates weapon object enemy is wielding
