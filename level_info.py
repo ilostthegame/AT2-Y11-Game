@@ -194,6 +194,7 @@ class LevelInfo():
         self.setBoardSurf(board_surf)
         
 ## TESTING
+# load_assets()
 # x=time.time()
 # test = LevelInfo('Dining Hall 1', pygame.Surface((728, 728)), Enemy('RI', 2, 2))
 # run = True
