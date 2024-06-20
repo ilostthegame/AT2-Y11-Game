@@ -10,20 +10,39 @@ class Character(ActiveEntity):
     Class representing a character sprite, with parent ActiveEntity
 
     Attributes:
+        (Inherited)
+        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar - 64x64 transparent square
+        image (pygame.Surface): Surface representing entity's sprite image
+        rect (pygame.Rect): Rectangle representing entity Surface position
+        name (str): Name of character
+        attack (int): Attack stat
+        defence (int): Defence stat
+        max_health (int): Maximum health stat
+        health (int): Current health stat
+        weapon (Weapon): Currently held weapon
+        is_alive (bool): Whether entity's is alive: health above 0 or not
+        xcoord (int): X coordinate of entity in world
+        ycoord (int): Y coordinate of entity in world
+        healthbar (Healthbar): Healthbar of entity
+
         MAX_LEVEL (int): Maximum level of character
         level (int): Current level of character
         experience_points (int): Experience point stat
         skills (list[*Skill]): List of skills the character has 
         items (list[*Item]): List of items the character has 
         gold (int): Amount of gold character has 
+    
         
     Methods:
         gainExperience(self, experience): Increases experience, and if possible levels up.
         updateStats(self): Updates attack, defence based on level.
         calcRequiredExperience(self): Calculates total required experience for the next level.
         takeDamage(self, damage): Changes health according to defence and damage.
-        TODO updatePosition(self, pressed_keys):
-        TODO getInfo
+        getInfo(self) @abstractmethod: Returns the info of entity for saving. TODO might not even be needed with pickling.
+        
+        (Inherited)
+        updateSurf(self): Blits the entity image, healthbar and weapon onto the entity's Surface.
+        updatePos(self): Changes position of Rect according to xcoord, ycoord
     """
     
     # Attributes

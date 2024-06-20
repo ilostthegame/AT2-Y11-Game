@@ -18,7 +18,7 @@ class LevelInfo():
     Attributes:
         level_name (str): Name of the current level
         all_clear (bool): True if all enemies are cleared, False otherwise.
-        board_surf (pygame.Surface): Surface onto which all tiles are drawn
+        board_surf (pygame.Surface): Surface onto which all tiles are drawn TODO make this into a sprite.
 
         character (Character): Character sprite in level
         position_tile_dict (dict): Dictionary with coordinate tuple (xcoord, ycoord) keys with values being the tile type at the coordinate:

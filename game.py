@@ -1,6 +1,6 @@
 import pygame
-from title_screen import TitleScreen
-from game_world import GameWorld
+from game_states.title_screen import TitleScreen
+from game_states.game_world import GameWorld
 from assets import load_assets, GAME_ASSETS
 from pygame.locals import *
 from character import Character
@@ -8,10 +8,11 @@ from healthbar import Healthbar
 
 load_assets()
 
-# Constants
 class Game:
     """
-    A class representing the game.
+    A class representing the game. Contains game main loop. TODO fix up everything such that everything running is in the game main loop
+    TODO Make an EventHandler class. Will handle all python events, button stuff etc.
+    Give this class attributes such as the TitleScreen, GameWorld classes.
 
     Attributes:
         screen (pygame.Surface): Display on which all objects are sent.
@@ -20,8 +21,9 @@ class Game:
         
     Methods:
         run(self): Runs the game main loop
-        handleTitleScreen(self): If state == 'title_screen', runs TitleScreen and changes state accordingly.
-        handleGameWorld(self): If state == 'game_world', runs GameWorld and changes state accordingly.
+        handleTitleScreen(self): If state == 'title_screen', handles the title screen
+        handleGameWorld(self): If state == 'game_world', handles the 
+        handleGameMenu(self): If state == 'game_menu,
         handleCleanup(self): When game loop is exited, quits pygame. TODO save system.
     """
 

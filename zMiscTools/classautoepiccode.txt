@@ -1,56 +1,14 @@
 # Attributes
-__surf = None
-__rect = None
-__text = None
-__font_size = None
-__colour = None
-__output = None
-__centre_coords = None
-__connected_key = None
+__all_sprites = None
 
 # Constructor
-def __init__(self, surf, rect, text, font_size, colour, output, centre_coords, connected_key):
-    self.setSurf(surf)
-    self.setRect(rect)
-    self.setText(text)
-    self.setFontSize(font_size)
-    self.setColour(colour)
-    self.setOutput(output)
-    self.setCentreCoords(centre_coords)
-    self.setConnectedKey(connected_key)
+def __init__(self, all_sprites):
+    self.setAllSprites(all_sprites)
 
 # Getters
-def getSurf(self):
-    return self.__surf
-def getRect(self):
-    return self.__rect
-def getText(self):
-    return self.__text
-def getFontSize(self):
-    return self.__font_size
-def getColour(self):
-    return self.__colour
-def getOutput(self):
-    return self.__output
-def getCentreCoords(self):
-    return self.__centre_coords
-def getConnectedKey(self):
-    return self.__connected_key
+def getAllSprites(self):
+    return self.__all_sprites
 
 # Setters
-def setSurf(self, surf):
-    self.__surf = surf
-def setRect(self, rect):
-    self.__rect = rect
-def setText(self, text):
-    self.__text = text
-def setFontSize(self, font_size):
-    self.__font_size = font_size
-def setColour(self, colour):
-    self.__colour = colour
-def setOutput(self, output):
-    self.__output = output
-def setCentreCoords(self, centre_coords):
-    self.__centre_coords = centre_coords
-def setConnectedKey(self, connected_key):
-    self.__connected_key = connected_key
+def setAllSprites(self, all_sprites):
+    self.__all_sprites = all_sprites
