@@ -50,8 +50,8 @@ class Game:
                  screen: pygame.Surface = pygame.display.set_mode((1200, 800)), 
                  clock: pygame.time.Clock = pygame.time.Clock(), 
                  title_screen: TitleScreen = TitleScreen(), 
-                 game_world: GameWorld = GameWorld(), 
-                 game_menu: GameMenu = GameMenu()):
+                 game_world = 'foobar', # game_world: GameWorld = GameWorld(), 
+                 game_menu = 'barfoo'): # game_menu: GameMenu = GameMenu()):
         self.setState(state)
         self.setIsRunning(is_running)
         self.setScreen(screen)
@@ -98,8 +98,11 @@ class Game:
         Runs the game loop
         """
         while self.getIsRunning() == True:
+            pygame_events = pygame.event.get()
+            mouse_pos = pygame.mouse.get_pos()
+
             # Event handler for if game is closed
-            for event in pygame.event.get(): 
+            for event in pygame_events: 
                 if event.type == QUIT:
                     self.setIsRunning(False)
             
@@ -107,38 +110,44 @@ class Game:
             state = self.getState()
             match state:
                 case 'title_screen':
-                    self.runTitleScreen()
+                    displayed_sprites = self.runTitleScreen(pygame_events, mouse_pos)
                 case 'game_world':
-                    self.runGameWorld()
+                    displayed_sprites = self.runGameWorld()
                 case 'game_menu':
-                    self.runGameMenu()
+                    displayed_sprites = self.runGameMenu()
                 case 'quit':
                     self.setIsRunning(False)
                 case _:
                     raise Exception("State does not exist")
-                
+            
+            # Sends all sprites to the display.
+            screen = self.getScreen()
+            screen.fill((255, 255, 255))
+            for sprite in displayed_sprites:
+                screen.blit(sprite.getSurf(), sprite.getRect())
+            pygame.display.flip()
 
         self.handleCleanup() # Runs cleanup, TODO save game.
 
 
-    def runTitleScreen(self):
+    def runTitleScreen(self, pygame_events: dict, mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
         """
-        Runs if state == 'title_screen'. Runs TitleScreen class.
-        Returns 'quit' if quit button hit; Returns 'start' if start button hit.
+        To run if state == 'title_screen'. Runs TitleScreen class.
+        Returns sprite group containing all sprites associated with TitleScreen state.
         """
-        title_screen = TitleScreen(self.getScreen(), pygame.sprite.Group(), True) # StartMenu object
-        title_screen.run()
-        result = title_screen.getOutput()
-        if result == 'start':
-            self.setState('game_world')
-        elif result == 'quit':
-            self.setIsRunning(False)
+        title_screen = self.getTitleScreen()
+        next_state = title_screen.run(pygame_events, mouse_pos)
+        displayed_sprites = title_screen.getDisplayedSprites()
+
+        self.setTitleScreen(title_screen)
+        self.setState(next_state)
+        return displayed_sprites
     
 
-    def runGameWorld(self):
+    def runGameWorld(self) -> pygame.sprite.Group:
         """
-        Runs if state == 'game_world'. Runs GameWorld class
-        Returns 'quit' if game is quit. Returns
+        To run if state == 'title_screen'. Runs GameWorld class.
+        Returns sprite group containing all sprites associated with GameWorld state.
         """
         game_world = GameWorld(self.getScreen(), 'explore', True, 
                                Character(pygame.Surface((64,64)), pygame.image.load(GAME_ASSETS['blue_orb']), # surface and image
@@ -151,7 +160,7 @@ class Game:
             self.setIsRunning(False)
         
 
-    def runGameMenu(self):
+    def runGameMenu(self) -> pygame.sprite.Group:
         """
         TODO
         """

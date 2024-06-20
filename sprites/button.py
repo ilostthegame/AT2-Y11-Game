@@ -104,6 +104,7 @@ class Button(pygame.sprite.Sprite):
             text += f" ({self.getConnectedKey().upper()}) " 
         
         # Create text surface, and blit onto button surface
+        pygame.font.init()
         font = pygame.font.Font(None, self.getFontSize())
         text_surf = font.render(text, True, (0,0,0))
         text_rect = text_surf.get_rect()

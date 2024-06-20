@@ -1,5 +1,5 @@
 import pygame
-from tile import Tile
+from sprites.tile import Tile
 
 class Board(pygame.sprite.Sprite):
     """

@@ -1,5 +1,5 @@
 import pygame
-from game_state import GameState
+from game_states.game_state import GameState
 from pygame.locals import *
 from assets import GAME_ASSETS
 from sprites.button import Button
@@ -13,10 +13,10 @@ class TitleScreen(GameState):
         button_group (pygame.sprite.Group): Sprite group that contains buttons
 
         (Inherited)
-        all_sprites: Sprite group that represents all pygame sprites. To be blitted each iteration
+        displayed_sprites: Sprite group that represents all pygame sprites that are to be sent to display
             
     Methods:
-        run(self) -> str: Runs all functions associated with TitleScreen. To be called each iteration of game loop.
+        run(self, pygame_events: dict, mouse_pos: tuple[int, int]) -> str: Runs all functions associated with TitleScreen. To be called each iteration of game loop.
             Returns the next state game is to enter.
         initialiseButtons(self) -> None: Creates start, quit buttons and adds them to button_group 
         savedGameExist(self) -> bool: Evaluates whether a saved gamefile exists. Returns True/False
@@ -50,16 +50,18 @@ class TitleScreen(GameState):
         # Event handler
         for event in pygame_events:
             # Handle mouse left-button click
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                buttons_pressed = [button for button in self.getButtonGroup() if button.getRect().collidepoint(mouse_pos)]
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # left mouse button
+                buttons_pressed = [button for button in self.getButtonGroup() if button.getRect().collidepoint(mouse_pos)] # gets all button rects colliding with mouse
                 for button in buttons_pressed:
                     button_outputs.append(button.getOutput())
 
             # Handle keypress
             elif event.type == pygame.KEYDOWN:
                 for button in self.getButtonGroup():
-                    if event.unicode.lower() == button.getConnectedKey().lower():
-                        button_outputs.append(button.getOutput())
+                    connected_key = button.getConnectedKey()
+                    if connected_key: # if connected key exists
+                        if event.unicode.lower() == connected_key.lower(): # check if pressed key == connected key
+                            button_outputs.append(button.getOutput())
 
             else:
                 continue
@@ -82,10 +84,10 @@ class TitleScreen(GameState):
                 
     def initialiseButtons(self) -> None:
         """
-        Creates title screen buttons and adds them to button_group, and all_sprites
+        Creates title screen buttons and adds them to button_group, and displayed_sprites
         """
         button_group = pygame.sprite.Group()
-        all_sprites_group = pygame.sprite.Group()
+        displayed_sprites = pygame.sprite.Group()
         new_game_button = Button(pygame.Surface((256, 128)), 
                                  'New Game',
                                  32,
@@ -107,12 +109,12 @@ class TitleScreen(GameState):
                                       32,
                                       (200, 200, 200),
                                       'load_game',
-                                      (400, 200))
+                                      (600, 400))
             button_group.add(load_game_button)
         
-        all_sprites_group.add(button_group)
+        displayed_sprites.add(button_group)
         self.setButtonGroup(button_group)
-        self.setAllSprites(all_sprites_group)
+        self.setDisplayedSprites(displayed_sprites)
         
     
     def savedGameExist(self) -> bool:
