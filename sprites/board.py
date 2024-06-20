@@ -1,11 +1,14 @@
 import pygame
+from sprites.tile import Tile
 
 class Board(pygame.sprite.Sprite):
     """
-    Class that represents the game board sprite.
+    Class that represents the game board sprite. 
 
     Attributes:
-        surf
-        rect
-        tile_dict
+        surf (pygame.Surface)
+        rect (pygame.Rect)
+        tile_dict (dict[tuple[int, int], Tile])
+    
+    
     """

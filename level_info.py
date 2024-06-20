@@ -5,8 +5,10 @@ from sprites.npc import Npc
 from sprites.portal import Portal
 from assets import load_assets
 from sprites.character import Character
+from sprites.board import Board
 import time
 
+# TODO merge with GameWorld - this is just the world initialiser, but GameWorld should instead track everything.
 class LevelInfo():
     """
     Class representing the level information: 
@@ -18,8 +20,8 @@ class LevelInfo():
     Attributes:
         level_name (str): Name of the current level
         all_clear (bool): True if all enemies are cleared, False otherwise.
-        board_surf (pygame.Surface): Surface onto which all tiles are drawn
 
+        board (pygame.Sprite): Sprite that represents the board: All 
         character (Character): Character sprite in level
         position_tile_dict (dict): Dictionary with coordinate tuple (xcoord, ycoord) keys with values being the tile type at the coordinate:
             {(xcoord, ycoord): tile_type}
@@ -141,12 +143,15 @@ class LevelInfo():
         xcoord, ycoord = int(tile_info[1]), int(tile_info[2]) # coordinates of tile
 
         # Adding tile to position_tile_dict
-        if tile_type == 'G':
-            self.getPositionTileDict()[(xcoord, ycoord)] = 'grass'
-        elif tile_type == 'W':
-            self.getPositionTileDict()[(xcoord, ycoord)] = 'wall'
-        elif tile_type == 'L':
-            self.getPositionTileDict()[(xcoord, ycoord)] = 'lava'
+        match tile_type:
+            case 'G':
+                self.getPositionTileDict()[(xcoord, ycoord)] = 'grass'
+            case 'W':
+                self.getPositionTileDict()[(xcoord, ycoord)] = 'wall'
+            case 'L':
+                self.getPositionTileDict()[(xcoord, ycoord)] = 'lava'
+            case _:
+                raise Exception(f"Tile type {tile_type} does not exist")
 
         # Adding entity (if exists) to respective group, and to all_sprites
         all_sprites = self.getAllSprites()

@@ -1,5 +1,5 @@
 import pygame
-from game_state import GameState
+from game_states.game_state import GameState
 from assets import GAME_ASSETS
 from pygame.locals import *
 from sprites.enemy import Enemy
@@ -7,15 +7,11 @@ from sprites.npc import Npc
 from sprites.character import Character
 from level_info import LevelInfo
 
-# TODO create separate classes for all the different states.
-# TODO make it so you actually can't go backwards once you have started a dungeon to make loading easier.
 class GameWorld(GameState):
     """
-    Class representing the game world
+    Class representing the game world. Has parent GameState.
+    TODO fix
     Attributes:
-        screen (pygame.display): Pygame display.
-        state (str): Represents state GameWorld is in: [world, narrator, interaction, game_menu] TODO skill_menu, etc.
-        is_running (bool): Whether the GameWorld loop is to keep running or finished.
         output (str): Output to be returned to main once loop finished. Represents next state game will enter:
             ['startmenu' -> exit and run StartMenu, 'quit' -> end game loop]
         
@@ -23,15 +19,16 @@ class GameWorld(GameState):
         level_info (LevelInfo): Initialises and tracks tile and entity information in a level.
         foo (Foo): Gui interface with action selections
 
-
-        # TODO fix attributes, from top-down view. Why am I working bottom up
+        (Inherited)
+        displayed_sprites: Sprite group that represents all pygame sprites that are to be sent to display
 
     Methods: TODO
+        run(self) -> str: Runs all functions associated with GameWorld. To be called each iteration of game loop.
+            Returns the next state game is to enter.
+
         handleWorld(self): Handles state where character is in world
         handleMenu(self, menu_type): 
         handleDisplay(self)
-        run(): Game loop for game world
-        TODO all methods
 
     """
 
@@ -42,7 +39,7 @@ class GameWorld(GameState):
     __character = None
     __current_level = None
     __output = None
-    __all_sprites = None
+    __displayed_sprites = None
     __tile_group = None
     __npc_group = None
     __enemy_group = None
@@ -55,7 +52,7 @@ class GameWorld(GameState):
                  character: Character, 
                  current_level: int, 
                  output: str = 'quit', 
-                 all_sprites = pygame.sprite.Group, 
+                 displayed_sprites = pygame.sprite.Group, 
                  tile_group = pygame.sprite.Group, 
                  npc_group = pygame.sprite.Group, 
                  enemy_group = pygame.sprite.Group):
@@ -65,7 +62,7 @@ class GameWorld(GameState):
         self.setCharacter(character)
         self.setCurrentLevel(current_level)
         self.setOutput(output)
-        self.setAllSprites(all_sprites)
+        self.setDisplayedSprites(displayed_sprites)
         self.setTileGroup(tile_group)
         self.setNpcGroup(npc_group)
         self.setEnemyGroup(enemy_group)
@@ -84,8 +81,8 @@ class GameWorld(GameState):
         return self.__current_level
     def getOutput(self):
         return self.__output
-    def getAllSprites(self):
-        return self.__all_sprites
+    def getDisplayedSprites(self):
+        return self.__displayed_sprites
     def getTileGroup(self):
         return self.__tile_group
     def getNpcGroup(self):
@@ -106,8 +103,8 @@ class GameWorld(GameState):
         self.__current_level = current_level
     def setOutput(self, output):
         self.__output = output
-    def setAllSprites(self, all_sprites):
-        self.__all_sprites = all_sprites
+    def setDisplayedSprites(self, displayed_sprites):
+        self.__displayed_sprites = displayed_sprites
     def setTileGroup(self, tile_group):
         self.__tile_group = tile_group
     def setNpcGroup(self, npc_group):
@@ -129,16 +126,6 @@ class GameWorld(GameState):
 
     def interpretButton(self):
         pass
-
-    def handleDisplay(self):
-        """
-        Blits all objects onto the screen, and flips display
-        """
-        self.getScreen().fill((255, 255, 255)) # fills screen with white - overrides previous iteration's blits.
-        for object in self.getAllSprites():
-            self.getScreen().blit(object.getSurf(), object.getRect()) # blits all objects onto screen
-
-        pygame.display.flip() # updates pygame display
 
 
     # Methods
