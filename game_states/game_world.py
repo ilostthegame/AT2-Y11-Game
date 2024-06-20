@@ -7,15 +7,10 @@ from sprites.npc import Npc
 from sprites.character import Character
 from level_info import LevelInfo
 
-# TODO create separate classes for all the different states.
-# TODO make it so you actually can't go backwards once you have started a dungeon to make loading easier.
 class GameWorld(GameState):
     """
     Class representing the game world
     Attributes:
-        screen (pygame.display): Pygame display.
-        state (str): Represents state GameWorld is in: [world, narrator, interaction, game_menu] TODO skill_menu, etc.
-        is_running (bool): Whether the GameWorld loop is to keep running or finished.
         output (str): Output to be returned to main once loop finished. Represents next state game will enter:
             ['startmenu' -> exit and run StartMenu, 'quit' -> end game loop]
         
@@ -23,15 +18,17 @@ class GameWorld(GameState):
         level_info (LevelInfo): Initialises and tracks tile and entity information in a level.
         foo (Foo): Gui interface with action selections
 
-
-        # TODO fix attributes, from top-down view. Why am I working bottom up
+        (Inherited)
+        all_sprites: Sprite group that represents all pygame sprites. To be blitted each iteration
 
     Methods: TODO
+        run(self) -> str: Runs all functions associated with GameWorld. To be called each iteration of game loop.
+            Returns the next state game is to enter.
+
         handleWorld(self): Handles state where character is in world
         handleMenu(self, menu_type): 
         handleDisplay(self)
-        run(): Game loop for game world
-        TODO all methods
+        
 
     """
 

@@ -8,6 +8,7 @@ from sprites.character import Character
 from sprites.board import Board
 import time
 
+# TODO merge with GameWorld - this is just the world initialiser, but GameWorld should instead track everything.
 class LevelInfo():
     """
     Class representing the level information: 
