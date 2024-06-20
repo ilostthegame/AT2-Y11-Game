@@ -8,9 +8,9 @@ class Portal(pygame.sprite.Sprite):
     Class representing a portal object
 
     Attributes:
-        surf (pygame.Surface): Surface representing the portal
-        image (pygame.Image): Portal image
-        rect (pygame.Rect): Rect representing position of portal on screen
+        surf (pygame.Surface)
+        image (pygame.Image)
+        rect (pygame.Rect)
         xcoord (int): Board xcoord of portal
         ycoord (int): Board ycoord of portal
         destination (str): Represents the level portal leads to
