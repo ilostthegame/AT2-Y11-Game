@@ -9,7 +9,8 @@ from level_info import LevelInfo
 
 class GameWorld(GameState):
     """
-    Class representing the game world
+    Class representing the game world. Has parent GameState.
+    TODO fix
     Attributes:
         output (str): Output to be returned to main once loop finished. Represents next state game will enter:
             ['startmenu' -> exit and run StartMenu, 'quit' -> end game loop]
@@ -28,7 +29,6 @@ class GameWorld(GameState):
         handleWorld(self): Handles state where character is in world
         handleMenu(self, menu_type): 
         handleDisplay(self)
-        
 
     """
 

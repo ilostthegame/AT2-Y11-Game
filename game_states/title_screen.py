@@ -6,7 +6,8 @@ from sprites.button import Button
 
 class TitleScreen(GameState):
     """
-    Class for title screen. Loaded automatically when game starts.
+    Class for title screen game state. Has parent GameState.
+    Loaded when game is initialised, and from 'save_and_exit' from GameMenu
 
     Attributes:
         button_group (pygame.sprite.Group): Sprite group that contains buttons
@@ -25,7 +26,7 @@ class TitleScreen(GameState):
     __button_group = None 
 
     # Constructor
-    def __init__(self, button_group: pygame.sprite.Group):
+    def __init__(self, button_group: pygame.sprite.Group = pygame.sprite.Group()):
         super().__init__()
         self.setButtonGroup(button_group)
         self.initialiseButtons()
@@ -71,8 +72,8 @@ class TitleScreen(GameState):
                     return 'game_world'
                 case 'load_game':
                     return 'game_world'
-                case 'exit':
-                    return 'exit'
+                case 'quit_game':
+                    return 'quit'
                 case _:
                     raise Exception("Unknown button output")
 
@@ -92,10 +93,10 @@ class TitleScreen(GameState):
                                  'new_game',
                                  (600, 200))
         exit_button = Button(pygame.Surface((256, 128)), 
-                                 'Exit',
+                                 'Quit Game',
                                  32,
                                  (200, 100, 0),
-                                 'exit',
+                                 'quit_game',
                                  (600, 600),
                                  'P')
         button_group.add(new_game_button, exit_button) # adds new game and exit buttons
