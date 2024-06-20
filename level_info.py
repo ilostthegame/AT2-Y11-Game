@@ -1,10 +1,10 @@
 import pygame
 from pygame.locals import *
-from enemy import Enemy
-from npc import Npc
-from portal import Portal
+from sprites.enemy import Enemy
+from sprites.npc import Npc
+from sprites.portal import Portal
 from assets import load_assets
-from character import Character
+from sprites.character import Character
 import time
 
 class LevelInfo():

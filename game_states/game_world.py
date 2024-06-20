@@ -1,4 +1,5 @@
 import pygame
+from game_state import GameState
 from assets import GAME_ASSETS
 from pygame.locals import *
 from sprites.enemy import Enemy
@@ -8,7 +9,7 @@ from level_info import LevelInfo
 
 # TODO create separate classes for all the different states.
 # TODO make it so you actually can't go backwards once you have started a dungeon to make loading easier.
-class GameWorld:
+class GameWorld(GameState):
     """
     Class representing the game world
     Attributes:

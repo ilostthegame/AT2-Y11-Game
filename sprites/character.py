@@ -1,9 +1,9 @@
 import pygame
-from active_entity import ActiveEntity
+from sprites.active_entity import ActiveEntity
 from pygame.locals import *
 from assets import GAME_ASSETS
-from healthbar import Healthbar
-from weapon import Weapon
+from sprites.healthbar import Healthbar
+from sprites.weapon import Weapon
 
 class Character(ActiveEntity):
     """

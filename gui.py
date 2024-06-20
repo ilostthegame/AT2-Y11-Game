@@ -1,6 +1,6 @@
 # TODO Rename this to something more specific
 import pygame
-from button import Button
+from sprites.button import Button
 
 class Gui:
     """

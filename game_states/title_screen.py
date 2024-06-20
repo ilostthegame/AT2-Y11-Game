@@ -11,6 +11,7 @@ class TitleScreen:
     Attributes:
         screen (pygame.Surface): pygame display Surface.
         button_group (pygame.sprite.Group): Sprite group that contains buttons
+        all_sprites (pygame.sprite.Group): Sprite group with all sprites
         is_running (bool): Whether TitleScreen loop is running
         output (str): Output to be returned to main once loop finished. Represents next state game will enter:
             {'start': run GameMenu, 'quit': end game loop}

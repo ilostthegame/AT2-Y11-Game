@@ -3,8 +3,8 @@ from title_screen import TitleScreen
 from game_world import GameWorld
 from assets import load_assets, GAME_ASSETS
 from pygame.locals import *
-from character import Character
-from healthbar import Healthbar
+from sprites.character import Character
+from sprites.healthbar import Healthbar
 
 load_assets()
 
