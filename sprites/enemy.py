@@ -11,6 +11,21 @@ class Enemy(ActiveEntity):
     Class representing an enemy sprite, with parent ActiveEntity
 
     Attributes:
+        (Inherited)
+        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar - 64x64 transparent square
+        image (pygame.Surface): Surface representing entity's sprite image
+        rect (pygame.Rect): Rectangle representing entity Surface position
+        name (str): Name of character
+        attack (int): Attack stat
+        defence (int): Defence stat
+        max_health (int): Maximum health stat
+        health (int): Current health stat
+        weapon (Weapon): Currently held weapon
+        is_alive (bool): Whether entity's is alive: health above 0 or not
+        xcoord (int): X coordinate of entity in world
+        ycoord (int): Y coordinate of entity in world
+        healthbar (Healthbar): Healthbar of entity
+
         movement_pattern (str): Represents the algorithm to be used for 
         xp_yield (int): Represents how much xp is earned through defeating enemy
         gold_yield (int): Represents how much gold is earned through defeating enemy
@@ -19,6 +34,10 @@ class Enemy(ActiveEntity):
         calcMovement(self, user_position): Returns a tuple (xcoord, ycoord) representing the square enemy will move to.
         #TODO
         getInfo(self): Returns info of enemy
+        
+        (Inherited)
+        updateSurf(self): Blits the entity image, healthbar and weapon onto the entity's Surface.
+        updatePos(self): Changes position of Rect according to xcoord, ycoord
     """
 
     # Attributes
