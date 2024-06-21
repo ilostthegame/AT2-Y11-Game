@@ -100,6 +100,8 @@ class Game:
         while self.getIsRunning() == True:
             pygame_events = pygame.event.get()
             mouse_pos = pygame.mouse.get_pos()
+            print(pygame_events)
+            print(mouse_pos)
 
             # Event handler for if game is closed
             for event in pygame_events: 
@@ -144,20 +146,18 @@ class Game:
         return displayed_sprites
     
 
-    def runGameWorld(self) -> pygame.sprite.Group:
+    def runGameWorld(self, pygame_events: dict) -> pygame.sprite.Group:
         """
-        To run if state == 'title_screen'. Runs GameWorld class.
+        To run if state == 'game_world'. Runs GameWorld class.
         Returns sprite group containing all sprites associated with GameWorld state.
         """
-        game_world = GameWorld(self.getScreen(), 'explore', True, 
-                               Character(pygame.Surface((64,64)), pygame.image.load(GAME_ASSETS['blue_orb']), # surface and image
-                                         'Bob', 25, 25, 100, 100, 'sword', True, 0, 0, 1, 0, list(), 0, # stats
-                                         Healthbar(pygame.Surface((64, 16)), 100, 100, 0, 0))) # healthbar object
-        result = game_world.run()
-        if result == 'title_screen':
-            self.setState('game_menu')
-        elif result == 'quit':
-            self.setIsRunning(False)
+        game_world = self.getGameWorld()
+        next_state = game_world.run(pygame_events)
+        displayed_sprites = game_world.getDisplayedSprites()
+
+        self.setGameWorld(game_world)
+        self.setState(next_state)
+        return displayed_sprites
         
 
     def runGameMenu(self) -> pygame.sprite.Group:

@@ -16,7 +16,7 @@ class TitleScreen(GameState):
         displayed_sprites: Sprite group that represents all pygame sprites that are to be sent to display
             
     Methods:
-        run(self, pygame_events: dict, mouse_pos: tuple[int, int]) -> str: Runs all functions associated with TitleScreen. To be called each iteration of game loop.
+        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: Runs all functions associated with TitleScreen. To be called each iteration of game loop.
             Returns the next state game is to enter.
         initialiseButtons(self) -> None: Creates start, quit buttons and adds them to button_group 
         savedGameExist(self) -> bool: Evaluates whether a saved gamefile exists. Returns True/False
@@ -40,7 +40,7 @@ class TitleScreen(GameState):
         self.__button_group = button_group
 
     # Methods
-    def run(self, pygame_events, mouse_pos) -> str: 
+    def run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: 
         """
         Runs all functions associated with TitleScreen. To be called each iteration of game loop.
         Returns the next state game is to enter: in [title_screen, game_world, exit]

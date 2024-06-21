@@ -30,17 +30,15 @@ class GameWorld(GameState):
 
 
     Methods:
-        run(self) -> str: Runs all functions associated with GameWorld. 
+        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: 
+            Runs all functions associated with GameWorld. 
             To be called each iteration of game loop, while state == "game_world"
             Returns the next state game is to enter.
 
-            
-        handleWorld(self): Handles state where character is in world
-        handleMenu(self, menu_type): 
-        handleDisplay(self)
+        Handler methods TODO
 
         (Initialiser methods)
-        initialiseLevel(self, level_name) -> None: Initialises level tiles and entities
+        initialiseLevel(self) -> None: Initialises level tiles and entities
         parseLevelCode(self) -> list[tuple[str, int, int]]: Returns list of tuples each representing a tile's info: 
             (tile_code, xcoord, ycoord) - tile_code is X_X_XX string representing {tile_type}, {entity_type}, {entity_id}
         interpretTileInfo(self, tile_info): Interprets a single tile_info tuple.
@@ -111,12 +109,16 @@ class GameWorld(GameState):
 
 
     # Methods
-    def run(self, pygame_events) -> str:
+    def run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str:
         """
         Runs all functions associated with GameWorld. 
             To be called each iteration of game loop, while state == "game_world"
             Returns the next state game is to enter.
         """
+
+        # Pygame event handler
+
+
 
         # Use pygame.event == KEYDOWN to do stuff with one movement at a time.
 
