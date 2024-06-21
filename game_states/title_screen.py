@@ -26,9 +26,9 @@ class TitleScreen(GameState):
     __button_group = None 
 
     # Constructor
-    def __init__(self, button_group: pygame.sprite.Group = pygame.sprite.Group()):
+    def __init__(self):
         super().__init__()
-        self.setButtonGroup(button_group)
+        self.setButtonGroup(pygame.sprite.Group())
         self.initialiseButtons()
 
     # Getters

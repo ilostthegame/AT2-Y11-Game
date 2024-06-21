@@ -50,17 +50,13 @@ class Game:
     # Constructor
     def __init__(self, 
                  state: str, 
-                 is_running: bool, 
-                 screen: pygame.Surface = pygame.display.set_mode((1200, 800)), 
-                 clock: pygame.time.Clock = pygame.time.Clock(), 
-                 title_screen: TitleScreen = TitleScreen(), 
-                 game_menu = 'barfoo'): # game_menu: GameMenu = GameMenu()):
+                 is_running: bool):
         self.setState(state)
         self.setIsRunning(is_running)
-        self.setScreen(screen)
-        self.setClock(clock)
-        self.setTitleScreen(title_screen)
-        self.setGameMenu(game_menu)
+        self.setScreen(pygame.display.set_mode((1200, 800)))
+        self.setClock(pygame.time.Clock())
+        self.setTitleScreen(TitleScreen())
+        self.setGameMenu('placeholder')
 
         #temp GameWorld init
         character = Character('blue_orb',
@@ -73,7 +69,7 @@ class Game:
                               True,
                               0,
                               0,1, 0,list(),list(),0,Healthbar(100, 100))
-        game_world = GameWorld('Dining Hall', character)
+        game_world = GameWorld('Test', character)
         game_world.initialiseLevel()
         self.setGameWorld(game_world)
 

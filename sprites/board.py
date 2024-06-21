@@ -25,13 +25,11 @@ class Board(pygame.sprite.Sprite):
     __position_tile_dict = None
 
     # Constructor
-    def __init__(self, 
-                 position_tile_dict: dict[tuple[int, int], Tile] = dict(), 
-                 surf: pygame.Surface = pygame.Surface((704, 704))):
+    def __init__(self):
         super().__init__()
-        self.setPositionTileDict(position_tile_dict)
-        self.setSurf(surf)
+        self.setSurf(pygame.Surface((704, 704)))
         self.setRect(self.getSurf().get_rect())
+        self.setPositionTileDict(dict())
 
     # Getters
     def getSurf(self):

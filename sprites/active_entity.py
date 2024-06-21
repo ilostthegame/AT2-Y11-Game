@@ -56,9 +56,10 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
                  is_alive: bool, 
                  xcoord: float, 
                  ycoord: float, 
-                 healthbar: Healthbar,
-                 surf: pygame.Surface = pygame.Surface((64, 64), SRCALPHA)):
+                 healthbar: Healthbar):
         super().__init__()
+        self.setSurf(pygame.Surface((64, 64), SRCALPHA))
+        self.setRect(self.getSurf().get_rect())
         self.setImage(image)
         self.setName(name)
         self.setAttack(attack)
@@ -70,8 +71,6 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setIsAlive(is_alive)
         self.setXcoord(xcoord)
         self.setYcoord(ycoord)
-        self.setSurf(surf)
-        self.setRect(self.getSurf().get_rect())
 
     # Getters
     def getSurf(self):

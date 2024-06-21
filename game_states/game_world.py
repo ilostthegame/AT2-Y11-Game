@@ -59,20 +59,15 @@ class GameWorld(GameState):
     # Constructor
     def __init__(self, 
                  level_name: str, 
-                 character: Character, 
-                 board: Board = Board(),
-                 sidebar: Sidebar = 'placeholder',
-                 npc_group: pygame.sprite.Group = pygame.sprite.Group(), 
-                 enemy_group: pygame.sprite.Group = pygame.sprite.Group(), 
-                 portal_group: pygame.sprite.Group = pygame.sprite.Group()):
+                 character: Character):
         super().__init__()
         self.setLevelName(level_name)
         self.setCharacter(character)
-        self.setBoard(board)
-        self.setSidebar(sidebar)
-        self.setNpcGroup(npc_group)
-        self.setEnemyGroup(enemy_group)
-        self.setPortalGroup(portal_group)
+        self.setBoard(Board())
+        self.setSidebar('placeholder')
+        self.setNpcGroup(pygame.sprite.Group())
+        self.setEnemyGroup(pygame.sprite.Group())
+        self.setPortalGroup(pygame.sprite.Group())
 
     # Getters
     def getSidebar(self):
