@@ -34,7 +34,6 @@ class Tile(pygame.sprite.Sprite):
         surf.fill(colour)
         self.setSurf(surf)
 
-
     # Getters
     def getSurf(self):
         return self.__surf
