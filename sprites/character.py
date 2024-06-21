@@ -2,7 +2,7 @@ import pygame
 from sprites.active_entity import ActiveEntity
 from pygame.locals import *
 from assets import GAME_ASSETS
-from sprites.healthbar import Healthbar
+from healthbar import Healthbar
 from sprites.weapon import Weapon
 
 class Character(ActiveEntity):
@@ -60,7 +60,7 @@ class Character(ActiveEntity):
                  defence: int, 
                  max_health: int, 
                  health: int, 
-                 weapon: Weapon, 
+                 weapon_id: str, 
                  is_alive: bool, 
                  xcoord: int, 
                  ycoord: int, 
@@ -70,7 +70,7 @@ class Character(ActiveEntity):
                  items: list, 
                  gold: int, 
                  healthbar: Healthbar):
-        super().__init__(image, name, attack, defence, max_health, health, weapon, is_alive, xcoord, ycoord, healthbar) 
+        super().__init__(image, name, attack, defence, max_health, health, weapon_id, is_alive, xcoord, ycoord, healthbar) 
         self.setLevel(level)
         self.setExperiencePoints(experience_points)
         self.setSkills(skills)

@@ -24,11 +24,11 @@ class Healthbar:
     __entity_max_health = None
 
     # Constructor
-    def __init__(self, entity_health: int, entity_max_health: int, surf: pygame.Surface = pygame.Surface((64, 16))):
+    def __init__(self, entity_health: int, entity_max_health: int):
+        self.setSurf(pygame.Surface((64, 16)))
+        self.setRect(self.getSurf().get_rect())
         self.setEntityHealth(entity_health)
         self.setEntityMaxHealth(entity_max_health)
-        self.setSurf(surf)
-        self.setRect(self.getSurf().get_rect())
 
     # Getters
     def getSurf(self):

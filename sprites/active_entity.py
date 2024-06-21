@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from abc import ABC, abstractmethod
-from sprites.healthbar import Healthbar
+from healthbar import Healthbar
 from sprites.weapon import Weapon
 
 class ActiveEntity(pygame.sprite.Sprite, ABC):
@@ -52,13 +52,14 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
                  defence: int, 
                  max_health: int, 
                  health: int, 
-                 weapon: str, 
+                 weapon_id: str, 
                  is_alive: bool, 
                  xcoord: float, 
                  ycoord: float, 
-                 healthbar: Healthbar,
-                 surf: pygame.Surface = pygame.Surface((64, 64), SRCALPHA)):
+                 healthbar: Healthbar):
         super().__init__()
+        self.setSurf(pygame.Surface((64, 64), SRCALPHA))
+        self.setRect(self.getSurf().get_rect())
         self.setImage(image)
         self.setName(name)
         self.setAttack(attack)
@@ -66,12 +67,10 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setHealthbar(healthbar)
         self.setMaxHealth(max_health)
         self.setHealth(health)
-        self.setWeapon(weapon)
+        self.setWeapon(weapon_id)
         self.setIsAlive(is_alive)
         self.setXcoord(xcoord)
         self.setYcoord(ycoord)
-        self.setSurf(surf)
-        self.setRect(self.getSurf().get_rect())
 
     # Getters
     def getSurf(self):

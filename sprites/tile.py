@@ -3,6 +3,7 @@ import pygame
 class Tile(pygame.sprite.Sprite):
     """
     Class representing a tile sprite
+    TODO optional - convert this to a file system too.
     
     Attributes:
         surf (pygame.Surface)
@@ -10,7 +11,6 @@ class Tile(pygame.sprite.Sprite):
         occupied (bool): Whether an ActiveEntity is on the tile
         damage (int): How much damage an entity takes upon entering tile
     """
-
     # Attributes
     __surf = None
     __accessible = None
@@ -20,15 +20,15 @@ class Tile(pygame.sprite.Sprite):
     # Constructor
     def __init__(self, 
                  colour: tuple[int, int, int], 
-                 accessible: bool, 
-                 occupied: bool, 
+                 accessible: bool,  
                  damage: int = 0, 
-                 surf: pygame.Surface = pygame.Surface((64, 64))):
-        self.setAccessible(accessible)
-        self.setOccupied(occupied)
-        self.setDamage(damage)
-        self.setSurf(surf)
+                 occupied: bool = False):
+        super().__init__()
+        self.setSurf(pygame.Surface((64, 64)))
         self.getSurf().fill(colour)
+        self.setAccessible(accessible)
+        self.setDamage(damage)
+        self.setOccupied(occupied)
 
     # Getters
     def getSurf(self):

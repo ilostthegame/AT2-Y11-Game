@@ -16,7 +16,7 @@ class TitleScreen(GameState):
         displayed_sprites: Sprite group that represents all pygame sprites that are to be sent to display
             
     Methods:
-        run(self, pygame_events: dict, mouse_pos: tuple[int, int]) -> str: Runs all functions associated with TitleScreen. To be called each iteration of game loop.
+        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: Runs all functions associated with TitleScreen. To be called each iteration of game loop.
             Returns the next state game is to enter.
         initialiseButtons(self) -> None: Creates start, quit buttons and adds them to button_group 
         savedGameExist(self) -> bool: Evaluates whether a saved gamefile exists. Returns True/False
@@ -26,9 +26,9 @@ class TitleScreen(GameState):
     __button_group = None 
 
     # Constructor
-    def __init__(self, button_group: pygame.sprite.Group = pygame.sprite.Group()):
+    def __init__(self):
         super().__init__()
-        self.setButtonGroup(button_group)
+        self.setButtonGroup(pygame.sprite.Group())
         self.initialiseButtons()
 
     # Getters
@@ -40,14 +40,14 @@ class TitleScreen(GameState):
         self.__button_group = button_group
 
     # Methods
-    def run(self, pygame_events, mouse_pos) -> str: 
+    def run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: 
         """
         Runs all functions associated with TitleScreen. To be called each iteration of game loop.
         Returns the next state game is to enter: in [title_screen, game_world, exit]
         """
         button_outputs = list() # List of all outputs from activated buttons
 
-        # Event handler
+        # Button activation handler TODO this can be a function with parameters (pygame_events, mouse_pos, button_group)
         for event in pygame_events:
             # Handle mouse left-button click
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # left mouse button
@@ -71,23 +71,23 @@ class TitleScreen(GameState):
             foo = button_outputs[0] # TODO fix name, and make the new_game, load_game cases activate some initialisation function. Perhaps within game_world
             match foo:
                 case 'new_game': 
-                    return 'game_world'
+                    return 'world_init'
                 case 'load_game':
-                    return 'game_world'
+                    return 'world_load'
                 case 'quit_game':
                     return 'quit'
                 case _:
                     raise Exception("Unknown button output")
 
-        return 'title_screen' # Re-enter title screen
+        return 'title_screen' # Re-enter title screen if no button pressed
             
                 
     def initialiseButtons(self) -> None:
         """
         Creates title screen buttons and adds them to button_group, and displayed_sprites
         """
-        button_group = pygame.sprite.Group()
-        displayed_sprites = pygame.sprite.Group()
+        button_group = self.getButtonGroup()
+        displayed_sprites = self.getDisplayedSprites()
         new_game_button = Button(pygame.Surface((256, 128)), 
                                  'New Game',
                                  32,

@@ -17,7 +17,7 @@ class GameState(ABC):
 
     # Constructor
     def __init__(self):
-        self.setDisplayedSprites(pygame.sprite.Group)
+        self.setDisplayedSprites(pygame.sprite.Group())
 
     # Getters
     def getDisplayedSprites(self):

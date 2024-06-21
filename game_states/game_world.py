@@ -3,145 +3,205 @@ from game_states.game_state import GameState
 from assets import GAME_ASSETS
 from pygame.locals import *
 from sprites.enemy import Enemy
+from sprites.portal import Portal
 from sprites.npc import Npc
+from sidebar import Sidebar
+from sprites.tile import Tile
+from sprites.board import Board
 from sprites.character import Character
-from level_info import LevelInfo
 
 class GameWorld(GameState):
     """
     Class representing the game world. Has parent GameState.
-    TODO fix
+    Loaded from GameMenu? TODO (all state calcualations should occur in Game).
+
     Attributes:
-        output (str): Output to be returned to main once loop finished. Represents next state game will enter:
-            ['startmenu' -> exit and run StartMenu, 'quit' -> end game loop]
-        
-        character (Character): Character object controlled by player
-        level_info (LevelInfo): Initialises and tracks tile and entity information in a level.
-        foo (Foo): Gui interface with action selections
+        sidebar (Sidebar): In-game sidebar
+        level_name (str): Name of the current level
+    
+        character (Character): Character sprite controlled by player
+        board (Board): Board sprite - 11x11 grid of tiles.
+        npc_group (pygame.sprite.Group): Group containing all npc sprites 
+        enemy_group (pygame.sprite.Group): Group containing all enemy sprites
+        portal_group (pygame.sprite.Group): Group containing all portal sprites
 
         (Inherited)
         displayed_sprites: Sprite group that represents all pygame sprites that are to be sent to display
 
-    Methods: TODO
-        run(self) -> str: Runs all functions associated with GameWorld. To be called each iteration of game loop.
+
+    Methods:
+        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: 
+            Runs all functions associated with GameWorld. 
+            To be called each iteration of game loop, while state == "game_world"
             Returns the next state game is to enter.
 
-        handleWorld(self): Handles state where character is in world
-        handleMenu(self, menu_type): 
-        handleDisplay(self)
+        Handler methods TODO
+
+        (Initialiser methods)
+        initialiseLevel(self) -> None: Initialises level tiles and entities
+        parseLevelCode(self) -> list[tuple[str, int, int]]: Returns list of tuples each representing a tile's info: 
+            (tile_code, xcoord, ycoord) - tile_code is X_X_XX string representing {tile_type}, {entity_type}, {entity_id}
+        interpretTileInfo(self, tile_info): Interprets a single tile_info tuple.
+            - tile information gets sent to Board object.
+            - enemy/npc/portal information sent to their respective groups
 
     """
 
     # Attributes
-    __screen = None
-    __state = None
-    __is_running = None
+    __sidebar = None
+    __level_name = None
     __character = None
-    __current_level = None
-    __output = None
-    __displayed_sprites = None
-    __tile_group = None
+    __board = None
     __npc_group = None
     __enemy_group = None
-    
+    __portal_group = None
+
     # Constructor
     def __init__(self, 
-                 screen: pygame.Surface, 
-                 state: str, 
-                 is_running: bool, 
-                 character: Character, 
-                 current_level: int, 
-                 output: str = 'quit', 
-                 displayed_sprites = pygame.sprite.Group, 
-                 tile_group = pygame.sprite.Group, 
-                 npc_group = pygame.sprite.Group, 
-                 enemy_group = pygame.sprite.Group):
-        self.setScreen(screen)
-        self.setState(state)
-        self.setIsRunning(is_running)
+                 level_name: str, 
+                 character: Character):
+        super().__init__()
+        self.setLevelName(level_name)
         self.setCharacter(character)
-        self.setCurrentLevel(current_level)
-        self.setOutput(output)
-        self.setDisplayedSprites(displayed_sprites)
-        self.setTileGroup(tile_group)
-        self.setNpcGroup(npc_group)
-        self.setEnemyGroup(enemy_group)
-
+        self.setBoard(Board())
+        self.setSidebar('placeholder')
+        self.setNpcGroup(pygame.sprite.Group())
+        self.setEnemyGroup(pygame.sprite.Group())
+        self.setPortalGroup(pygame.sprite.Group())
 
     # Getters
-    def getScreen(self):
-        return self.__screen
-    def getState(self):
-        return self.__state
-    def getIsRunning(self):
-        return self.__is_running
+    def getSidebar(self):
+        return self.__sidebar
+    def getLevelName(self):
+        return self.__level_name
     def getCharacter(self):
         return self.__character
-    def getCurrentLevel(self):
-        return self.__current_level
-    def getOutput(self):
-        return self.__output
-    def getDisplayedSprites(self):
-        return self.__displayed_sprites
-    def getTileGroup(self):
-        return self.__tile_group
+    def getBoard(self):
+        return self.__board
     def getNpcGroup(self):
         return self.__npc_group
     def getEnemyGroup(self):
         return self.__enemy_group
+    def getPortalGroup(self):
+        return self.__portal_group
 
     # Setters
-    def setScreen(self, screen):
-        self.__screen = screen
-    def setState(self, state):
-        self.__state = state
-    def setIsRunning(self, is_running):
-        self.__is_running = is_running
+    def setSidebar(self, sidebar):
+        self.__sidebar = sidebar
+    def setLevelName(self, level_name):
+        self.__level_name = level_name
     def setCharacter(self, character):
         self.__character = character
-    def setCurrentLevel(self, current_level):
-        self.__current_level = current_level
-    def setOutput(self, output):
-        self.__output = output
-    def setDisplayedSprites(self, displayed_sprites):
-        self.__displayed_sprites = displayed_sprites
-    def setTileGroup(self, tile_group):
-        self.__tile_group = tile_group
+    def setBoard(self, board):
+        self.__board = board
     def setNpcGroup(self, npc_group):
         self.__npc_group = npc_group
     def setEnemyGroup(self, enemy_group):
         self.__enemy_group = enemy_group
-
-    def handleWorld(self):
-        pass
-    
-    def handleActionMenu(self):
-        pass
-    
-    def handleNarrator(self, text):
-        pass
-
-    def handleInteraction(self, text, npc):
-        pass
-
-    def interpretButton(self):
-        pass
+    def setPortalGroup(self, portal_group):
+        self.__portal_group = portal_group
 
 
     # Methods
-    def run(self):
+    def run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str:
         """
-        Runs the game world loop.
-        Game world includes all stuff happening ingame after start button has been pressed.
+        Runs all functions associated with GameWorld. 
+        To be called each iteration of game loop, while state == "game_world"
+        Returns the next state game is to enter.
         """
-        while self.getIsRunning():
-            while self.getIsRunning() == True:
-            # Event handler for QUIT
-                for event in pygame.event.get(): 
-                    if event.type == QUIT:
-                        self.setIsRunning(False)
-                self.handleWorld()
-            
-        return self.getOutput()
 
-        # TODO use pygame.event == KEYDOWN to do stuff with one movement at a time.
+        # Pygame event handler
+        for event in pygame_events:
+            pass
+            # Use pygame.event == KEYDOWN to do stuff with one movement at a time.
+
+        displayed_sprites = self.getDisplayedSprites()
+        displayed_sprites.empty()
+        displayed_sprites.add(self.getBoard())
+        self.setDisplayedSprites(displayed_sprites)
+        return 'game_world'
+
+
+    # Level initialisation methods.
+    def initialiseLevel(self) -> None:
+        """
+        Initialises the level's board and entities.
+        """
+        # Interpret tile code, send info to sprite groups and Board object.
+        tile_info = self.parseLevelCode()
+        for tile in tile_info: # Iterates through all tuples
+            self.interpretTileInfo(tile)
+        
+        # Initialise board surface
+        board = self.getBoard()
+        board.drawBoardSurface()
+        self.setBoard(board)
+        
+    def parseLevelCode(self) -> list[tuple[str, int, int]]:
+        """
+        Returns list of tuples each representing a tile's info in form: 
+            (tile_code, xcoord, ycoord), where tile_code is X_X_XX string representing {tile_type}, {entity_type}, {entity_id}
+        """
+        str_to_find = '!!' + self.getLevelName() # marker string for the level code
+        with open('gameinfostorage/world_gen.txt', 'r') as world_gen_file:
+            file_lines = world_gen_file.readlines()
+
+            # Find place where level code begins
+            for pos, line in enumerate(file_lines):
+                if str_to_find in line:
+                    starting_pos = pos + 1 # position of line at which level code starts
+
+                    # Splits the 11x11 grid code into components.
+                    level_code_lines = [file_lines[starting_pos + i] for i in range(11)]
+                    tile_info = [(tile_code, int(xcoord), int(ycoord)) for ycoord, code_line in enumerate(level_code_lines) for xcoord, tile_code in enumerate(code_line.split())]
+                    return tile_info
+            
+            raise Exception(f"Level {self.getLevelName()} is not found")
+
+    def interpretTileInfo(self, tile_info) -> None:
+        """
+        Interprets a single tile_info tuple.
+            - tile information gets sent to Board object.
+            - enemy/npc/portal information sent to their respective groups
+        """
+        tile_type, entity_type, entity_id = tile_info[0].split('_')
+        xcoord, ycoord = tile_info[1], tile_info[2] # coordinates of tile
+
+        # Adding tile to Board's position_tile_dict
+        board = self.getBoard()
+        position_tile_dict = board.getPositionTileDict()
+        match tile_type:
+            case 'G': # grass
+                tile = Tile((123, 245, 10), True)
+            case 'W': # wall
+                tile = Tile((77, 77, 77), False)
+            case 'L': # lava
+                tile = Tile((209, 23, 23), True, 10)
+            case _:
+                raise Exception(f"Tile type {tile_type} does not exist")
+        position_tile_dict[(xcoord, ycoord)] = tile
+        board.setPositionTileDict(position_tile_dict)
+        self.setBoard(board)
+
+        # Adding entity (if exists) to respective group, and to all_sprites
+        match entity_type:
+            case '0': # no entity exists
+                return
+            case 'E': # enemy
+                enemy_group = self.getEnemyGroup()
+                enemy = Enemy(entity_id, xcoord, ycoord)
+                enemy_group.add(enemy)
+                self.setEnemyGroup(enemy_group)
+            case 'N': # npc
+                npc_group = self.getNpcGroup()
+                npc = Npc(entity_id, xcoord, ycoord)
+                npc_group.add(npc)
+                self.setNpcGroup(npc_group)
+            case 'P': # portal
+                portal_group = self.getPortalGroup()
+                portal = Portal(entity_id, xcoord, ycoord)
+                portal_group.add(portal)
+                self.setPortalGroup(portal_group)
+            case _:
+                raise Exception(f"Entity type {entity_type} does not exist.")
+        return

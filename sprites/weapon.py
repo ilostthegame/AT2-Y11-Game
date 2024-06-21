@@ -16,6 +16,7 @@ class Weapon(pygame.sprite.Sprite):
         attack_list (list): The list of attacks the weapon has
         entity_xcoord (int): The xcoord of the entity holding weapon
         entity_ycoord (int): The ycoord of the entity holding weapon
+        TODO will need some cooldown tracker
 
     Methods:
     TODO
@@ -37,6 +38,7 @@ class Weapon(pygame.sprite.Sprite):
         image, name = attribute_list[0], attribute_list[1]
         
         # Initialising weapon object.
+        super().__init__()
         self.setImage(pygame.image.load(GAME_ASSETS[image]))
         self.setName(name)
         self.setAttackList(list())
