@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from abc import ABC, abstractmethod
-from sprites.healthbar import Healthbar
+from healthbar import Healthbar
 from sprites.weapon import Weapon
 
 class ActiveEntity(pygame.sprite.Sprite, ABC):
@@ -52,7 +52,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
                  defence: int, 
                  max_health: int, 
                  health: int, 
-                 weapon: str, 
+                 weapon_id: str, 
                  is_alive: bool, 
                  xcoord: float, 
                  ycoord: float, 
@@ -66,7 +66,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setHealthbar(healthbar)
         self.setMaxHealth(max_health)
         self.setHealth(health)
-        self.setWeapon(weapon)
+        self.setWeapon(weapon_id)
         self.setIsAlive(is_alive)
         self.setXcoord(xcoord)
         self.setYcoord(ycoord)

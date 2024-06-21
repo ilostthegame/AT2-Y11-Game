@@ -1,26 +1,38 @@
 # Attributes
 __surf = None
-__rect = None
-__position_tile_dict = None
+__colour = None
+__accessible = None
+__occupied = None
+__damage = None
 
 # Constructor
-def __init__(self, surf, rect, position_tile_dict):
+def __init__(self, surf, colour, accessible, occupied, damage):
     self.setSurf(surf)
-    self.setRect(rect)
-    self.setPositionTileDict(position_tile_dict)
+    self.setColour(colour)
+    self.setAccessible(accessible)
+    self.setOccupied(occupied)
+    self.setDamage(damage)
 
 # Getters
 def getSurf(self):
     return self.__surf
-def getRect(self):
-    return self.__rect
-def getPositionTileDict(self):
-    return self.__position_tile_dict
+def getColour(self):
+    return self.__colour
+def getAccessible(self):
+    return self.__accessible
+def getOccupied(self):
+    return self.__occupied
+def getDamage(self):
+    return self.__damage
 
 # Setters
 def setSurf(self, surf):
     self.__surf = surf
-def setRect(self, rect):
-    self.__rect = rect
-def setPositionTileDict(self, position_tile_dict):
-    self.__position_tile_dict = position_tile_dict
+def setColour(self, colour):
+    self.__colour = colour
+def setAccessible(self, accessible):
+    self.__accessible = accessible
+def setOccupied(self, occupied):
+    self.__occupied = occupied
+def setDamage(self, damage):
+    self.__damage = damage

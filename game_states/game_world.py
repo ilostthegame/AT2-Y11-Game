@@ -73,7 +73,6 @@ class GameWorld(GameState):
         self.setNpcGroup(npc_group)
         self.setEnemyGroup(enemy_group)
         self.setPortalGroup(portal_group)
-        self.initialiseLevel() # Initialise starting level
 
     # Getters
     def getSidebar(self):
@@ -112,30 +111,40 @@ class GameWorld(GameState):
     def run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str:
         """
         Runs all functions associated with GameWorld. 
-            To be called each iteration of game loop, while state == "game_world"
-            Returns the next state game is to enter.
+        To be called each iteration of game loop, while state == "game_world"
+        Returns the next state game is to enter.
         """
 
         # Pygame event handler
+        for event in pygame_events:
+            pass
+            # Use pygame.event == KEYDOWN to do stuff with one movement at a time.
 
-
-
-        # Use pygame.event == KEYDOWN to do stuff with one movement at a time.
-
+        displayed_sprites = self.getDisplayedSprites()
+        displayed_sprites.empty()
+        displayed_sprites.add(self.getBoard())
+        self.setDisplayedSprites(displayed_sprites)
+        return 'game_world'
 
 
     # Level initialisation methods.
     def initialiseLevel(self) -> None:
         """
-        Initialises the level's tiles and entities.
+        Initialises the level's board and entities.
         """
+        # Interpret tile code, send info to sprite groups and Board object.
         tile_info = self.parseLevelCode()
         for tile in tile_info: # Iterates through all tuples
             self.interpretTileInfo(tile)
         
+        # Initialise board surface
+        board = self.getBoard()
+        board.drawBoardSurface()
+        self.setBoard(board)
+        
     def parseLevelCode(self) -> list[tuple[str, int, int]]:
         """
-        Returns list of tuples each representing a tile's info: 
+        Returns list of tuples each representing a tile's info in form: 
             (tile_code, xcoord, ycoord), where tile_code is X_X_XX string representing {tile_type}, {entity_type}, {entity_id}
         """
         str_to_find = '!!' + self.getLevelName() # marker string for the level code

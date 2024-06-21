@@ -14,9 +14,8 @@ class Board(pygame.sprite.Sprite):
     Can copy() to get a new game board to blit all sprites upon.
     Can probably do that in GameWorld.
 
-    Methods: (note that constructor uses these).
-
-        drawBoardSurface(self): Using position_tile_dict, draws tiles onto board_surf
+    Methods:
+    drawBoardSurface(self): Using position_tile_dict, draws tiles onto board_surf
     
     """
 
@@ -29,6 +28,7 @@ class Board(pygame.sprite.Sprite):
     def __init__(self, 
                  position_tile_dict: dict[tuple[int, int], Tile] = dict(), 
                  surf: pygame.Surface = pygame.Surface((704, 704))):
+        super().__init__()
         self.setPositionTileDict(position_tile_dict)
         self.setSurf(surf)
         self.setRect(self.getSurf().get_rect())
@@ -53,11 +53,16 @@ class Board(pygame.sprite.Sprite):
     def drawBoardSurface(self):
         """
         Using position_tile_dict, draws tiles onto surf
-        """ 
+        """
         position_tile_dict = self.getPositionTileDict()
-        surf = self.getSurf()
-        # Iterating through all xcoord, ycoord and tile_type
+        board_surf = self.getSurf()
+        # Iterating through all xcoord, ycoord and tile_type, and drawing onto board_surf
         for xcoord, ycoord in position_tile_dict.keys():
             tile = position_tile_dict[(xcoord, ycoord)]
-            surf.blit(tile.getSurf, (xcoord*64, ycoord*64, 64, 64))
-        self.setSurf(surf)
+            #pygame.draw.rect(board_surf, tile.getColour(), (xcoord*64, ycoord*64, 64, 64))
+            board_surf.blit(tile.getSurf(), (xcoord*64, ycoord*64, 64, 64))
+
+        self.setSurf(board_surf)
+        
+
+

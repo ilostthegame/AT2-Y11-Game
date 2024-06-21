@@ -71,23 +71,23 @@ class TitleScreen(GameState):
             foo = button_outputs[0] # TODO fix name, and make the new_game, load_game cases activate some initialisation function. Perhaps within game_world
             match foo:
                 case 'new_game': 
-                    return 'game_world'
+                    return 'world_init'
                 case 'load_game':
-                    return 'game_world'
+                    return 'world_load'
                 case 'quit_game':
                     return 'quit'
                 case _:
                     raise Exception("Unknown button output")
 
-        return 'title_screen' # Re-enter title screen
+        return 'title_screen' # Re-enter title screen if no button pressed
             
                 
     def initialiseButtons(self) -> None:
         """
         Creates title screen buttons and adds them to button_group, and displayed_sprites
         """
-        button_group = pygame.sprite.Group()
-        displayed_sprites = pygame.sprite.Group()
+        button_group = self.getButtonGroup()
+        displayed_sprites = self.getDisplayedSprites()
         new_game_button = Button(pygame.Surface((256, 128)), 
                                  'New Game',
                                  32,

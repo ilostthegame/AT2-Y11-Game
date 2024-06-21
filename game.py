@@ -2,10 +2,13 @@ import pygame
 from game_states.title_screen import TitleScreen
 from game_states.game_world import GameWorld
 from game_states.game_menu import GameMenu
+from game_states.world_init import WorldInit
+from game_states.world_load import WorldLoad
 from assets import load_assets, GAME_ASSETS
 from pygame.locals import *
 from sprites.character import Character
-from sprites.healthbar import Healthbar
+from healthbar import Healthbar
+import random
 
 load_assets()
 
@@ -17,7 +20,8 @@ class Game:
 
     Attributes:
         screen (pygame.Surface): Display on which all objects are sent.
-        state (str): Represents the state the game is in: in ['title_screen', 'game_world', 'game_menu', 'quit']
+        state (str): Represents the state the game is in: 
+            in ['title_screen', 'world_init', 'world_load', 'game_world', 'game_menu', 'quit']
         is_running (bool): Whether game loop is to continue iteration.
         clock (pygame.time.Clock): Clock to track framerate
 
@@ -50,15 +54,28 @@ class Game:
                  screen: pygame.Surface = pygame.display.set_mode((1200, 800)), 
                  clock: pygame.time.Clock = pygame.time.Clock(), 
                  title_screen: TitleScreen = TitleScreen(), 
-                 game_world = 'foobar', # game_world: GameWorld = GameWorld(), 
                  game_menu = 'barfoo'): # game_menu: GameMenu = GameMenu()):
         self.setState(state)
         self.setIsRunning(is_running)
         self.setScreen(screen)
         self.setClock(clock)
         self.setTitleScreen(title_screen)
-        self.setGameWorld(game_world)
         self.setGameMenu(game_menu)
+
+        #temp GameWorld init
+        character = Character('blue_orb',
+                              'Bob',
+                              25,
+                              25,
+                              100,
+                              100,
+                              'Sw',
+                              True,
+                              0,
+                              0,1, 0,list(),list(),0,Healthbar(100, 100))
+        game_world = GameWorld('Dining Hall', character)
+        game_world.initialiseLevel()
+        self.setGameWorld(game_world)
 
     # Getters
     def getScreen(self):
@@ -100,8 +117,6 @@ class Game:
         while self.getIsRunning() == True:
             pygame_events = pygame.event.get()
             mouse_pos = pygame.mouse.get_pos()
-            print(pygame_events)
-            print(mouse_pos)
 
             # Event handler for if game is closed
             for event in pygame_events: 
@@ -113,10 +128,14 @@ class Game:
             match state:
                 case 'title_screen':
                     displayed_sprites = self.runTitleScreen(pygame_events, mouse_pos)
+                case 'world_init': # TODO fix up worldinit
+                    displayed_sprites = self.runGameWorld(pygame_events, mouse_pos) # self.runWorldInit()
+                case 'world_load':
+                    displayed_sprites = self.runWorldLoad()
                 case 'game_world':
-                    displayed_sprites = self.runGameWorld()
+                    displayed_sprites = self.runGameWorld(pygame_events, mouse_pos)
                 case 'game_menu':
-                    displayed_sprites = self.runGameMenu()
+                    displayed_sprites = self.runGameMenu() 
                 case 'quit':
                     self.setIsRunning(False)
                 case _:
@@ -132,7 +151,7 @@ class Game:
         self.handleCleanup() # Runs cleanup, TODO save game.
 
 
-    def runTitleScreen(self, pygame_events: dict, mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
+    def runTitleScreen(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
         """
         To run if state == 'title_screen'. Runs TitleScreen class.
         Returns sprite group containing all sprites associated with TitleScreen state.
@@ -145,18 +164,24 @@ class Game:
         self.setState(next_state)
         return displayed_sprites
     
+    def runWorldInit(self):
+        pass
 
-    def runGameWorld(self, pygame_events: dict) -> pygame.sprite.Group:
+    def runWorldLoad(self):
+        pass
+
+    def runGameWorld(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
         """
         To run if state == 'game_world'. Runs GameWorld class.
         Returns sprite group containing all sprites associated with GameWorld state.
         """
         game_world = self.getGameWorld()
-        next_state = game_world.run(pygame_events)
+        
+        next_state = game_world.run(pygame_events, mouse_pos)
         displayed_sprites = game_world.getDisplayedSprites()
 
         self.setGameWorld(game_world)
-        self.setState(next_state)
+        self.setState(next_state) # no problems here I think
         return displayed_sprites
         
 

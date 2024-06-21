@@ -38,6 +38,7 @@ class Weapon(pygame.sprite.Sprite):
         image, name = attribute_list[0], attribute_list[1]
         
         # Initialising weapon object.
+        super().__init__()
         self.setImage(pygame.image.load(GAME_ASSETS[image]))
         self.setName(name)
         self.setAttackList(list())

@@ -6,6 +6,8 @@ import time
 run = True
 pygame.init()
 screen = pygame.display.set_mode((500,500))
+tile = pygame.Surface((64, 64))
+tile.fill('red')
 
 while run == True:
     # Event handler for QUIT
@@ -16,6 +18,8 @@ while run == True:
             print(event.unicode)
 
     screen.fill((255, 255, 255))
+    screen.blit(tile, (0, 0, 64, 64))
+    screen.blit(tile, (55, 100, 64, 64))
     pygame.display.flip()
                     
 pygame.quit()

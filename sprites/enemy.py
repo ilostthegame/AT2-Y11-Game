@@ -3,7 +3,7 @@ import random
 from file_id_interpreter import FileIdInterpreter
 from sprites.active_entity import ActiveEntity
 from assets import GAME_ASSETS, load_assets
-from sprites.healthbar import Healthbar
+from healthbar import Healthbar
 from sprites.weapon import Weapon
 
 class Enemy(ActiveEntity):
