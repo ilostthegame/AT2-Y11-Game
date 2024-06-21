@@ -1,50 +1,26 @@
 # Attributes
-__screen = None
-__state = None
-__is_running = None
-__clock = None
-__title_screen = None
-__game_world = None
-__game_menu = None
+__surf = None
+__rect = None
+__position_tile_dict = None
 
 # Constructor
-def __init__(self, screen, state, is_running, clock, title_screen, game_world, game_menu):
-    self.setScreen(screen)
-    self.setState(state)
-    self.setIsRunning(is_running)
-    self.setClock(clock)
-    self.setTitleScreen(title_screen)
-    self.setGameWorld(game_world)
-    self.setGameMenu(game_menu)
+def __init__(self, surf, rect, position_tile_dict):
+    self.setSurf(surf)
+    self.setRect(rect)
+    self.setPositionTileDict(position_tile_dict)
 
 # Getters
-def getScreen(self):
-    return self.__screen
-def getState(self):
-    return self.__state
-def getIsRunning(self):
-    return self.__is_running
-def getClock(self):
-    return self.__clock
-def getTitleScreen(self):
-    return self.__title_screen
-def getGameWorld(self):
-    return self.__game_world
-def getGameMenu(self):
-    return self.__game_menu
+def getSurf(self):
+    return self.__surf
+def getRect(self):
+    return self.__rect
+def getPositionTileDict(self):
+    return self.__position_tile_dict
 
 # Setters
-def setScreen(self, screen):
-    self.__screen = screen
-def setState(self, state):
-    self.__state = state
-def setIsRunning(self, is_running):
-    self.__is_running = is_running
-def setClock(self, clock):
-    self.__clock = clock
-def setTitleScreen(self, title_screen):
-    self.__title_screen = title_screen
-def setGameWorld(self, game_world):
-    self.__game_world = game_world
-def setGameMenu(self, game_menu):
-    self.__game_menu = game_menu
+def setSurf(self, surf):
+    self.__surf = surf
+def setRect(self, rect):
+    self.__rect = rect
+def setPositionTileDict(self, position_tile_dict):
+    self.__position_tile_dict = position_tile_dict

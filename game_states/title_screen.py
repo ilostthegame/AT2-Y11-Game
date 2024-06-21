@@ -47,7 +47,7 @@ class TitleScreen(GameState):
         """
         button_outputs = list() # List of all outputs from activated buttons
 
-        # Event handler
+        # Button activation handler TODO this can be a function with parameters (pygame_events, mouse_pos, button_group)
         for event in pygame_events:
             # Handle mouse left-button click
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # left mouse button
