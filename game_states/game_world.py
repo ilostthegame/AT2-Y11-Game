@@ -66,6 +66,7 @@ class GameWorld(GameState):
         super().__init__()
         self.setLevelName(level_name)
         self.setCharacter(character)
+        # self.setSidebar(Sidebar(character.getWeapon().getAttackList()), character.getQuestList())
         self.setBoard(Board())
         self.setSidebar('placeholder')
         self.setNpcGroup(pygame.sprite.Group())

@@ -18,9 +18,9 @@ class Sidebar(pygame.sprite.Sprite):
         surf (pygame.Surface): Entire surface of the sidebar.
         rect (pygame.Rect)
         game_event_display (GameEventDisplay): Sprite that displays game events. Blitted to bottom right.
-        character_data_display (CharacterData TODO is a Sprite): Displays character healthbar, xp bar, and level.
-        character_attacks (dict[Attack]): Represents all attacks player has.
-        character_quests (dict[Quest]) Represents all quests player has.
+        character_data_display (CharacterDataDisplay): Displays character healthbar, xp bar, and level.
+        character_attacks (list[Attack]): Represents all attacks player has.
+        character_quests (list[Quest]) Represents all quests player has.
         current_button_group (pygame.sprite.Group): Group representing all buttons on sidebar
         current_menu (str): Represents which menu the player is on. In [main, attack_menu, quest_menu]
         button_dict (dict[str, Button]): Relates button names to their objects, for conciseness.
@@ -33,10 +33,11 @@ class Sidebar(pygame.sprite.Sprite):
             Interprets button output, changes current_menu accordingly. 
             Returns any important outputs: if an attack is used, or if game menu is accessed. 
         updateButtons(self) -> None: 
-            Updates which buttons are in current_button_group. To be run when a button is pressed.
+            Updates which buttons are in current_button_group, depending on current_menu. 
+            To be run when a button is pressed.
         initialiseButtonDict(self) -> None: 
             Inputs all button objects into button_dict. 
-            To be run in constructor, and whenever character_attacks or character_quests are updated.
+            To be run initially, and whenever character_attacks or character_quests are updated.
     """
     # Attributes
     __surf = None
@@ -57,12 +58,11 @@ class Sidebar(pygame.sprite.Sprite):
         self.setRect((704, 0, 496, 800)) # position is top-right of screen.
         self.setGameEventDisplay(GameEventDisplay())
         self.setCharacterDataDisplay(CharacterDataDisplay())
+        
+
+        # Initialise button_dict - initialisation function found in character_attacks/quests setters.
         self.setCharacterAttacks(character_attacks)
         self.setCharacterQuests(character_quests)
-
-        # Initialise button dictionary
-        self.setButtonDict(dict())
-        self.initialiseButtonDict()
 
         # Add initial buttons: Attack menu, Quest menu, Game menu
         self.setCurrentMenu('main')
@@ -100,10 +100,15 @@ class Sidebar(pygame.sprite.Sprite):
         self.__game_event_display = game_event_display
     def setCharacterDataDisplay(self, character_data_display):
         self.__character_data_display = character_data_display
+
+    # Set character/quest dictionaries. Automatically updates button_dict with new attack/quest buttons
     def setCharacterAttacks(self, character_attacks):
         self.__character_attacks = character_attacks
+        self.initialiseButtonDict()
     def setCharacterQuests(self, character_quests):
         self.__character_quests = character_quests
+        self.initialiseButtonDict()
+
     def setCurrentButtonGroup(self, current_button_group):
         self.__current_button_group = current_button_group
     def setCurrentMenu(self, current_menu):
@@ -142,25 +147,77 @@ class Sidebar(pygame.sprite.Sprite):
         Returns any important outputs: if an attack is used, or if game menu is accessed. 
         """
         match button_output:
-            case 'new_game': # TODO change
-                return 'world_init'
-            case 'load_game':
-                return 'world_load'
-            case 'quit_game':
-                return 'quit'
+            # Menu navigation buttons
+            case 'game_menu':
+                return 'game_menu'
+            case 'attack_menu':
+                self.setCurrentMenu('attack_menu')
+                self.updateButtons()
+            case 'quest_menu':
+                self.setCurrentMenu('quest_menu')
+                self.updateButtons()
+            case 'back':
+                self.setCurrentMenu('main')
+                self.updateButtons()
+            # Attack selection buttons
+            case 'attack1':
+                return 'attack1'
+            case 'attack2':
+                return 'attack2'
+            case 'attack3':
+                return 'attack3'
+            case 'attack4':
+                return 'attack4'
             case _:
-                raise Exception("Unknown button output")
+                raise Exception(f"Button output {button_output} is unknown")
+        return # if no important outputs, returns None
 
     def updateButtons(self) -> None: 
         """
-        Updates which buttons are in current_button_group. To be run when a button is pressed.
+        Updates which buttons are in current_button_group, depending on current_menu. 
+        To be run when a button is pressed.
         """
-        pass
-
+        current_menu = self.getCurrentMenu()
+        current_button_group = self.getCurrentButtonGroup()
+        current_button_group.empty()
+        button_dict = self.getButtonDict()
+        match current_menu:
+            case 'main':
+                # Adds menu navigation buttons: game_menu, attack_menu, quest_menu, back
+                current_button_group.add(button_dict['game_menu'], button_dict['attack_menu'], button_dict['quest_menu'], button_dict['back'])
+            case 'attack_menu':
+                # Adds buttons for each existing attack 
+                for attack_pos in range(1, 4+1):
+                    if button_dict[f'attack {attack_pos}']:
+                        current_button_group.add(button_dict[f'attack {attack_pos}'])
+            case 'quest_menu':
+                pass
+            case '_':
+                raise Exception(f"current_menu {current_menu} is unknown.")
+        return
 
     def initialiseButtonDict(self) -> None: 
         """
-        Inputs all button objects into button_dict. 
-        To be run in constructor, and whenever character_attacks or character_quests are updated.
+        Creates button_dict, and adds all objects to 
+        To be run initially, and whenever character_attacks or character_quests are updated.
         """
-        pass
+        attacks = self.getCharacterAttacks()
+        quests = self.getCharacterQuests()
+        button_dict = dict()
+        # Add menu navigation buttons
+        button_dict['game_menu'] = Button(pygame.Surface((64, 32)), 'Menu', 16, (100, 100, 100), 'game_menu', (1168, 16), '0')
+        button_dict['attack_menu'] = Button(pygame.Surface((128, 64)), 'Attack Menu', 32, (100, 100, 100), 'attack_menu', (1168, 16), '0')
+        button_dict['quest_menu'] = Button(pygame.Surface((128, 64)), 'Menu', 32, (100, 100, 100), 'game_menu', (1168, 16), '0')
+        button_dict['back'] = Button(pygame.Surface((128, 64)), 'Menu', 32, (100, 100, 100), 'game_menu', (1168, 16), '0')
+        # Add attack buttons
+        for pos, attack in enumerate(attacks):
+            if pos <= 3:
+                button_dict[f"attack {pos+1}"] = Button(pygame.Surface((128, 32)), attack.getName(), 16, (100, 0, 100), f"attack {pos+1}", str(pos+1))
+            else:
+                raise Exception("Character has too many attacks (max is 4)")
+            
+        # Add quest buttons TODO
+
+        # TODO this should just be a sprite_dict. Not sure what to name it. 
+
+        self.setButtonDict(button_dict)

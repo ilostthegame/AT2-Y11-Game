@@ -59,8 +59,8 @@ class TitleScreen(GameState):
         button_outputs = ButtonOutputGetter().getOutputs(self.getButtonGroup(), pygame_events, mouse_pos) # Gets all button outputs
         # If there exists button output(s), interprets the first one in button_outputs.
         if button_outputs:
-            output = button_outputs[0]
-            match output:
+            button_output = button_outputs[0]
+            match button_output:
                 case 'new_game': 
                     return 'world_init'
                 case 'load_game':
@@ -68,7 +68,7 @@ class TitleScreen(GameState):
                 case 'quit_game':
                     return 'quit'
                 case _:
-                    raise Exception("Unknown button output")
+                    raise Exception(f"Button output {button_output} is unknown")
 
         return 'title_screen' # Re-enter title screen if no button pressed
             
