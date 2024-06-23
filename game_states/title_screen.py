@@ -3,6 +3,7 @@ from game_states.game_state import GameState
 from pygame.locals import *
 from assets import GAME_ASSETS
 from sprites.button import Button
+from button_output_getter import ButtonOutputGetter
 
 class TitleScreen(GameState):
     """
@@ -45,31 +46,12 @@ class TitleScreen(GameState):
         Runs all functions associated with TitleScreen. To be called each iteration of game loop.
         Returns the next state game is to enter: in [title_screen, game_world, exit]
         """
-        button_outputs = list() # List of all outputs from activated buttons
+        button_outputs = ButtonOutputGetter().getOutputs(self.getButtonGroup(), pygame_events, mouse_pos) # Gets all button outputs
 
-        # Button activation handler TODO this can be a function with parameters (pygame_events, mouse_pos, button_group)
-        for event in pygame_events:
-            # Handle mouse left-button click
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # left mouse button
-                buttons_pressed = [button for button in self.getButtonGroup() if button.getRect().collidepoint(mouse_pos)] # gets all button rects colliding with mouse
-                for button in buttons_pressed:
-                    button_outputs.append(button.getOutput())
-
-            # Handle keypress
-            elif event.type == pygame.KEYDOWN:
-                for button in self.getButtonGroup():
-                    connected_key = button.getConnectedKey()
-                    if connected_key: # if connected key exists
-                        if event.unicode.lower() == connected_key.lower(): # check if pressed key == connected key
-                            button_outputs.append(button.getOutput())
-
-            else:
-                continue
-            
         # If there exists button output(s), interprets the first one in button_outputs.
         if button_outputs:
-            foo = button_outputs[0] # TODO fix name, and make the new_game, load_game cases activate some initialisation function. Perhaps within game_world
-            match foo:
+            output = button_outputs[0]
+            match output:
                 case 'new_game': 
                     return 'world_init'
                 case 'load_game':
