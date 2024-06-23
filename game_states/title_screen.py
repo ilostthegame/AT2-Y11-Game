@@ -46,8 +46,14 @@ class TitleScreen(GameState):
         Runs all functions associated with TitleScreen. To be called each iteration of game loop.
         Returns the next state game is to enter: in [title_screen, game_world, exit]
         """
-        button_outputs = ButtonOutputGetter().getOutputs(self.getButtonGroup(), pygame_events, mouse_pos) # Gets all button outputs
+        # Blits all buttons to surface
+        main_surf = self.getMainSurf()
+        main_surf.fill((187, 211, 250))
+        for button in self.getButtonGroup():
+            main_surf.blit(button.getSurf(), button.getRect())
+        self.setMainSurf(main_surf)
 
+        button_outputs = ButtonOutputGetter().getOutputs(self.getButtonGroup(), pygame_events, mouse_pos) # Gets all button outputs
         # If there exists button output(s), interprets the first one in button_outputs.
         if button_outputs:
             output = button_outputs[0]
@@ -66,11 +72,9 @@ class TitleScreen(GameState):
                 
     def initialiseButtons(self) -> None:
         """
-        Creates title screen buttons and adds them to button_group, and blits them to main_surf
+        Creates title screen buttons and adds them to button_group.
         """
         button_group = self.getButtonGroup()
-        main_surf = self.getMainSurf()
-        # adds new game and exit buttons, and load button if it exists
         new_game_button = Button(pygame.Surface((256, 128)), 
                                  'New Game',
                                  32,
@@ -85,7 +89,7 @@ class TitleScreen(GameState):
                                  (600, 600),
                                  'P')
         button_group.add(new_game_button, exit_button) 
-        if self.savedGameExist():
+        if self.savedGameExist(): # Load Game only if saved game exists already.
             load_game_button = Button(pygame.Surface((256, 128)), 
                                       'Load Game',
                                       32,
@@ -94,12 +98,6 @@ class TitleScreen(GameState):
                                       (600, 400))
             button_group.add(load_game_button)
         self.setButtonGroup(button_group)
-
-        # Blits all buttons to surface
-        main_surf.fill((187, 211, 250))
-        for button in self.getButtonGroup():
-            main_surf.blit(button.getSurf(), button.getRect())
-        self.setMainSurf(main_surf)
         return
         
     

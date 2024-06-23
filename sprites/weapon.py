@@ -10,10 +10,10 @@ class Weapon(pygame.sprite.Sprite):
 
     Attributes:
         surf (pygame.Surface): The weapon surface.
-        image (pygame.image): The weapon's image
+        image (pygame.Surface): The weapon's image
         rect (pygame.Rect): The weapon surface's rectangle
         name (str): The name of the weapon
-        attack_list (list): The list of attacks the weapon has
+        attack_dict (dict[Attack]): relates attack number to Attack object
         entity_xcoord (int): The xcoord of the entity holding weapon
         entity_ycoord (int): The ycoord of the entity holding weapon
         TODO will need some cooldown tracker
@@ -27,7 +27,7 @@ class Weapon(pygame.sprite.Sprite):
     __image = None
     __rect = None
     __name = None
-    __attack_list = None
+    __attack_dict = None
     __entity_xcoord = None
     __entity_ycoord = None
 
@@ -41,16 +41,17 @@ class Weapon(pygame.sprite.Sprite):
         super().__init__()
         self.setImage(pygame.image.load(GAME_ASSETS[image]))
         self.setName(name)
-        self.setAttackList(list())
         self.setEntityXcoord(entity_xcoord)
         self.setEntityYcoord(entity_ycoord)
         self.setSurf(pygame.Surface((64, 64), SRCALPHA))
         self.setRect(self.getSurf().get_rect())
 
-        # Adds all attacks to the attack list.
-        for attack_id in attribute_list[2:]:
+        # Adds all attacks to the attack dictionary.
+        attack_dict = dict()
+        for pos, attack_id in enumerate(attribute_list[2:]):
             attack = Attack(attack_id)
-            self.getAttackList().append(attack)
+            attack_dict[pos + 1] = attack
+        self.setAttackDict(attack_dict)
 
     # Getters
     def getSurf(self):
@@ -61,8 +62,8 @@ class Weapon(pygame.sprite.Sprite):
         return self.__rect
     def getName(self):
         return self.__name
-    def getAttackList(self):
-        return self.__attack_list
+    def getAttackDict(self):
+        return self.__attack_dict
     def getEntityXcoord(self):
         return self.__entity_xcoord
     def getEntityYcoord(self):
@@ -77,8 +78,8 @@ class Weapon(pygame.sprite.Sprite):
         self.__rect = rect
     def setName(self, name):
         self.__name = name
-    def setAttackList(self, attacks):
-        self.__attack_list = attacks
+    def setAttackDict(self, attacks):
+        self.__attack_dict = attacks
     def setEntityXcoord(self, entity_xcoord):
         self.__entity_xcoord = entity_xcoord
     def setEntityYcoord(self, entity_ycoord):

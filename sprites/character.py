@@ -66,9 +66,9 @@ class Character(ActiveEntity):
                  ycoord: int, 
                  level: int, 
                  experience_points: int, 
-                 skills: list, 
-                 items: list, 
-                 gold: int, 
+                 quests: dict, # TODO fix type hint
+                 items, # TODO remove
+                 gold, # TODO remove. Unnecessary features
                  healthbar: Healthbar):
         super().__init__(image, name, attack, defence, max_health, health, weapon_id, is_alive, xcoord, ycoord, healthbar) 
         self.setLevel(level)
