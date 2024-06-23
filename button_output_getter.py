@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import MOUSEBUTTONDOWN, KEYDOWN
 
 class ButtonOutputGetter:
     """
@@ -23,13 +24,13 @@ class ButtonOutputGetter:
 
         for event in pygame_events:
             # Handle left mouse button press
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
                 buttons_pressed = [button for button in button_group if button.getRect().collidepoint(mouse_pos)] # gets all button rects colliding with mouse
                 for button in buttons_pressed:
                     button_outputs.append(button.getOutput())
 
             # Handle keypress
-            elif event.type == pygame.KEYDOWN:
+            elif event.type == KEYDOWN:
                 for button in button_group:
                     connected_key = button.getConnectedKey()
                     if connected_key: # if connected key exists

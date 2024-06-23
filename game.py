@@ -7,7 +7,7 @@ from game_states.world_load import WorldLoad
 from assets import load_assets, GAME_ASSETS
 from pygame.locals import *
 from sprites.character import Character
-from healthbar import Healthbar
+from sprites.healthbar import Healthbar
 import random
 
 load_assets()
@@ -58,7 +58,7 @@ class Game:
         self.setTitleScreen(TitleScreen())
         self.setGameMenu('placeholder')
 
-        #temp GameWorld init
+        # Temporary GameWorld initialisation
         character = Character('blue_orb',
                               'Bob',
                               25,
@@ -69,7 +69,7 @@ class Game:
                               True,
                               0,
                               0,1, 0,list(),list(),0,Healthbar(100, 100))
-        game_world = GameWorld('Test', character)
+        game_world = GameWorld('Dining Hall', character)
         game_world.initialiseLevel()
         self.setGameWorld(game_world)
 
@@ -123,15 +123,15 @@ class Game:
             state = self.getState()
             match state:
                 case 'title_screen':
-                    displayed_sprites = self.runTitleScreen(pygame_events, mouse_pos)
+                    main_surf = self.runTitleScreen(pygame_events, mouse_pos)
                 case 'world_init': # TODO fix up worldinit
-                    displayed_sprites = self.runGameWorld(pygame_events, mouse_pos) # self.runWorldInit()
+                    main_surf = self.runGameWorld(pygame_events, mouse_pos) # self.runWorldInit()
                 case 'world_load':
-                    displayed_sprites = self.runWorldLoad()
+                    main_surf = self.runWorldLoad()
                 case 'game_world':
-                    displayed_sprites = self.runGameWorld(pygame_events, mouse_pos)
+                    main_surf = self.runGameWorld(pygame_events, mouse_pos)
                 case 'game_menu':
-                    displayed_sprites = self.runGameMenu() 
+                    main_surf = self.runGameMenu() 
                 case 'quit':
                     self.setIsRunning(False)
                 case _:
@@ -140,8 +140,7 @@ class Game:
             # Sends all sprites to the display.
             screen = self.getScreen()
             screen.fill((255, 255, 255))
-            for sprite in displayed_sprites:
-                screen.blit(sprite.getSurf(), sprite.getRect())
+            screen.blit(main_surf, (0, 0))
             pygame.display.flip()
 
         self.handleCleanup() # Runs cleanup, TODO save game.
@@ -154,11 +153,11 @@ class Game:
         """
         title_screen = self.getTitleScreen()
         next_state = title_screen.run(pygame_events, mouse_pos)
-        displayed_sprites = title_screen.getDisplayedSprites()
+        main_surf = title_screen.getMainSurf()
 
         self.setTitleScreen(title_screen)
         self.setState(next_state)
-        return displayed_sprites
+        return main_surf
     
     def runWorldInit(self):
         pass
@@ -174,11 +173,11 @@ class Game:
         game_world = self.getGameWorld()
         
         next_state = game_world.run(pygame_events, mouse_pos)
-        displayed_sprites = game_world.getDisplayedSprites()
+        main_surf = game_world.getMainSurf()
 
         self.setGameWorld(game_world)
         self.setState(next_state) # no problems here I think
-        return displayed_sprites
+        return main_surf
         
 
     def runGameMenu(self) -> pygame.sprite.Group:

@@ -1,8 +1,8 @@
 import pygame
 
-class Healthbar:
+class Healthbar(pygame.sprite.Sprite):
     """
-    Class representing a healthbar surface
+    Class representing a healthbar sprite
 
     Attributes:
 
@@ -25,6 +25,7 @@ class Healthbar:
 
     # Constructor
     def __init__(self, entity_health: int, entity_max_health: int):
+        super().__init__()
         self.setSurf(pygame.Surface((64, 16)))
         self.setRect(self.getSurf().get_rect())
         self.setEntityHealth(entity_health)

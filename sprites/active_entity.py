@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from abc import ABC, abstractmethod
-from healthbar import Healthbar
+from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
 
 class ActiveEntity(pygame.sprite.Sprite, ABC):

@@ -7,3 +7,5 @@ Template for npc object as below:
 
 !!Bo~bob/Bob/hi i am bob
 !!Is~ishaan/Ishaan/help i am ishaan
+
+!!HF~hayden_foxwell/Hayden Foxwell/make sure your uniforms are well adjusted

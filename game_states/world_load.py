@@ -15,7 +15,7 @@ class WorldLoad(GameState): # TODO very unfinished
         save_file ???
     
         (Inherited)
-        displayed_sprites: Sprite group that represents all pygame sprites that are to be sent to display
+        main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
             
     Methods:
         run(self) -> str: Runs all functions to initialise the game world

@@ -2,7 +2,7 @@ import pygame
 from sprites.active_entity import ActiveEntity
 from pygame.locals import *
 from assets import GAME_ASSETS
-from healthbar import Healthbar
+from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
 
 class Character(ActiveEntity):

@@ -5,7 +5,7 @@ from pygame.locals import *
 from sprites.enemy import Enemy
 from sprites.portal import Portal
 from sprites.npc import Npc
-from sidebar import Sidebar
+from sprites.sidebar import Sidebar
 from sprites.tile import Tile
 from sprites.board import Board
 from sprites.character import Character
@@ -26,7 +26,7 @@ class GameWorld(GameState):
         portal_group (pygame.sprite.Group): Group containing all portal sprites
 
         (Inherited)
-        displayed_sprites: Sprite group that represents all pygame sprites that are to be sent to display
+        main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
 
 
     Methods:
@@ -115,10 +115,13 @@ class GameWorld(GameState):
             pass
             # Use pygame.event == KEYDOWN to do stuff with one movement at a time.
 
-        displayed_sprites = self.getDisplayedSprites()
-        displayed_sprites.empty()
-        displayed_sprites.add(self.getBoard())
-        self.setDisplayedSprites(displayed_sprites)
+        board = self.getBoard()
+
+        main_surf = self.getMainSurf()
+        main_surf.fill((0, 0, 0))
+
+        main_surf.blit(board.getSurf(), board.getRect())
+        self.setMainSurf(main_surf)
         return 'game_world'
 
 
@@ -137,6 +140,7 @@ class GameWorld(GameState):
         board.drawBoardSurface()
         self.setBoard(board)
         
+
     def parseLevelCode(self) -> list[tuple[str, int, int]]:
         """
         Returns list of tuples each representing a tile's info in form: 
@@ -156,7 +160,8 @@ class GameWorld(GameState):
                     tile_info = [(tile_code, int(xcoord), int(ycoord)) for ycoord, code_line in enumerate(level_code_lines) for xcoord, tile_code in enumerate(code_line.split())]
                     return tile_info
             
-            raise Exception(f"Level {self.getLevelName()} is not found")
+        raise Exception(f"Level {self.getLevelName()} is not found") # Level name is not found
+
 
     def interpretTileInfo(self, tile_info) -> None:
         """
