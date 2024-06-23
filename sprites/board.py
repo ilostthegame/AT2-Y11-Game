@@ -15,7 +15,8 @@ class Board(pygame.sprite.Sprite):
     Can probably do that in GameWorld.
 
     Methods:
-    drawBoardSurface(self): Using position_tile_dict, draws tiles onto board_surf
+    drawBoardSurface(self): 
+        Using position_tile_dict, draws tiles onto board_surf
     
     """
 

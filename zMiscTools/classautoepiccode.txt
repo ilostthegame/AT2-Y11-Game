@@ -1,20 +1,62 @@
 # Attributes
 __surf = None
 __rect = None
+__game_event_display = None
+__character_data_display = None
+__character_attacks = None
+__character_quests = None
+__current_button_group = None
+__current_menu = None
+__button_dict = None
 
 # Constructor
-def __init__(self, surf, rect):
+def __init__(self, surf, rect, game_event_display, character_data_display, character_attacks, character_quests, current_button_group, current_menu, button_dict):
     self.setSurf(surf)
     self.setRect(rect)
+    self.setGameEventDisplay(game_event_display)
+    self.setCharacterDataDisplay(character_data_display)
+    self.setCharacterAttacks(character_attacks)
+    self.setCharacterQuests(character_quests)
+    self.setCurrentButtonGroup(current_button_group)
+    self.setCurrentMenu(current_menu)
+    self.setButtonDict(button_dict)
 
 # Getters
 def getSurf(self):
     return self.__surf
 def getRect(self):
     return self.__rect
+def getGameEventDisplay(self):
+    return self.__game_event_display
+def getCharacterDataDisplay(self):
+    return self.__character_data_display
+def getCharacterAttacks(self):
+    return self.__character_attacks
+def getCharacterQuests(self):
+    return self.__character_quests
+def getCurrentButtonGroup(self):
+    return self.__current_button_group
+def getCurrentMenu(self):
+    return self.__current_menu
+def getButtonDict(self):
+    return self.__button_dict
 
 # Setters
 def setSurf(self, surf):
     self.__surf = surf
 def setRect(self, rect):
     self.__rect = rect
+def setGameEventDisplay(self, game_event_display):
+    self.__game_event_display = game_event_display
+def setCharacterDataDisplay(self, character_data_display):
+    self.__character_data_display = character_data_display
+def setCharacterAttacks(self, character_attacks):
+    self.__character_attacks = character_attacks
+def setCharacterQuests(self, character_quests):
+    self.__character_quests = character_quests
+def setCurrentButtonGroup(self, current_button_group):
+    self.__current_button_group = current_button_group
+def setCurrentMenu(self, current_menu):
+    self.__current_menu = current_menu
+def setButtonDict(self, button_dict):
+    self.__button_dict = button_dict

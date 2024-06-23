@@ -38,10 +38,13 @@ class GameWorld(GameState):
         Handler methods TODO
 
         (Initialiser methods)
-        initialiseLevel(self) -> None: Initialises level tiles and entities
-        parseLevelCode(self) -> list[tuple[str, int, int]]: Returns list of tuples each representing a tile's info: 
+        initialiseLevel(self) -> None: 
+            Initialises level tiles and entities
+        parseLevelCode(self) -> list[tuple[str, int, int]]: 
+            Returns list of tuples each representing a tile's info: 
             (tile_code, xcoord, ycoord) - tile_code is X_X_XX string representing {tile_type}, {entity_type}, {entity_id}
-        interpretTileInfo(self, tile_info): Interprets a single tile_info tuple.
+        interpretTileInfo(self, tile_info: tuple[str, int, int]): 
+            Interprets a single tile_info tuple.
             - tile information gets sent to Board object.
             - enemy/npc/portal information sent to their respective groups
 

@@ -12,7 +12,8 @@ class Attack:
         cooldown (int): Number of turns before next use (0 => no cooldown)
 
     Methods: TODO
-        getInfo(self): Returns the info.
+        getInfo(self): 
+            Returns the info.
     """
     # Attributes
     __name = None

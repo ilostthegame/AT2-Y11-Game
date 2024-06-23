@@ -18,11 +18,14 @@ class WorldLoad(GameState): # TODO very unfinished
         main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
             
     Methods:
-        run(self) -> str: Runs all functions to initialise the game world
+        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: 
+            Runs all functions to initialise the game world
             To be called each iteration of game loop while state == 'world_init'.
             Returns the next state game is to enter.
-        initialiseGameWorld(self, character: Character) -> GameWorld: Creates and returns initial GameWorld object
-        initialiseCharacter(self) -> Character: Creates and returns initial character object
+        initialiseGameWorld(self, character: Character) -> GameWorld: 
+            Creates and returns initial GameWorld object
+        initialiseCharacter(self) -> Character: 
+            Creates and returns initial character object
     """
 
     def __init__(self):

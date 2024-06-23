@@ -31,11 +31,16 @@ class Game:
         game_menu (GameMenu)
         
     Methods:
-        run(self): Runs the game main loop
-        runTitleScreen(self): If state == 'title_screen', runs title screen
-        runGameWorld(self): If state == 'game_world', runs game world
-        runGameMenu(self): If state == 'game_menu, runs game menu
-        handleCleanup(self): To run when game loop is exited. Quits pygame. TODO save system.
+        run(self) -> None: 
+            Runs the game main loop
+        runTitleScreen(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
+            If state == 'title_screen', runs title screen
+        runGameWorld(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
+            If state == 'game_world', runs game world
+        runGameMenu(self) -> pygame.sprite.Group:
+            If state == 'game_menu, runs game menu
+        handleCleanup(self) -> None: 
+            To run when game loop is exited. Quits pygame. TODO save system.
     """
 
     # Attributes
@@ -106,7 +111,7 @@ class Game:
         self.__game_menu = game_menu
 
     # Methods
-    def run(self):
+    def run(self) -> None:
         """
         Runs the game loop
         """
@@ -187,7 +192,7 @@ class Game:
         pass
     
 
-    def handleCleanup(self):
+    def handleCleanup(self) -> None:
         """
         To run when game loop is exited. Quits pygame. TODO save system.
         """

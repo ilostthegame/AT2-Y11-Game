@@ -13,7 +13,7 @@ class Weapon(pygame.sprite.Sprite):
         image (pygame.Surface): The weapon's image
         rect (pygame.Rect): The weapon surface's rectangle
         name (str): The name of the weapon
-        attack_dict (dict[Attack]): relates attack number to Attack object
+        attack_list (list[Attack]): list of attacks on the weapon
         entity_xcoord (int): The xcoord of the entity holding weapon
         entity_ycoord (int): The ycoord of the entity holding weapon
         TODO will need some cooldown tracker
@@ -27,7 +27,7 @@ class Weapon(pygame.sprite.Sprite):
     __image = None
     __rect = None
     __name = None
-    __attack_dict = None
+    __attack_list = None
     __entity_xcoord = None
     __entity_ycoord = None
 
@@ -46,12 +46,12 @@ class Weapon(pygame.sprite.Sprite):
         self.setSurf(pygame.Surface((64, 64), SRCALPHA))
         self.setRect(self.getSurf().get_rect())
 
-        # Adds all attacks to the attack dictionary.
-        attack_dict = dict()
-        for pos, attack_id in enumerate(attribute_list[2:]):
+        # Adds all attacks to the attack list.
+        attack_list = list()
+        for attack_id in attribute_list[2:]:
             attack = Attack(attack_id)
-            attack_dict[pos + 1] = attack
-        self.setAttackDict(attack_dict)
+            attack_list.append(attack)
+        self.setAttackList(attack_list)
 
     # Getters
     def getSurf(self):
@@ -62,8 +62,8 @@ class Weapon(pygame.sprite.Sprite):
         return self.__rect
     def getName(self):
         return self.__name
-    def getAttackDict(self):
-        return self.__attack_dict
+    def getAttackList(self):
+        return self.__attack_list
     def getEntityXcoord(self):
         return self.__entity_xcoord
     def getEntityYcoord(self):
@@ -78,8 +78,8 @@ class Weapon(pygame.sprite.Sprite):
         self.__rect = rect
     def setName(self, name):
         self.__name = name
-    def setAttackDict(self, attacks):
-        self.__attack_dict = attacks
+    def setAttackList(self, attacks):
+        self.__attack_list = attacks
     def setEntityXcoord(self, entity_xcoord):
         self.__entity_xcoord = entity_xcoord
     def setEntityYcoord(self, entity_ycoord):

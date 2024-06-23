@@ -4,7 +4,8 @@ class FileIdInterpreter:
     Class containing method interpretFileInfo, which interprets *_id files
 
     Methods:
-        interpretFileInfo(self): interprets file and returns a list with the attributes associated with ID.
+        interpretFileInfo(self, file_name: str, id: str) -> list[str]: 
+            Interprets file and returns a list with the attributes associated with ID.
     """
 
     # Methods

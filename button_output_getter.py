@@ -6,8 +6,8 @@ class ButtonOutputGetter:
     Contains method that returns all button outputs in an iteration of game cycle
 
     Methods:
-        getOutputs(self, button_group, pygame_events, mouse_pos) -> list[str]:
-            Finds all buttons in button_group that were activated.
+        getOutputs(self, button_group: pygame.sprite.Group, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> list[str]:
+            Finds all buttons in button_group that were activated, either by mouse or connected_key.
             Returns a list containing all button outputs.
     """
 
@@ -15,7 +15,7 @@ class ButtonOutputGetter:
     def getOutputs(self, 
                    button_group: pygame.sprite.Group, 
                    pygame_events: list[pygame.event.Event], 
-                   mouse_pos) -> list[str]:
+                   mouse_pos: tuple[int, int]) -> list[str]:
         """
         Finds all buttons in button_group that were activated.
         Returns a list containing all button outputs.

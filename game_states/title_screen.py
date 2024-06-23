@@ -17,10 +17,13 @@ class TitleScreen(GameState):
         main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
 
     Methods:
-        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: Runs all functions associated with TitleScreen. To be called each iteration of game loop.
+        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: 
+            Runs all functions associated with TitleScreen. To be called each iteration of game loop.
             Returns the next state game is to enter.
-        initialiseButtons(self) -> None: Creates start, quit buttons and adds them to button_group 
-        savedGameExist(self) -> bool: Evaluates whether a saved gamefile exists. Returns True/False
+        initialiseButtons(self) -> None: 
+            Creates start, quit buttons and adds them to button_group 
+        savedGameExist(self) -> bool: 
+            Evaluates whether a saved gamefile exists. Returns True/False
     """
 
     # Attributes

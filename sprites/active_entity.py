@@ -16,6 +16,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         defence (int): Defence stat
         max_health (int): Maximum health stat
         health (int): Current health stat
+        TODO health_regen
         weapon (Weapon): Currently held weapon
         is_alive (bool): Whether entity's is alive: health above 0 or not
         xcoord (int): X coordinate of entity in world
@@ -23,9 +24,12 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         healthbar (Healthbar): Healthbar of entity
 
     Methods:
-        updateSurf(self): Blits the character image, healthbar and weapon onto the entity's Surface.
-        updatePos(self): Changes position of Rect according to xcoord, ycoord
-        getInfo(self) @abstractmethod: Returns the info of entity for saving. TODO might not even be needed with pickling.
+        updateSurf(self): 
+            Blits the character image, healthbar and weapon onto the entity's Surface.
+        updatePos(self): 
+            Changes position of Rect according to xcoord, ycoord
+        getInfo(self) @abstractmethod: 
+            Returns the info of entity for saving. TODO might not even be needed with pickling.
 
     """
 
@@ -52,7 +56,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
                  defence: int, 
                  max_health: int, 
                  health: int, 
-                 weapon_id: str, 
+                 weapon: Weapon, 
                  is_alive: bool, 
                  xcoord: float, 
                  ycoord: float, 
@@ -67,7 +71,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setHealthbar(healthbar)
         self.setMaxHealth(max_health)
         self.setHealth(health)
-        self.setWeapon(weapon_id)
+        self.setWeapon(weapon)
         self.setIsAlive(is_alive)
         self.setXcoord(xcoord)
         self.setYcoord(ycoord)

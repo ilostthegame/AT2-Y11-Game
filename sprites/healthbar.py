@@ -14,7 +14,8 @@ class Healthbar(pygame.sprite.Sprite):
         entity_max_health (int)
 
     Methods: 
-        updateHealth(self): Updates the health indicator of healthbar - to be called whenever entity health or max_health updates
+        updateHealth(self) -> None: 
+            Updates the health indicator of healthbar - to be called whenever entity health or max_health updates
     """
 
     # Attributes
@@ -51,7 +52,7 @@ class Healthbar(pygame.sprite.Sprite):
     def setEntityMaxHealth(self, entity_max_health):
         self.__entity_max_health = entity_max_health
 
-    def updateHealth(self):
+    def updateHealth(self) -> None:
         """
         Updates the health indicator of healthbar - to be called whenever entity health or max_health updates
         """

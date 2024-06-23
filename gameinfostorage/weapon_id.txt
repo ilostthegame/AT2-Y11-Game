@@ -5,10 +5,14 @@ Weapon object information is found on same line, separated by forward slashes (/
 Template for weapon object as below:
 !!{ID}~{image}/{name}/{*attack_ids}
 
+Character weapons:
 !!Sw~sword/Sword/Sl/Ch
+
 
 !!Mc~mace/Mace
 !!Cl~club/Club
+
+Music centre:
 !!Vi~violin/Violin
 
 !!WC~whiteboard_cleaner/Whiteboard Cleaner/Co

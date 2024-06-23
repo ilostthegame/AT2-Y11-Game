@@ -9,7 +9,8 @@ class GameState(ABC):
         main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
 
     Methods:
-        run(self) -> str @abstractmethod: Runs all functions associated with game state. To be called each iteration of game loop.
+        run(self) -> str @abstractmethod: 
+            Runs all functions associated with game state. To be called each iteration of game loop.
             Returns the next state game is to enter.
     """
     # Attributes

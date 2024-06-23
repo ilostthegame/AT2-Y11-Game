@@ -9,7 +9,7 @@ class Character(ActiveEntity):
     """
     Class representing a character sprite, with parent ActiveEntity
 
-    Attributes:
+    Attributes: TODO fix up
         (Inherited)
         surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar - 64x64 transparent square
         image (pygame.Surface): Surface representing entity's sprite image
@@ -28,20 +28,29 @@ class Character(ActiveEntity):
         MAX_LEVEL (int): Maximum level of character
         level (int): Current level of character
         experience_points (int): Experience point stat
-        skills (list[*Skill]): List of skills the character has 
+        quests (list[*Skill]): List of skills the character has 
+
+        TODO (REMOVE)
         items (list[*Item]): List of items the character has 
         gold (int): Amount of gold character has 
         
     Methods:
-        gainExperience(self, experience): Increases experience, and if possible levels up.
-        updateStats(self): Updates attack, defence based on level.
-        calcRequiredExperience(self): Calculates total required experience for the next level.
-        takeDamage(self, damage): Changes health according to defence and damage.
-        getInfo(self) @abstractmethod: Returns the info of entity for saving. TODO might not even be needed with pickling.
+        gainExperience(self, experience: int) -> None: 
+            Increases experience, and if possible levels up.
+        updateStats(self) -> None: 
+            Updates attack, defence based on level.
+        calcRequiredExperience(self) -> int: 
+            Returns total required experience for the next level.
+        takeDamage(self, damage: int) -> None: 
+            Changes health according to defence and damage.
+        getInfo(self) @abstractmethod: 
+            Returns the info of entity for saving. TODO might not even be needed with pickling.
         
         (Inherited)
-        updateSurf(self): Blits the entity image, healthbar and weapon onto the entity's Surface.
-        updatePos(self): Changes position of Rect according to xcoord, ycoord
+        updateSurf(self):  
+            Blits the entity image, healthbar and weapon onto the entity's Surface.
+        updatePos(self): 
+            Changes position of Rect according to xcoord, ycoord
     """
     
     # Attributes
@@ -66,14 +75,14 @@ class Character(ActiveEntity):
                  ycoord: int, 
                  level: int, 
                  experience_points: int, 
-                 quests: dict, # TODO fix type hint
+                 quests: list, # TODO fix type hint
                  items, # TODO remove
                  gold, # TODO remove. Unnecessary features
                  healthbar: Healthbar):
         super().__init__(image, name, attack, defence, max_health, health, weapon_id, is_alive, xcoord, ycoord, healthbar) 
         self.setLevel(level)
         self.setExperiencePoints(experience_points)
-        self.setSkills(skills)
+        self.setSkills(quests)
         self.setItems(items)
         self.setGold(gold)
 

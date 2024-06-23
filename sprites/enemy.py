@@ -31,13 +31,17 @@ class Enemy(ActiveEntity):
         gold_yield (int): Represents how much gold is earned through defeating enemy
     
     Methods:
-        calcMovement(self, user_position): Returns a tuple (xcoord, ycoord) representing the square enemy will move to.
+        calcMovement(self, user_position: tuple[int, int]): 
+            Returns a tuple (xcoord, ycoord) representing the square enemy will move to.
         #TODO
-        getInfo(self): Returns info of enemy
+        getInfo(self): 
+            Returns info of enemy
         
         (Inherited)
-        updateSurf(self): Blits the entity image, healthbar and weapon onto the entity's Surface.
-        updatePos(self): Changes position of Rect according to xcoord, ycoord
+        updateSurf(self): 
+            Blits the entity image, healthbar and weapon onto the entity's Surface.
+        updatePos(self): 
+            Changes position of Rect according to xcoord, ycoord
     """
 
     # Attributes

@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from typing import Optional
 
 class Button(pygame.sprite.Sprite):
     """
@@ -16,7 +17,8 @@ class Button(pygame.sprite.Sprite):
         connected_key (str): Key that when pressed activates button. May be None.
 
     Methods:
-        initialiseButtonSurf(self): Positions, colours and writes text onto button surface
+        initialiseButtonSurf(self): 
+            Sets position and colour of button, and writes text onto button surface
     """
 
     # Attributes
@@ -37,7 +39,7 @@ class Button(pygame.sprite.Sprite):
                 colour: tuple[int, int, int], 
                 output: str, 
                 centre_coords: tuple[int, int], 
-                connected_key: str = None):
+                connected_key: Optional[str] = None):
         super().__init__()
         self.setSurf(surf)
         self.setRect(self.getSurf().get_rect())
@@ -89,7 +91,7 @@ class Button(pygame.sprite.Sprite):
     # Methods
     def initialiseButtonSurf(self):
         """
-        Positions, colours and writes text onto button surface
+        Sets position and colour of button, and writes text onto button surface
         """
         button_surf = self.getSurf()
         button_rect = self.getRect()
