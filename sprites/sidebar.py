@@ -23,7 +23,7 @@ class Sidebar(pygame.sprite.Sprite):
         attack_button_group (pygame.sprite.Group): Group representing attack buttons on sidebar
 
     Methods:
-        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> Optional[str]: 
+        update(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> Optional[str]: 
             Updates the sidebar surface and interprets button presses. To be run each iteration
             Returns string when button is pressed: 'attack X' - attack X button was pressed
             
@@ -80,7 +80,7 @@ class Sidebar(pygame.sprite.Sprite):
 
 
     # Methods
-    def run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> Optional[str]: 
+    def update(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> Optional[str]: 
         """
         Updates the sidebar surface and interprets button presses. To be run each iteration
         Returns string when button is pressed: 'attackX' - attack X button was pressed

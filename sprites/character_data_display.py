@@ -9,7 +9,9 @@ class CharacterDataDisplay(pygame.sprite.Sprite):
     Attributes: TODO
         surf
     
-    Methods: TODO
+    Methods:
+        update(self) -> None:
+            Updates surface
     """
     # Attributes
     __surf = None

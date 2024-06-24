@@ -121,7 +121,7 @@ class GameWorld(GameState):
         board = self.getBoard()
         sidebar = self.getSidebar()
         sidebar.initialiseAttackButtons()
-        sidebar.run(pygame_events, mouse_pos)
+        sidebar.update(pygame_events, mouse_pos)
 
         # Blit sprites onto main_surf
         main_surf = self.getMainSurf()

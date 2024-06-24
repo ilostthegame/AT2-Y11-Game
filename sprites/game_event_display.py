@@ -5,21 +5,20 @@ from button import Button
 class GameEventDisplay(pygame.sprite.Sprite):
     """
     Represents the display to which game events are sent.
-    Setting of valid_event_list, invalid_event should be handled outside function.
     There are two types:
-        Valid: Represents events that have occurred during a user action
-        4 lines of these displayed at a time, with cycle functionality. TODO later
-        These events should be replaced when user next does a 'valid' action.
+        Valid: Represents events that have occurred during the last valid user turn.
+        4 lines of these displayed at a time. TODO add cycle functionality between pages
+        These events should be replaced when user next has a valid turn.
         The set of these events are:
             - User attacks enemy(s). 
             - Enemy attacks user.
             - Enemy faints.
             - Npc says something to user.
 
-        Invalid: Represents an error message for an invalid user action
+        Invalid: Represents an error message for an invalid user turn
         1 line displayed at a time.
-        Event should be replaced when user next does any action.
-        These events represent erroneous user actions, these being:
+        Event should be replaced when user next has a valid or invalid turn.
+        These events represent erroneous user turns, these being:
             - User walks into wall/entity.
             - User selects invalid target(s) for attack.
             - User interacts with invalid/nonexistent entity.
@@ -27,13 +26,13 @@ class GameEventDisplay(pygame.sprite.Sprite):
 
     Attributes:
         surf (pygame.Surface): Surface to which all events are displayed. Size: 432 x 324
-        valid_event_list (list[str]): List of valid events
-        invalid_event (Optional[str]): invalid
+        valid_event_list (list[str]): List of valid events. To be updated after a valid turn
+        invalid_event (Optional[str]): Invalid event. To be replaced after a valid or invalid turn
 
     Methods:
-        run(self) -> None:
+        update(self) -> None:
             Draws all events onto surf.
-            To be run whenever 
+            To be run whenever a turn occurs in GameWorld.
     """
 
 
