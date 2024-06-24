@@ -63,17 +63,8 @@ class Game:
         self.setTitleScreen(TitleScreen())
         self.setGameMenu('placeholder')
 
-        # Temporary GameWorld initialisation
-        character = Character('blue_orb',
-                              'Bob',
-                              25,
-                              25,
-                              100,
-                              100,
-                              'Sw',
-                              True,
-                              0,
-                              0,1, 0,list(),list(),0,Healthbar(100, 100))
+        # Temporary GameWorld initialisation. Can edit character's stuff here for testing.
+        character = Character('blue_orb', 'Bob', 'Sw')
         game_world = GameWorld('Dining Hall', character)
         game_world.initialiseLevel()
         self.setGameWorld(game_world)

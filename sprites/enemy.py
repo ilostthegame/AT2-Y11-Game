@@ -29,7 +29,6 @@ class Enemy(ActiveEntity):
 
         movement_pattern (str): Represents the algorithm to be used for 
         xp_yield (int): Represents how much xp is earned through defeating enemy
-        gold_yield (int): Represents how much gold is earned through defeating enemy
     
     Methods:
         calcMovement(self, user_position: tuple[int, int]): 
@@ -48,17 +47,16 @@ class Enemy(ActiveEntity):
     # Attributes
     __movement_pattern = None
     __xp_yield = None
-    __gold_yield = None
 
     # Constructor
     def __init__(self, enemy_id: str, xcoord: int, ycoord: int):
         # Getting file info
-        # Attributes in attribute_list = [image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield, gold_yield]
+        # Attributes in attribute_list = [image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield]
         attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/enemy_id.txt', enemy_id) 
         
         # Unpacking file info, and creating additional enemy attributes
-        image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield, gold_yield = attribute_list # unpacks attribute_list
-        attack, defence, health, health_regen, xp_yield, gold_yield = [int(i) for i in (attack, defence, health, health_regen, xp_yield, gold_yield)] # converts some attributes to integers
+        image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield = attribute_list # unpacks attribute_list
+        attack, defence, health, health_regen, xp_yield = [int(i) for i in (attack, defence, health, health_regen, xp_yield)] # converts some attributes to integers
         weapon = Weapon(weapon_id, xcoord, ycoord) # creates weapon object enemy is wielding
         healthbar = Healthbar(health, health) # creates healthbar object attached to enemy
     
@@ -67,23 +65,18 @@ class Enemy(ActiveEntity):
                          name, attack, defence, health, health, health_regen, weapon, True, xcoord, ycoord, healthbar)
         self.setMovementPattern(movement_pattern)
         self.setXpYield(xp_yield)
-        self.setGoldYield(gold_yield)
 
     # Getters
     def getMovementPattern(self):
         return self.__movement_pattern
     def getXpYield(self):
         return self.__xp_yield
-    def getGoldYield(self):
-        return self.__gold_yield
 
     # Setters
     def setMovementPattern(self, movement_pattern):
         self.__movement_pattern = movement_pattern
     def setXpYield(self, xp_yield):
         self.__xp_yield = xp_yield
-    def setGoldYield(self, gold_yield):
-        self.__gold_yield = gold_yield
 
     # Methods
     def getInfo(self):

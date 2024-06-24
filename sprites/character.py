@@ -4,6 +4,7 @@ from pygame.locals import *
 from assets import GAME_ASSETS
 from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
+from quest import Quest
 
 class Character(ActiveEntity):
     """
@@ -19,6 +20,7 @@ class Character(ActiveEntity):
         defence (int): Defence stat
         max_health (int): Maximum health stat
         health (int): Current health stat
+        health_regen (int): How much health regenerates each turn
         weapon (Weapon): Currently held weapon
         is_alive (bool): Whether entity's is alive: health above 0 or not
         xcoord (int): X coordinate of entity in world
@@ -28,11 +30,7 @@ class Character(ActiveEntity):
         MAX_LEVEL (int): Maximum level of character
         level (int): Current level of character
         experience_points (int): Experience point stat
-        quests (list[*Skill]): List of skills the character has 
-
-        TODO (REMOVE)
-        items (list[*Item]): List of items the character has 
-        gold (int): Amount of gold character has 
+        quest_list (list[*Quest]): List of quests the character has 
         
     Methods:
         gainExperience(self, experience: int) -> None: 
@@ -57,59 +55,43 @@ class Character(ActiveEntity):
     MAX_LEVEL = 50
     __level = None
     __experience_points = None
-    __skills = None
-    __items = None
-    __gold = None
+    __quest_list = None
+
 
     # Constructor
     def __init__(self,  
                  image: pygame.Surface, 
-                 name: str, 
-                 attack: int, 
-                 defence: int, 
-                 max_health: int, 
-                 health: int, 
+                 name: str,
                  weapon_id: str, 
-                 is_alive: bool, 
-                 xcoord: int, 
-                 ycoord: int, 
-                 level: int, 
-                 experience_points: int, 
-                 quests: list, # TODO fix type hint
-                 items, # TODO remove
-                 gold, # TODO remove. Unnecessary features
-                 healthbar: Healthbar):
-        super().__init__(image, name, attack, defence, max_health, health, weapon_id, is_alive, xcoord, ycoord, healthbar) 
+                 attack: int = 25, 
+                 defence: int = 25, 
+                 max_health: int = 100, 
+                 health: int = 100, 
+                 is_alive: bool = True, 
+                 xcoord: int = 0, 
+                 ycoord: int = 0, 
+                 level: int = 1, 
+                 experience_points: int = 0):
+        super().__init__(image, name, attack, defence, max_health, health, weapon_id, is_alive, xcoord, ycoord, Healthbar(health, max_health)) 
         self.setLevel(level)
         self.setExperiencePoints(experience_points)
-        self.setSkills(quests)
-        self.setItems(items)
-        self.setGold(gold)
+        self.setQuestList(list())
 
     # Getters
     def getLevel(self):
         return self.__level
     def getExperiencePoints(self):
         return self.__experience_points
-    def getSkills(self):
-        return self.__skills
-    def getItems(self):
-        return self.__items
-    def getGold(self):
-        return self.__gold
+    def getQuestList(self):
+        return self.__quest_list
 
     # Setters
     def setLevel(self, level):
         self.__level = level
     def setExperiencePoints(self, experience_points):
         self.__experience_points = experience_points
-    def setSkills(self, skills):
-        self.__skills = skills
-    def setItems(self, items):
-        self.__items = items
-    def setGold(self, gold):
-        self.__gold = gold
-
+    def setQuestList(self, quest_list):
+        self.__quest_list = quest_list
 
     # Methods
     def gainExperience(self, experience):
