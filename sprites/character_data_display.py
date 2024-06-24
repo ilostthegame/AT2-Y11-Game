@@ -11,3 +11,18 @@ class CharacterDataDisplay(pygame.sprite.Sprite):
     
     Methods: TODO
     """
+    # Attributes
+    __surf = None
+
+    # Constructor
+    def __init__(self):
+        self.setSurf(pygame.Surface((432, 200)))
+        self.getSurf().fill(('blue'))
+
+    # Getters
+    def getSurf(self):
+        return self.__surf
+
+    # Setters
+    def setSurf(self, surf):
+        self.__surf = surf

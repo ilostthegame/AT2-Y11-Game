@@ -6,9 +6,7 @@ Template for weapon object as below:
 !!{ID}~{image}/{name}/{*attack_ids}
 
 Character weapons:
-!!Sw~sword/Sword/Sl/Ch
-
-
+!!Sw~sword/Sword/Sl/Ch/Ha
 !!Mc~mace/Mace
 !!Cl~club/Club
 

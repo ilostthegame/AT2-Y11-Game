@@ -131,13 +131,15 @@ class Game:
                 case 'quit':
                     self.setIsRunning(False)
                 case _:
-                    raise Exception("State does not exist")
+                    raise ValueError(f"State ({state}) is unknown")
             
             # Sends all sprites to the display.
             screen = self.getScreen()
             screen.fill((255, 255, 255))
             screen.blit(main_surf, (0, 0))
             pygame.display.flip()
+
+            self.getClock().tick(20)
 
         self.handleCleanup() # Runs cleanup, TODO save game.
 

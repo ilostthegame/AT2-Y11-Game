@@ -83,14 +83,15 @@ class TitleScreen(GameState):
                                  32,
                                  (200, 100, 0),
                                  'new_game',
-                                 (600, 200))
+                                 (600, 200),
+                                 '1')
         exit_button = Button(pygame.Surface((256, 128)), 
                                  'Quit Game',
                                  32,
                                  (200, 100, 0),
                                  'quit_game',
                                  (600, 600),
-                                 'P')
+                                 '0')
         button_group.add(new_game_button, exit_button) 
         if self.savedGameExist(): # Load Game only if saved game exists already.
             load_game_button = Button(pygame.Surface((256, 128)), 
@@ -98,7 +99,8 @@ class TitleScreen(GameState):
                                       32,
                                       (200, 200, 200),
                                       'load_game',
-                                      (600, 400))
+                                      (600, 400),
+                                      '2')
             button_group.add(load_game_button)
         self.setButtonGroup(button_group)
         return

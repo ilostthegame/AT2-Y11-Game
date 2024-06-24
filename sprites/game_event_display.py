@@ -9,4 +9,18 @@ class GameEventDisplay(pygame.sprite.Sprite):
     """
 
 
-    pass
+    # Attributes
+    __surf = None
+
+    # Constructor
+    def __init__(self):
+        self.setSurf(pygame.Surface((432, 324)))
+        self.getSurf().fill('red')
+
+    # Getters
+    def getSurf(self):
+        return self.__surf
+
+    # Setters
+    def setSurf(self, surf):
+        self.__surf = surf

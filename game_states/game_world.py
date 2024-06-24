@@ -66,9 +66,8 @@ class GameWorld(GameState):
         super().__init__()
         self.setLevelName(level_name)
         self.setCharacter(character)
-        # self.setSidebar(Sidebar(character.getWeapon().getAttackList()), character.getQuestList())
+        self.setSidebar(Sidebar(character.getWeapon().getAttackList()))
         self.setBoard(Board())
-        self.setSidebar('placeholder')
         self.setNpcGroup(pygame.sprite.Group())
         self.setEnemyGroup(pygame.sprite.Group())
         self.setPortalGroup(pygame.sprite.Group())
@@ -120,12 +119,17 @@ class GameWorld(GameState):
             # Use pygame.event == KEYDOWN to do stuff with one movement at a time.
 
         board = self.getBoard()
+        sidebar = self.getSidebar()
 
+        sidebar.run(pygame_events, mouse_pos)
+
+        # Blit sprites onto main_surf
         main_surf = self.getMainSurf()
         main_surf.fill((0, 0, 0))
-
-        main_surf.blit(board.getSurf(), board.getRect())
+        main_surf.blit(board.getSurf(), (0, 0))
+        main_surf.blit(sidebar.getSurf(), (768, 0))
         self.setMainSurf(main_surf)
+
         return 'game_world'
 
 
@@ -164,7 +168,7 @@ class GameWorld(GameState):
                     tile_info = [(tile_code, int(xcoord), int(ycoord)) for ycoord, code_line in enumerate(level_code_lines) for xcoord, tile_code in enumerate(code_line.split())]
                     return tile_info
             
-        raise Exception(f"Level {self.getLevelName()} is not found") # Level name is not found
+        raise ValueError(f"Level name ({self.getLevelName()}) cannot be found in file 'world_gen.txt'.")
 
 
     def interpretTileInfo(self, tile_info) -> None:
@@ -187,7 +191,7 @@ class GameWorld(GameState):
             case 'L': # lava
                 tile = Tile((209, 23, 23), True, 10)
             case _:
-                raise Exception(f"Tile type {tile_type} does not exist")
+                raise ValueError(f"Tile type ({tile_type}) cannot be found")
         position_tile_dict[(xcoord, ycoord)] = tile
         board.setPositionTileDict(position_tile_dict)
         self.setBoard(board)
@@ -212,5 +216,5 @@ class GameWorld(GameState):
                 portal_group.add(portal)
                 self.setPortalGroup(portal_group)
             case _:
-                raise Exception(f"Entity type {entity_type} does not exist.")
+                raise ValueError(f"Entity type ({entity_type}) cannot be found.")
         return

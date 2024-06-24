@@ -4,13 +4,12 @@ from pygame.locals import *
 from assets import GAME_ASSETS
 from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
-from quest import Quest
 
 class Character(ActiveEntity):
     """
     Class representing a character sprite, with parent ActiveEntity
 
-    Attributes: TODO fix up
+    Attributes:
         (Inherited)
         surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar - 64x64 transparent square
         image (pygame.Surface): Surface representing entity's sprite image
@@ -27,11 +26,9 @@ class Character(ActiveEntity):
         ycoord (int): Y coordinate of entity in world
         healthbar (Healthbar): Healthbar of entity
 
-        MAX_LEVEL (int): Maximum level of character
         level (int): Current level of character
         experience_points (int): Experience point stat
-        quest_list (list[*Quest]): List of quests the character has 
-        
+
     Methods:
         gainExperience(self, experience: int) -> None: 
             Increases experience, and if possible levels up.
@@ -52,11 +49,8 @@ class Character(ActiveEntity):
     """
     
     # Attributes
-    MAX_LEVEL = 50
     __level = None
     __experience_points = None
-    __quest_list = None
-
 
     # Constructor
     def __init__(self,  
@@ -67,31 +61,29 @@ class Character(ActiveEntity):
                  defence: int = 25, 
                  max_health: int = 100, 
                  health: int = 100, 
+                 health_regen: int = 2,
                  is_alive: bool = True, 
                  xcoord: int = 0, 
                  ycoord: int = 0, 
                  level: int = 1, 
                  experience_points: int = 0):
-        super().__init__(image, name, attack, defence, max_health, health, weapon_id, is_alive, xcoord, ycoord, Healthbar(health, max_health)) 
+        super().__init__(image, name, attack, defence, max_health, health, health_regen, 
+                         Weapon(weapon_id, xcoord, ycoord),
+                         is_alive, xcoord, ycoord, Healthbar(health, max_health)) 
         self.setLevel(level)
         self.setExperiencePoints(experience_points)
-        self.setQuestList(list())
 
     # Getters
     def getLevel(self):
         return self.__level
     def getExperiencePoints(self):
         return self.__experience_points
-    def getQuestList(self):
-        return self.__quest_list
-
+    
     # Setters
     def setLevel(self, level):
         self.__level = level
     def setExperiencePoints(self, experience_points):
         self.__experience_points = experience_points
-    def setQuestList(self, quest_list):
-        self.__quest_list = quest_list
 
     # Methods
     def gainExperience(self, experience):
@@ -100,11 +92,11 @@ class Character(ActiveEntity):
         Runs stat increase method based on levels gained.
         """
         original_level = self.getLevel()
-        self.setExperiencePoints(self.getExperiencePoints() + experience)  # Increase character's experience points
+        self.setExperiencePoints(self.getExperiencePoints() + experience)
         required_experience = self.calcRequiredExperience() # Calculate experience required for next level
 
-        # Level up character while character has enough experience to level up and is below the level cap.
-        while self.getExperiencePoints() >= required_experience and self.getLevel() < self.MAX_LEVEL:
+        # Level up character while character has enough experience to level up and is below the level cap (50).
+        while self.getExperiencePoints() >= required_experience and self.getLevel() < 50:
             self.setLevel(self.getLevel() + 1)
             self.setExperiencePoints(self.getExperiencePoints() - required_experience) # subtract used experience points.
             required_experience = self.calcRequiredExperience() # Re-calculate experience required for next level
@@ -129,7 +121,7 @@ class Character(ActiveEntity):
         """
         Calculates total required experience to get to next level
         """ 
-        return int(100 * (1.5 ** (self.getLevel()))) # Current formula TODO change: 100 * 1.5^level.
+        return int(100 * (1.5 ** (self.getLevel())))  # Current formula TODO change: 100 * 1.5^level.
 
     def getInfo(self):
         """

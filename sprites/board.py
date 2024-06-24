@@ -7,8 +7,7 @@ class Board(pygame.sprite.Sprite):
 
     Attributes:
         surf (pygame.Surface)
-        rect (pygame.Rect)
-        position_tile_dict (dict[tuple[int, int], Tile]): Dictionary that relates coordinate tuples (keys) to Tiles (values)
+        position_tile_dict (dict[tuple[int, int], Tile]): Dictionary that relates coordinate tuples to Tiles 
             {(xcoord, ycoord): Tile})
     
     Can copy() to get a new game board to blit all sprites upon.
@@ -22,29 +21,23 @@ class Board(pygame.sprite.Sprite):
 
     # Attributes
     __surf = None
-    __rect = None
     __position_tile_dict = None
 
     # Constructor
     def __init__(self):
         super().__init__()
         self.setSurf(pygame.Surface((768, 768)))
-        self.setRect(self.getSurf().get_rect())
         self.setPositionTileDict(dict())
 
     # Getters
     def getSurf(self):
         return self.__surf
-    def getRect(self):
-        return self.__rect
     def getPositionTileDict(self):
         return self.__position_tile_dict
 
     # Setters
     def setSurf(self, surf):
         self.__surf = surf
-    def setRect(self, rect):
-        self.__rect = rect
     def setPositionTileDict(self, position_tile_dict):
         self.__position_tile_dict = position_tile_dict
 
