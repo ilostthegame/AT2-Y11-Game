@@ -6,7 +6,7 @@ from file_id_interpreter import FileIdInterpreter
 class Npc(pygame.sprite.Sprite):
     """
     Attributes:
-        surf (pygame.Surface): Surface of npc
+        surf (pygame.Surface): Surface of npc. Size: 64 x 64
         image (pygame.image): Image for npc
         rect (pygame.Rect): Rectangle representing position of npc surface
         name (str): Name of npc

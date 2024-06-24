@@ -15,6 +15,7 @@ class TitleScreen(GameState):
 
         (Inherited)
         main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
+            Size: 1200 x 768
 
     Methods:
         run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: 

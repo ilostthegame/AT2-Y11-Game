@@ -7,7 +7,7 @@ class Button(pygame.sprite.Sprite):
     Class for a generalised button
     
     Attributes:
-        surf (pygame.Surface): Surface for the button.
+        surf (pygame.Surface): Surface for the button. Variable size.
         rect (pygame.Rect): Rectangle underlying the button.
         text (str): What the button says on it
         font_size (int): Font size of text on button

@@ -6,7 +6,7 @@ class Tile(pygame.sprite.Sprite):
     TODO optional - convert this to a file system too.
     
     Attributes:
-        surf (pygame.Surface)
+        surf (pygame.Surface): Size: 64 x 64
         accessible (bool): Whether tile can be entered by an entity
         occupied (bool): Whether an ActiveEntity is on the tile
         damage (int): How much damage an entity takes upon entering tile

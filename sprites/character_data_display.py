@@ -7,7 +7,8 @@ class CharacterDataDisplay(pygame.sprite.Sprite):
     - Current level name, enemy count.
 
     Attributes: TODO
-        surf
+        surf (pygame.Surface)
+            Size: 432 x 200
     
     Methods:
         update(self) -> None:

@@ -26,7 +26,8 @@ class GameWorld(GameState):
         portal_group (pygame.sprite.Group): Group containing all portal sprites
 
         (Inherited)
-        main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
+        main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted. 
+            Size: 1200 x 768
 
 
     Methods:

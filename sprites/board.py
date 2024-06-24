@@ -6,15 +6,12 @@ class Board(pygame.sprite.Sprite):
     Class that represents the game board sprite. 
 
     Attributes:
-        surf (pygame.Surface)
+        surf (pygame.Surface): Surface representing board. Size: 768 x 768
         position_tile_dict (dict[tuple[int, int], Tile]): Dictionary that relates coordinate tuples to Tiles 
             {(xcoord, ycoord): Tile})
-    
-    Can copy() to get a new game board to blit all sprites upon.
-    Can probably do that in GameWorld.
 
     Methods:
-    drawBoardSurface(self): 
+    drawBoardSurface(self) -> None: 
         Using position_tile_dict, draws tiles onto board_surf
     
     """
@@ -42,7 +39,7 @@ class Board(pygame.sprite.Sprite):
         self.__position_tile_dict = position_tile_dict
 
     # Methods
-    def drawBoardSurface(self):
+    def drawBoardSurface(self) -> None:
         """
         Using position_tile_dict, draws tiles onto surf
         """
@@ -53,8 +50,9 @@ class Board(pygame.sprite.Sprite):
             tile = position_tile_dict[(xcoord, ycoord)]
             #pygame.draw.rect(board_surf, tile.getColour(), (xcoord*64, ycoord*64, 64, 64))
             board_surf.blit(tile.getSurf(), (xcoord*64, ycoord*64, 64, 64))
-
+            
         self.setSurf(board_surf)
+        return
         
 
 

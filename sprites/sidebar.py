@@ -14,7 +14,7 @@ class Sidebar(pygame.sprite.Sprite):
     - GameEventDisplay - Displays game events. Size: 432 x 324
 
     Attributes:
-        surf (pygame.Surface): Entire surface of the sidebar.
+        surf (pygame.Surface): Entire surface of the sidebar. Size: 432 x 768
         rect (pygame.Rect)
         game_event_display (GameEventDisplay): Sprite that displays game events. Blitted to bottom right.
         character_data_display (CharacterDataDisplay): Displays character healthbar, xp bar, and level.

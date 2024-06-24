@@ -11,9 +11,9 @@ class Character(ActiveEntity):
 
     Attributes:
         (Inherited)
-        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar - 64x64 transparent square
-        image (pygame.Surface): Surface representing entity's sprite image
-        rect (pygame.Rect): Rectangle representing entity Surface position
+        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar -
+            Size: 64 x 64, transparent.
+        image (pygame.Surface): Surface representing entity's sprite image - Size: 32 x 48
         name (str): Name of character
         attack (int): Attack stat
         defence (int): Defence stat

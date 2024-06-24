@@ -6,10 +6,7 @@ class Healthbar(pygame.sprite.Sprite):
 
     Attributes:
 
-        surf (pygame.Surface): Represents the surface of the healthbar. size: 64x16
-        rect (pygame.Rect): Position of surface
-
-        Entity info:
+        surf (pygame.Surface): Represents the surface of the healthbar. Size: 64x16
         entity_health (int)
         entity_max_health (int)
 
@@ -20,7 +17,6 @@ class Healthbar(pygame.sprite.Sprite):
 
     # Attributes
     __surf = None
-    __rect = None
     __entity_health = None
     __entity_max_health = None
 
@@ -28,7 +24,6 @@ class Healthbar(pygame.sprite.Sprite):
     def __init__(self, entity_health: int, entity_max_health: int):
         super().__init__()
         self.setSurf(pygame.Surface((64, 16)))
-        self.setRect(self.getSurf().get_rect())
         self.setEntityHealth(entity_health)
         self.setEntityMaxHealth(entity_max_health)
 

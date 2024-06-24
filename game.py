@@ -19,7 +19,7 @@ class Game:
     TODO Give this class attributes such as the TitleScreen, GameWorld classes.
 
     Attributes:
-        screen (pygame.Surface): Display on which all objects are sent.
+        screen (pygame.Surface): Display on which all objects are sent. Size: 1200 x 768
         state (str): Represents the state the game is in: 
             in ['title_screen', 'world_init', 'world_load', 'game_world', 'game_menu', 'quit']
         is_running (bool): Whether game loop is to continue iteration.

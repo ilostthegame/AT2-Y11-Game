@@ -9,23 +9,18 @@ class Weapon(pygame.sprite.Sprite):
     A class representing a weapon.
 
     Attributes:
-        surf (pygame.Surface): The weapon surface.
-        image (pygame.Surface): The weapon's image
-        rect (pygame.Rect): The weapon surface's rectangle
-        name (str): The name of the weapon
-        attack_list (list[Attack]): list of attacks on the weapon
+        image (pygame.Surface): The weapon's image. Size: 32 x 48
+        name (str): Name of the weapon
+        attack_list (list[Attack]): List of attacks on the weapon
         entity_xcoord (int): The xcoord of the entity holding weapon
         entity_ycoord (int): The ycoord of the entity holding weapon
-        TODO will need some cooldown tracker
 
     Methods:
     TODO
     """
 
     # Attributes
-    __surf = None
     __image = None
-    __rect = None
     __name = None
     __attack_list = None
     __entity_xcoord = None
@@ -43,8 +38,7 @@ class Weapon(pygame.sprite.Sprite):
         self.setName(name)
         self.setEntityXcoord(entity_xcoord)
         self.setEntityYcoord(entity_ycoord)
-        self.setSurf(pygame.Surface((64, 64), SRCALPHA))
-        self.setRect(self.getSurf().get_rect())
+
 
         # Adds all attacks to the attack list.
         attack_list = list()

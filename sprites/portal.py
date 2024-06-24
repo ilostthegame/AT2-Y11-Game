@@ -8,7 +8,7 @@ class Portal(pygame.sprite.Sprite):
     Class representing a portal object
 
     Attributes:
-        surf (pygame.Surface)
+        surf (pygame.Surface) Size: 64 x 64
         image (pygame.Image)
         rect (pygame.Rect)
         xcoord (int): Board xcoord of portal
