@@ -20,7 +20,7 @@ class GameWorld(GameState):
         level_name (str): Name of the current level
     
         character (Character): Character sprite controlled by player
-        board (Board): Board sprite - 11x11 grid of tiles.
+        board (Board): Board sprite - 12x12 grid of tiles.
         npc_group (pygame.sprite.Group): Group containing all npc sprites 
         enemy_group (pygame.sprite.Group): Group containing all enemy sprites
         portal_group (pygame.sprite.Group): Group containing all portal sprites
@@ -159,8 +159,8 @@ class GameWorld(GameState):
                 if str_to_find in line:
                     starting_pos = pos + 1 # position of line at which level code starts
 
-                    # Splits the 11x11 grid code into components.
-                    level_code_lines = [file_lines[starting_pos + i] for i in range(11)]
+                    # Splits the 12x12 grid code into components.
+                    level_code_lines = [file_lines[starting_pos + i] for i in range(12)]
                     tile_info = [(tile_code, int(xcoord), int(ycoord)) for ycoord, code_line in enumerate(level_code_lines) for xcoord, tile_code in enumerate(code_line.split())]
                     return tile_info
             

@@ -58,7 +58,7 @@ class Game:
                  is_running: bool):
         self.setState(state)
         self.setIsRunning(is_running)
-        self.setScreen(pygame.display.set_mode((1200, 800)))
+        self.setScreen(pygame.display.set_mode((1200, 768)))
         self.setClock(pygame.time.Clock())
         self.setTitleScreen(TitleScreen())
         self.setGameMenu('placeholder')
