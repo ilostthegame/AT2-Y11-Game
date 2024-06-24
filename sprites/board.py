@@ -28,7 +28,7 @@ class Board(pygame.sprite.Sprite):
     # Constructor
     def __init__(self):
         super().__init__()
-        self.setSurf(pygame.Surface((704, 704)))
+        self.setSurf(pygame.Surface((768, 768)))
         self.setRect(self.getSurf().get_rect())
         self.setPositionTileDict(dict())
 

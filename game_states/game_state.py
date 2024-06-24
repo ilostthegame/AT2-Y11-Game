@@ -18,7 +18,7 @@ class GameState(ABC):
 
     # Constructor
     def __init__(self):
-        self.setMainSurf(pygame.Surface((1200, 800)))
+        self.setMainSurf(pygame.Surface((1200, 768)))
 
     # Getters
     def getMainSurf(self):

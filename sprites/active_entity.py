@@ -16,7 +16,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         defence (int): Defence stat
         max_health (int): Maximum health stat
         health (int): Current health stat
-        TODO health_regen
+        health_regen (int): How much health regenerates each turn
         weapon (Weapon): Currently held weapon
         is_alive (bool): Whether entity's is alive: health above 0 or not
         xcoord (int): X coordinate of entity in world
@@ -42,6 +42,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
     __defence = None
     __max_health = None
     __health = None
+    __health_regen = None
     __weapon = None
     __is_alive = None
     __xcoord = None
@@ -55,7 +56,8 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
                  attack: int, 
                  defence: int, 
                  max_health: int, 
-                 health: int, 
+                 health: int,
+                 health_regen: int, 
                  weapon: Weapon, 
                  is_alive: bool, 
                  xcoord: float, 
@@ -71,6 +73,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setHealthbar(healthbar)
         self.setMaxHealth(max_health)
         self.setHealth(health)
+        self.setHealthRegen(health_regen)
         self.setWeapon(weapon)
         self.setIsAlive(is_alive)
         self.setXcoord(xcoord)
@@ -93,6 +96,8 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         return self.__max_health
     def getHealth(self):
         return self.__health
+    def getHealthRegen(self):
+        return self.__health_regen
     def getWeapon(self):
         return self.__weapon
     def getIsAlive(self):
@@ -146,7 +151,9 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         # Update Healthbar's display
         self.getHealthbar().setEntityHealth(self.getHealth())
         self.getHealthbar().updateHealth()
-        
+    
+    def setHealthRegen(self, health_regen):
+        self.__health_regen = health_regen
     def setWeapon(self, weapon):
         self.__weapon = weapon
     def setIsAlive(self, is_alive):

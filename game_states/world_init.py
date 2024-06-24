@@ -49,11 +49,4 @@ class WorldInit(GameState): # TODO unfinished
         Creates and returns initial character object
         """
         pass
-        # init_character = Character(
-        #     'blue_orb',
-        #     25,
-        #     25,
-        #     100,
-        #     100,
-
-        # )
+        initial_character = Character('placeholder_image', 'placeholder_name', 'placeholder_weapon_id')
