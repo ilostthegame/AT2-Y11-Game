@@ -3,7 +3,7 @@ Double exclamation mark (!!) marks the ID of npc, e.g. !!00
 ID is separated from npc object information by tilde (~)
 Npc object information is found on same line, separated by forward slashes (/)
 Template for npc object as below:
-!!{ID}~{image}/{name}/{dialogue}
+!!{ID}~{image_name}/{name}/{dialogue}
 
 !!Bo~bob/Bob/hi i am bob
 !!Is~ishaan/Ishaan/help i am ishaan

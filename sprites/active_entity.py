@@ -10,7 +10,8 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
     Attributes:
         surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar
             Size: 64 x 64, transparent
-        image (pygame.Surface): Surface representing entity's sprite image. Size: 32 x 48
+        image (pygame.Surface): Surface representing entity's sprite image. 
+            Size: 32 x 48, transparent
         name (str): Name of character
         attack (int): Attack stat
         defence (int): Defence stat
@@ -77,6 +78,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setYcoord(ycoord)
         self.setHealthbar(healthbar)
 
+        # Updates the display of entity surface.
         self.updateHealthbar()
         self.updateSurf()
 

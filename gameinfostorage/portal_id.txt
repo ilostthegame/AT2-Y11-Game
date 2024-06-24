@@ -2,7 +2,7 @@ Interpretation of file:
 Double exclamation mark (!!) marks the ID of portal, e.g. !!00
 ID is separated from portal object destination by tilde (~)
 Template for npc object as below:
-!!{ID}~{destination}
+!!{ID}~{image_name}/{destination}
 
-!!D1~Dining Hall 1
-!!D2~Dining Hall 2
+!!D1~portal_1/Dining Hall 1
+!!D2~portal_2/Dining Hall 2

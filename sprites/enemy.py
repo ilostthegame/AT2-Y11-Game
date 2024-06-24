@@ -12,9 +12,10 @@ class Enemy(ActiveEntity):
 
     Attributes:
         (Inherited)
-        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar
-            Size: 64 x 64 transparent.
-        image (pygame.Surface): Surface representing entity's sprite image. Size: 32 x 48
+        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar.
+            Size: 64 x 64, transparent.
+        image (pygame.Surface): Surface representing entity's sprite image. 
+            Size: 32 x 48, transparent
         name (str): Name of character
         attack (int): Attack stat
         defence (int): Defence stat
@@ -55,13 +56,13 @@ class Enemy(ActiveEntity):
         attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/enemy_id.txt', enemy_id) 
         
         # Unpacking file info, and creating additional enemy attributes
-        image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield = attribute_list # unpacks attribute_list
+        image_name, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield = attribute_list # unpacks attribute_list
         attack, defence, health, health_regen, xp_yield = [int(i) for i in (attack, defence, health, health_regen, xp_yield)] # converts some attributes to integers
         weapon = Weapon(weapon_id, xcoord, ycoord) # creates weapon object enemy is wielding
         healthbar = Healthbar(health, health) # creates healthbar object attached to enemy
     
         # Initialising enemy object. Note that health variable is used to set both max_health and health.
-        super().__init__(pygame.image.load(GAME_ASSETS[image]), # enemy image
+        super().__init__(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha(), # enemy image
                          name, attack, defence, health, health, health_regen, weapon, True, xcoord, ycoord, healthbar)
         self.setMovementPattern(movement_pattern)
         self.setXpYield(xp_yield)
