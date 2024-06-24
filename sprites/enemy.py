@@ -20,6 +20,7 @@ class Enemy(ActiveEntity):
         defence (int): Defence stat
         max_health (int): Maximum health stat
         health (int): Current health stat
+        health_regen (int): How much health regenerates each turn
         weapon (Weapon): Currently held weapon
         is_alive (bool): Whether entity's is alive: health above 0 or not
         xcoord (int): X coordinate of entity in world
@@ -52,18 +53,18 @@ class Enemy(ActiveEntity):
     # Constructor
     def __init__(self, enemy_id: str, xcoord: int, ycoord: int):
         # Getting file info
-        # Attributes in attribute_list = [image, name, attack, defence, health, weapon_id, movement_pattern, xp_yield, gold_yield]
+        # Attributes in attribute_list = [image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield, gold_yield]
         attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/enemy_id.txt', enemy_id) 
         
         # Unpacking file info, and creating additional enemy attributes
-        image, name, attack, defence, health, weapon_id, movement_pattern, xp_yield, gold_yield = attribute_list # unpacks attribute_list
-        attack, defence, health, xp_yield, gold_yield = [int(i) for i in (attack, defence, health, xp_yield, gold_yield)] # converts some attributes to integers
+        image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield, gold_yield = attribute_list # unpacks attribute_list
+        attack, defence, health, health_regen, xp_yield, gold_yield = [int(i) for i in (attack, defence, health, health_regen, xp_yield, gold_yield)] # converts some attributes to integers
         weapon = Weapon(weapon_id, xcoord, ycoord) # creates weapon object enemy is wielding
         healthbar = Healthbar(health, health) # creates healthbar object attached to enemy
     
         # Initialising enemy object. Note that health variable is used to set both max_health and health.
         super().__init__(pygame.image.load(GAME_ASSETS[image]), # enemy image
-                         name, attack, defence, health, health, weapon, True, xcoord, ycoord, healthbar)
+                         name, attack, defence, health, health, health_regen, weapon, True, xcoord, ycoord, healthbar)
         self.setMovementPattern(movement_pattern)
         self.setXpYield(xp_yield)
         self.setGoldYield(gold_yield)

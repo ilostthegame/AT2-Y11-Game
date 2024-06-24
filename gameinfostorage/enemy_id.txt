@@ -3,11 +3,11 @@ Double exclamation mark (!!) marks the ID of enemy, e.g. !!00
 ID is separated from enemy object information by tilde (~)
 Enemy object information is found on same line, separated by forward slashes (/)
 Template for enemy object as below:
-!!{ID}~{image}/{name}/{attack}/{defence}/{health}/{weapon_id}/{movement_pattern}/{xp_yield}/{gold_yield}
+!!{ID}~{image}/{name}/{attack}/{defence}/{health}/{health_regen}/{weapon_id}/{movement_pattern}/{xp_yield}/{gold_yield}
 
-!!G1~goblin/Goblin/10/10/50/Mc/direct/50/10
-!!O1~orc/Orc/30/5/25/Cl/direct/50/10
-!!VP~violin_player/Violin Player/5/20/60/Vi/still/30/20
+!!G1~goblin/Goblin/10/10/50/2/Mc/direct/50/10
+!!O1~orc/Orc/30/5/25/2/Cl/direct/50/10
+!!VP~violin_player/Violin Player/5/20/60/1/Vi/still/30/20
 
 
-!!RI~rocco_ianni/Rocco Ianni/10/100000/200/WC/direct/10000000000/20000
+!!RI~rocco_ianni/Rocco Ianni/10/100000/200/100/WC/direct/10000000000/20000
