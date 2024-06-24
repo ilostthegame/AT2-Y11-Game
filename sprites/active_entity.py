@@ -70,7 +70,6 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setName(name)
         self.setAttack(attack)
         self.setDefence(defence)
-        self.setHealthbar(healthbar)
         self.setMaxHealth(max_health)
         self.setHealth(health)
         self.setHealthRegen(health_regen)
@@ -78,6 +77,8 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setIsAlive(is_alive)
         self.setXcoord(xcoord)
         self.setYcoord(ycoord)
+        self.setHealthbar(healthbar)
+        self.updateHealthbar()
 
     # Getters
     def getSurf(self):
@@ -118,6 +119,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.__rect = rect
     def setName(self, name):
         self.__name = name
+
     def setAttack(self, attack):
         if attack < 0:
             self.__attack = 0
@@ -135,10 +137,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
             self.setMaxHealth(1)
         else:
             self.__max_health = max_health
-        # Update Healthbar's display
-        self.getHealthbar().setEntityMaxHealth(self.getMaxHealth())
-        self.getHealthbar().updateHealth()
-        
+
     def setHealth(self, health):
         max_health = self.getMaxHealth() 
         if health > max_health: # ensures 0 <= health <= max_health
@@ -148,10 +147,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
             self.setIsAlive(False)
         else:
             self.__health = health
-        # Update Healthbar's display
-        self.getHealthbar().setEntityHealth(self.getHealth())
-        self.getHealthbar().updateHealth()
-    
+
     def setHealthRegen(self, health_regen):
         self.__health_regen = health_regen
     def setWeapon(self, weapon):
@@ -185,6 +181,14 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         rect = self.getRect()
         rect.topleft = (self.getXcoord() * 64, self.getYcoord() * 64)
         self.setRect(rect)
+    
+    def updateHealthbar(self):
+        """
+        Updates healthbar attributes, and its surface.
+        """
+        self.getHealthbar().setEntityMaxHealth(self.getMaxHealth())
+        self.getHealthbar().setEntityHealth(self.getHealth())
+        self.getHealthbar().updateSurf()
 
     @abstractmethod
     def getInfo(self):

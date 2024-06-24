@@ -29,7 +29,7 @@ class Sidebar(pygame.sprite.Sprite):
             
         initialiseAttackButtons(self) -> None: 
             Creates all buttons in attack_button_group 
-            To be run whenever henever character_attack_list is updated
+            To be run whenever character_attack_list is initialised or updated
     """
     # Attributes
     __surf = None
@@ -44,9 +44,10 @@ class Sidebar(pygame.sprite.Sprite):
         self.setGameEventDisplay(GameEventDisplay())
         self.setCharacterDataDisplay(CharacterDataDisplay())
         
-        # Initialise button_dict - initialisation function found in character_attack_list setter.
+        # Initialise attack buttons
         self.setAttackButtonGroup(pygame.sprite.Group())
         self.setCharacterAttackList(character_attack_list)
+        self.initialiseAttackButtons()
 
         # Add attack buttons TODO
         
@@ -72,12 +73,8 @@ class Sidebar(pygame.sprite.Sprite):
         self.__game_event_display = game_event_display
     def setCharacterDataDisplay(self, character_data_display):
         self.__character_data_display = character_data_display
-
-    # Set character attack list. Automatically updates button_dict with new attack buttons
     def setCharacterAttackList(self, character_attack_list):
         self.__character_attack_list = character_attack_list
-        self.initialiseAttackButtons()
-
     def setAttackButtonGroup(self, attack_button_group):
         self.__attack_button_group = attack_button_group
 
