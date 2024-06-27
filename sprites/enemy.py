@@ -29,7 +29,7 @@ class Enemy(ActiveEntity):
         healthbar (Healthbar): Healthbar of entity
 
         movement_pattern (str): Represents the algorithm to be used for 
-        xp_yield (int): Represents how much xp is earned through defeating enemy
+        exp_yield (int): Represents how much exp is earned through defeating enemy
     
     Methods:
         calcMovement(self, user_position: tuple[int, int]): 
@@ -47,17 +47,17 @@ class Enemy(ActiveEntity):
 
     # Attributes
     __movement_pattern = None
-    __xp_yield = None
+    __exp_yield = None
 
     # Constructor
     def __init__(self, enemy_id: str, xcoord: int, ycoord: int):
         # Getting file info
-        # Attributes in attribute_list = [image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield]
+        # Attributes in attribute_list = [image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, exp_yield]
         attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/enemy_id.txt', enemy_id) 
         
         # Unpacking file info, and creating additional enemy attributes
-        image_name, name, attack, defence, health, health_regen, weapon_id, movement_pattern, xp_yield = attribute_list # unpacks attribute_list
-        attack, defence, health, health_regen, xp_yield = [int(i) for i in (attack, defence, health, health_regen, xp_yield)] # converts some attributes to integers
+        image_name, name, attack, defence, health, health_regen, weapon_id, movement_pattern, exp_yield = attribute_list # unpacks attribute_list
+        attack, defence, health, health_regen, exp_yield = [int(i) for i in (attack, defence, health, health_regen, exp_yield)] # converts some attributes to integers
         weapon = Weapon(weapon_id, xcoord, ycoord) # creates weapon object enemy is wielding
         healthbar = Healthbar(health, health) # creates healthbar object attached to enemy
     
@@ -65,19 +65,19 @@ class Enemy(ActiveEntity):
         super().__init__(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha(), # enemy image
                          name, attack, defence, health, health, health_regen, weapon, True, xcoord, ycoord, healthbar)
         self.setMovementPattern(movement_pattern)
-        self.setXpYield(xp_yield)
+        self.setExpYield(exp_yield)
 
     # Getters
     def getMovementPattern(self):
         return self.__movement_pattern
-    def getXpYield(self):
-        return self.__xp_yield
+    def getExpYield(self):
+        return self.__exp_yield
 
     # Setters
     def setMovementPattern(self, movement_pattern):
         self.__movement_pattern = movement_pattern
-    def setXpYield(self, xp_yield):
-        self.__xp_yield = xp_yield
+    def setExpYield(self, exp_yield):
+        self.__exp_yield = exp_yield
 
     # Methods
     def getInfo(self):

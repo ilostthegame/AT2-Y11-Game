@@ -28,15 +28,15 @@ class Character(ActiveEntity):
         healthbar (Healthbar): Healthbar of entity
 
         level (int): Current level of character
-        experience_points (int): Experience point stat
+        exp (int): Exp stat
 
     Methods:
-        gainExperience(self, experience: int) -> None: 
-            Increases experience, and if possible levels up.
+        gainExp(self, exp: int) -> None: 
+            Increases exp, and if possible levels up.
         updateStats(self) -> None: 
             Updates attack, defence based on level.
-        calcRequiredExperience(self) -> int: 
-            Returns total required experience for the next level.
+        calcRequiredExp(self) -> int: 
+            Returns total required exp for the next level.
         takeDamage(self, damage: int) -> None: 
             Changes health according to defence and damage.
         getInfo(self) @abstractmethod: 
@@ -51,7 +51,7 @@ class Character(ActiveEntity):
     
     # Attributes
     __level = None
-    __experience_points = None
+    __exp = None
 
     # Constructor
     def __init__(self,  
@@ -67,40 +67,40 @@ class Character(ActiveEntity):
                  xcoord: int = 0, 
                  ycoord: int = 0, 
                  level: int = 1, 
-                 experience_points: int = 0):
+                 exp: int = 0):
         super().__init__(image, name, attack, defence, max_health, health, health_regen, 
                          Weapon(weapon_id, xcoord, ycoord),
                          is_alive, xcoord, ycoord, Healthbar(health, max_health)) 
         self.setLevel(level)
-        self.setExperiencePoints(experience_points)
+        self.setExp(exp)
 
     # Getters
     def getLevel(self):
         return self.__level
-    def getExperiencePoints(self):
-        return self.__experience_points
+    def getExp(self):
+        return self.__exp
     
     # Setters
     def setLevel(self, level):
         self.__level = level
-    def setExperiencePoints(self, experience_points):
-        self.__experience_points = experience_points
+    def setExp(self, exp):
+        self.__exp = exp
 
     # Methods
-    def gainExperience(self, experience):
+    def gainExp(self, exp):
         """
-        Increases character's experience, and increases levels accordingly. Subtracts used experience.
+        Increases character's exp, and increases levels accordingly. Subtracts used exp.
         Runs stat increase method based on levels gained.
         """
         original_level = self.getLevel()
-        self.setExperiencePoints(self.getExperiencePoints() + experience)
-        required_experience = self.calcRequiredExperience() # Calculate experience required for next level
+        self.setExp(self.getExp() + exp)
+        required_exp = self.calcRequiredExp() # Calculate exp required for next level
 
-        # Level up character while character has enough experience to level up and is below the level cap (50).
-        while self.getExperiencePoints() >= required_experience and self.getLevel() < 50:
+        # Level up character while character has enough exp to level up and is below the level cap (50).
+        while self.getExp() >= required_exp and self.getLevel() < 50:
             self.setLevel(self.getLevel() + 1)
-            self.setExperiencePoints(self.getExperiencePoints() - required_experience) # subtract used experience points.
-            required_experience = self.calcRequiredExperience() # Re-calculate experience required for next level
+            self.setExp(self.getExp() - required_exp) # subtract used exps.
+            required_exp = self.calcRequiredExp() # Re-calculate exp required for next level
 
         # Update attack/defence and if levelled up, prints levelup info.
         level_increase = self.updateStats(original_level)
@@ -118,9 +118,9 @@ class Character(ActiveEntity):
         self.setDefence(self.getDefence() + defence_increase)
         return (level_increase, attack_increase, defence_increase)
 
-    def calcRequiredExperience(self):
+    def calcRequiredExp(self):
         """
-        Calculates total required experience to get to next level
+        Calculates total required exp to get to next level
         """ 
         return int(100 * (1.5 ** (self.getLevel())))  # Current formula TODO change: 100 * 1.5^level.
 

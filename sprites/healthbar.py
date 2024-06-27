@@ -36,7 +36,7 @@ class Healthbar(pygame.sprite.Sprite):
 
     # Setters
     def setSurf(self, surf):
-        self.__surf = surfds
+        self.__surf = surf
     def setEntityHealth(self, entity_health):
         self.__entity_health = entity_health
     def setEntityMaxHealth(self, entity_max_health):

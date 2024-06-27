@@ -22,10 +22,10 @@ pygame.init()
 
 
 screen = pygame.display.set_mode((500,500))
-font = pygame.font.Font(None, 32)
+font = pygame.font.SysFont('Arial Narrow', 30)
 x=pygame.Surface((100, 100))
 
-text = font.render('eeeejfeijfiej', True, (0,0,0))
+text = font.render('the quick brown fox jumped over the lazy dog', True, (0,0,0))
 x = text.get_rect()
 x.topleft = (10,100)
 

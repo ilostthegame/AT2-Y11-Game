@@ -15,8 +15,7 @@ load_assets()
 # Constants
 class Game:
     """
-    A class representing the game. Contains game main loop. TODO fix up everything such that everything running is in the game main loop
-    TODO Give this class attributes such as the TitleScreen, GameWorld classes.
+    A class representing the game. Contains game main loop.
 
     Attributes:
         screen (pygame.Surface): Display on which all objects are sent. Size: 1200 x 768
@@ -64,7 +63,7 @@ class Game:
         self.setGameMenu('placeholder')
 
         # Temporary GameWorld initialisation. Can edit character's stuff here for testing.
-        character = Character('blue_orb', 'Bob', 'Sw')
+        character = Character(pygame.image.load(GAME_ASSETS['blue_orb']).convert_alpha(), 'Bob', 'Sw')
         game_world = GameWorld('Dining Hall', character)
         game_world.initialiseLevel()
         self.setGameWorld(game_world)

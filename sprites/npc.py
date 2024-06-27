@@ -6,7 +6,7 @@ from file_id_interpreter import FileIdInterpreter
 class Npc(pygame.sprite.Sprite):
     """
     Attributes:
-        image (pygame.Surface): Image of npc. Size: 64 x 64, transparent
+        surf (pygame.Surface): Image of npc. Size: 64 x 64, transparent
         name (str): Name of npc
         dialogue (str): Dialogue npc says when interacted with
         xcoord (int): Xcoord of npc
@@ -16,7 +16,7 @@ class Npc(pygame.sprite.Sprite):
     """
 
     # Attributes
-    __image = None
+    __surf = None
     __name = None
     __dialogue = None
     __xcoord = None
@@ -25,12 +25,12 @@ class Npc(pygame.sprite.Sprite):
     # Constructor
     def __init__(self, npc_id: str, xcoord: int, ycoord: int):
         # Getting and unpacking file info
-        attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/npc_id.txt', npc_id) # [image, name, dialogue]
+        attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/npc_id.txt', npc_id) # [image_name, name, dialogue]
         image_name, name, dialogue = attribute_list # unpacks all npc information
         
         # Initialising npc object.
         super().__init__()
-        self.setImage(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha())
+        self.setSurf(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha())
         self.setName(name)
         self.setDialogue(dialogue)
         self.setXcoord(xcoord)
@@ -38,8 +38,8 @@ class Npc(pygame.sprite.Sprite):
 
 
     # Getters
-    def getImage(self):
-        return self.__image
+    def getSurf(self):
+        return self.__surf
     def getName(self):
         return self.__name
     def getDialogue(self):
@@ -50,8 +50,8 @@ class Npc(pygame.sprite.Sprite):
         return self.__ycoord
 
     # Setters
-    def setImage(self, image):
-        self.__image = image
+    def setSurf(self, surf):
+        self.__surf = surf
     def setName(self, name):
         self.__name = name
     def setDialogue(self, dialogue):

@@ -1,9 +1,9 @@
 import pygame
 
-class CharacterDataDisplay(pygame.sprite.Sprite):
+class DataDisplay(pygame.sprite.Sprite):
     """
     Sprite which displays the following:
-    - Character level, healthbar and xp bar with hover capabilities.
+    - Character level, healthbar and exp bar with hover capabilities.
     - Current level name, enemy count.
 
     Attributes: TODO
@@ -19,6 +19,7 @@ class CharacterDataDisplay(pygame.sprite.Sprite):
 
     # Constructor
     def __init__(self):
+        super().__init__()
         self.setSurf(pygame.Surface((432, 200)))
         self.getSurf().fill(('blue'))
 
@@ -29,3 +30,7 @@ class CharacterDataDisplay(pygame.sprite.Sprite):
     # Setters
     def setSurf(self, surf):
         self.__surf = surf
+
+    # def update(self):
+        # print('hi')
+    

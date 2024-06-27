@@ -9,7 +9,7 @@ class Weapon(pygame.sprite.Sprite):
     A class representing a weapon.
 
     Attributes:
-        image (pygame.Surface): The weapon's image. Size: 32 x 48, transparent
+        surf (pygame.Surface): The weapon's image. Size: 32 x 48, transparent
         name (str): Name of the weapon
         attack_list (list[Attack]): List of attacks on the weapon
         entity_xcoord (int): The xcoord of the entity holding weapon
@@ -20,7 +20,7 @@ class Weapon(pygame.sprite.Sprite):
     """
 
     # Attributes
-    __image = None
+    __surf = None
     __name = None
     __attack_list = None
     __entity_xcoord = None
@@ -34,7 +34,7 @@ class Weapon(pygame.sprite.Sprite):
         
         # Initialising weapon object.
         super().__init__()
-        self.setImage(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha())
+        self.setSurf(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha())
         self.setName(name)
         self.setEntityXcoord(entity_xcoord)
         self.setEntityYcoord(entity_ycoord)
@@ -47,8 +47,8 @@ class Weapon(pygame.sprite.Sprite):
         self.setAttackList(attack_list)
 
     # Getters
-    def getImage(self):
-        return self.__image
+    def getSurf(self):
+        return self.__surf
     def getName(self):
         return self.__name
     def getAttackList(self):
@@ -59,8 +59,8 @@ class Weapon(pygame.sprite.Sprite):
         return self.__entity_ycoord
 
     # Setters
-    def setImage(self, image):
-        self.__image = image
+    def setSurf(self, surf):
+        self.__surf = surf
     def setName(self, name):
         self.__name = name
     def setAttackList(self, attacks):

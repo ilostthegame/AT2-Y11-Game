@@ -5,7 +5,7 @@ from pygame.locals import *
 from sprites.enemy import Enemy
 from sprites.portal import Portal
 from sprites.npc import Npc
-from sprites.sidebar import Sidebar
+from sprites.sidebar.sidebar import Sidebar
 from sprites.tile import Tile
 from sprites.board import Board
 from sprites.character import Character
@@ -67,7 +67,7 @@ class GameWorld(GameState):
         super().__init__()
         self.setLevelName(level_name)
         self.setCharacter(character)
-        self.setSidebar(Sidebar(character.getWeapon().getAttackList()))
+        self.setSidebar(Sidebar())
         self.setBoard(Board())
         self.setNpcGroup(pygame.sprite.Group())
         self.setEnemyGroup(pygame.sprite.Group())
@@ -120,9 +120,22 @@ class GameWorld(GameState):
             # Use pygame.event == KEYDOWN to do stuff with one movement at a time.
 
         board = self.getBoard()
+        character = self.getCharacter()
+        
+        # Get attributes needed to update Sidebar
+        health = character.getHealth()
+        max_health = character.getMaxHealth()
+        exp = character.getExp()
+        req_exp = character.calcRequiredExp()
+        level_name = self.getLevelName()
+        attack_list = character.getWeapon().getAttackList()
+        valid_event_list = list()
+        invalid_event = 'bad'
+
+        # Update Sidebar display
         sidebar = self.getSidebar()
-        sidebar.initialiseAttackButtons()
-        sidebar.update(pygame_events, mouse_pos)
+        used_attack = sidebar.update(pygame_events, mouse_pos, health, max_health, exp, req_exp, level_name, attack_list, valid_event_list, invalid_event)
+        self.setSidebar(sidebar)
 
         # Blit sprites onto main_surf
         main_surf = self.getMainSurf()
@@ -130,6 +143,9 @@ class GameWorld(GameState):
         main_surf.blit(board.getSurf(), (0, 0))
         main_surf.blit(sidebar.getSurf(), (768, 0))
         self.setMainSurf(main_surf)
+
+        # TESTING
+        print(used_attack)
 
         return 'game_world'
 
