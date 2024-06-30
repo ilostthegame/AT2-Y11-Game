@@ -49,6 +49,29 @@ class GameWorld(GameState):
             - tile information gets sent to Board object.
             - enemy/npc/portal information sent to their respective groups
 
+    ########
+    TODO probably create a gameEvent handler based on the following system:
+    Implement once turn based is in.
+
+    Valid: Represents events that have occurred during the last valid user turn.
+        4 lines of these displayed at a time.
+        These events should be replaced when user next has a valid turn.
+        The set of these events are:
+            - User attacks enemy(s). 
+            - Enemy attacks user.
+            - Enemy faints.
+            - Npc says something to user.
+
+    Invalid: Represents an error message for an invalid user turn
+        1 line displayed at a time.
+        Event should be replaced when user next has a valid or invalid turn.
+        These events represent erroneous user turns, these being:
+            - User walks into wall/entity.
+            - User selects invalid target(s) for attack.
+            - User interacts with invalid/nonexistent entity.
+            - User attempts to enter portal without clearing all enemies
+    ###########
+
     """
 
     # Attributes
@@ -129,8 +152,13 @@ class GameWorld(GameState):
         req_exp = character.calcRequiredExp()
         level_name = self.getLevelName()
         attack_list = character.getWeapon().getAttackList()
-        valid_event_list = list()
+
+        #############
+        ## TESTING ##
+        #############
+        valid_event_list = ['fdf', '123', 'i am an event', 'roco iani cool', 'idk', 'hihi', '2nd page now', 'how long can this message get honestly', '123123123']
         invalid_event = 'bad'
+        #############
 
         # Update Sidebar display
         sidebar = self.getSidebar()
@@ -144,9 +172,12 @@ class GameWorld(GameState):
         main_surf.blit(sidebar.getSurf(), (768, 0))
         self.setMainSurf(main_surf)
 
-        # TESTING
+        #############
+        ## TESTING ##
+        #############
         print(used_attack)
-
+        #############
+        
         return 'game_world'
 
 

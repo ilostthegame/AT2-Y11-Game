@@ -3,7 +3,7 @@ from pygame.locals import MOUSEBUTTONDOWN, KEYDOWN
 
 class ButtonOutputGetter:
     """
-    Contains method that returns all button outputs in an iteration of game cycle
+    Contains method that returns all button outputs in an iteration of game loop
 
     Methods:
         getOutputs(self, button_group: pygame.sprite.Group, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> list[str]:

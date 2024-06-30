@@ -10,7 +10,7 @@ from sprites.sidebar.attack_buttons import AttackButtons
 
 class Sidebar(pygame.sprite.Sprite):
     """
-    Class that represents the in-game sidebar. Contains three componenets:
+    Class that represents the in-game sidebar. Contains three components:
     - DataDisplay - Displays character's healthbar/exp bar/level and the level name. Size: 432 x 200
     - AttackButtons - Handles attack buttons. Size: 432 x 244 space. Each button size is 200 x 100
     - GameEventDisplay: Displays game events. Size: 432 x 324
@@ -100,7 +100,7 @@ class Sidebar(pygame.sprite.Sprite):
         # Update components of sidebar
         data_display.update(health, max_health, exp, req_exp, level_name)
         used_attack = attack_buttons.update(pygame_events, mouse_pos, attack_list)
-        game_event_display.update(valid_event_list, invalid_event)
+        game_event_display.update(pygame_events, mouse_pos, valid_event_list, invalid_event)
         self.setDataDisplay(data_display)
         self.setAttackButtons(attack_buttons)
         self.setGameEventDisplay(game_event_display)

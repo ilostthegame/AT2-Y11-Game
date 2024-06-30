@@ -11,7 +11,7 @@ class Button(pygame.sprite.Sprite):
         rect (pygame.Rect): Rectangle underlying the button.
         text (str): What the button says on it
         font_size (int): Font size of text on button
-        colour (tuple[int, int, int]): Colour of button
+        colour (tuple[int, int, int]): Background colour of button
         output (str): What the button should return when activated (clicked/connected_key pressed)
         centre_coords (tuple[int, int]): Coordinates of the centre of button
         connected_key (str): Key that when pressed activates button. May be None.

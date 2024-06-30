@@ -40,7 +40,7 @@ class AttackButtons(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.setSurf(pygame.Surface((432, 244)))
-        self.setAttackButtonGroup(pygame.sprite.Group)
+        self.setAttackButtonGroup(pygame.sprite.Group())
         self.setAttackList(list())
 
     # Getters
@@ -76,7 +76,8 @@ class AttackButtons(pygame.sprite.Sprite):
 
         # If button_outputs exist, interprets first one and sets method output
         used_attack = None
-        button_outputs = ButtonOutputGetter().getOutputs(self.getAttackButtonGroup(), pygame_events, mouse_pos)
+        relative_mouse_pos = (mouse_pos[0] - 768, mouse_pos[1] - 200)
+        button_outputs = ButtonOutputGetter().getOutputs(self.getAttackButtonGroup(), pygame_events, relative_mouse_pos)
         if button_outputs:
             button_output = button_outputs[0]
             match button_output:

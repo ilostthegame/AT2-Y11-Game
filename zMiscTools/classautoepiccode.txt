@@ -1,32 +1,50 @@
 # Attributes
 __surf = None
-__character_data_display = None
-__attack_buttons = None
-__game_event_display = None
+__valid_event_list = None
+__invalid_event = None
+__displayed_event = None
+__total_pages = None
+__current_page = None
+__button_group = None
 
 # Constructor
-def __init__(self, surf, character_data_display, attack_buttons, game_event_display):
+def __init__(self, surf, valid_event_list, invalid_event, displayed_event, total_pages, current_page, button_group):
     self.setSurf(surf)
-    self.setCharacterDataDisplay(character_data_display)
-    self.setAttackButtons(attack_buttons)
-    self.setGameEventDisplay(game_event_display)
+    self.setValidEventList(valid_event_list)
+    self.setInvalidEvent(invalid_event)
+    self.setDisplayedEvent(displayed_event)
+    self.setTotalPages(total_pages)
+    self.setCurrentPage(current_page)
+    self.setButtonGroup(button_group)
 
 # Getters
 def getSurf(self):
     return self.__surf
-def getCharacterDataDisplay(self):
-    return self.__character_data_display
-def getAttackButtons(self):
-    return self.__attack_buttons
-def getGameEventDisplay(self):
-    return self.__game_event_display
+def getValidEventList(self):
+    return self.__valid_event_list
+def getInvalidEvent(self):
+    return self.__invalid_event
+def getDisplayedEvent(self):
+    return self.__displayed_event
+def getTotalPages(self):
+    return self.__total_pages
+def getCurrentPage(self):
+    return self.__current_page
+def getButtonGroup(self):
+    return self.__button_group
 
 # Setters
 def setSurf(self, surf):
     self.__surf = surf
-def setCharacterDataDisplay(self, character_data_display):
-    self.__character_data_display = character_data_display
-def setAttackButtons(self, attack_buttons):
-    self.__attack_buttons = attack_buttons
-def setGameEventDisplay(self, game_event_display):
-    self.__game_event_display = game_event_display
+def setValidEventList(self, valid_event_list):
+    self.__valid_event_list = valid_event_list
+def setInvalidEvent(self, invalid_event):
+    self.__invalid_event = invalid_event
+def setDisplayedEvent(self, displayed_event):
+    self.__displayed_event = displayed_event
+def setTotalPages(self, total_pages):
+    self.__total_pages = total_pages
+def setCurrentPage(self, current_page):
+    self.__current_page = current_page
+def setButtonGroup(self, button_group):
+    self.__button_group = button_group
