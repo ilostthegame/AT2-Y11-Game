@@ -2,8 +2,7 @@ import pygame
 from sprites.button import Button
 from sprites.sidebar.game_event_display import GameEventDisplay
 from sprites.sidebar.data_display import DataDisplay
-from button_output_getter import ButtonOutputGetter
-from typing import Optional, Any
+from typing import Optional
 from attack import Attack
 from sprites.sidebar.attack_buttons import AttackButtons
 
@@ -25,6 +24,7 @@ class Sidebar(pygame.sprite.Sprite):
         update(self, 
                pygame_events: list[pygame.event.Event], 
                mouse_pos: tuple[int, int],
+               character_level: int,
                health: int,
                max_health: int,
                exp: int,
@@ -78,6 +78,7 @@ class Sidebar(pygame.sprite.Sprite):
     def update(self, 
                pygame_events: list[pygame.event.Event], 
                mouse_pos: tuple[int, int],
+               character_level: int,
                health: int,
                max_health: int,
                exp: int,
@@ -98,7 +99,7 @@ class Sidebar(pygame.sprite.Sprite):
         game_event_display = self.getGameEventDisplay()
 
         # Update components of sidebar
-        data_display.update(health, max_health, exp, req_exp, level_name)
+        data_display.update(character_level, exp, req_exp, health, max_health, level_name)
         used_attack = attack_buttons.update(pygame_events, mouse_pos, attack_list)
         game_event_display.update(pygame_events, mouse_pos, valid_event_list, invalid_event)
         self.setDataDisplay(data_display)

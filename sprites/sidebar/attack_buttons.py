@@ -6,7 +6,7 @@ from button_output_getter import ButtonOutputGetter
 
 class AttackButtons(pygame.sprite.Sprite):
     """
-    Class that represents the attack buttons
+    Sidebar component that displays and handles the attack buttons
 
     Attributes:
         surf (pygame.Surface): Surface on which the attack buttons are blitted.

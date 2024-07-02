@@ -146,6 +146,7 @@ class GameWorld(GameState):
         character = self.getCharacter()
         
         # Get attributes needed to update Sidebar
+        character_level = character.getLevel()
         health = character.getHealth()
         max_health = character.getMaxHealth()
         exp = character.getExp()
@@ -156,13 +157,13 @@ class GameWorld(GameState):
         #############
         ## TESTING ##
         #############
-        valid_event_list = ['fdf', '123', 'i am an event', 'roco iani cool', 'idk', 'hihi', '2nd page now', 'how long can this message get honestly', '123123123']
+        valid_event_list = ['fdf', '123', 'i am an event', 'roco iani cool', 'idk', 'hihi', '2nd page now', 'how long can this message get honestly', '123123123', 'qwertyuiopasdfghjklzxcvbnm 1234567890 qwertyuiop ooooooooooof', 'Hayden Foxwell: "Make sure your uniforms are well adjusted"']
         invalid_event = 'bad'
         #############
 
         # Update Sidebar display
         sidebar = self.getSidebar()
-        used_attack = sidebar.update(pygame_events, mouse_pos, health, max_health, exp, req_exp, level_name, attack_list, valid_event_list, invalid_event)
+        used_attack = sidebar.update(pygame_events, mouse_pos, character_level, health, max_health, exp, req_exp, level_name, attack_list, valid_event_list, invalid_event)
         self.setSidebar(sidebar)
 
         # Blit sprites onto main_surf

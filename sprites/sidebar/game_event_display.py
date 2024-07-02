@@ -7,7 +7,8 @@ from button_output_getter import ButtonOutputGetter
 
 class GameEventDisplay(pygame.sprite.Sprite):
     """
-    Represents the display to which game events are sent. Has two separate parts:
+    Sidebar compomenent that represents the display to which game events are sent. 
+    Has two separate parts:
         Valid events: Exist 6 slots, which can be cycled between.
         Invalid events: Exists 1 slot.
 
@@ -126,7 +127,7 @@ class GameEventDisplay(pygame.sprite.Sprite):
         self.drawTemplate() # Draws template, overriding previously displayed events.
 
         displayed_events = self.getDisplayedEvents() # list of events to display
-        font = pygame.font.Font(None, 24)
+        font = pygame.font.Font(None, 20)
         surf = self.getSurf()
 
         # Create font objects for each displayed valid event, and blit to surf
