@@ -3,27 +3,6 @@ from pygame.locals import *
 import time
 ## DONT TOUCH MODULES
 
-run = True
-pygame.init()
-screen = pygame.display.set_mode((500,500))
-tile = pygame.Surface((64, 64))
-tile.fill('red')
-
-while run == True:
-    # Event handler for QUIT
-    for event in pygame.event.get(): 
-        if event.type == QUIT:
-            run = False
-        elif event.type == KEYDOWN:
-            print(event.unicode)
-
-    screen.fill((255, 255, 255))
-    screen.blit(tile, (0, 0, 64, 64))
-    screen.blit(tile, (55, 100, 64, 64))
-    pygame.display.flip()
-                    
-pygame.quit()
-
 ### GAME RUNNING STUFF
 
 # class test2:
@@ -38,30 +17,30 @@ pygame.quit()
 
 # ####
 
-# # run = True
-# # pygame.init()
+run = True
+pygame.init()
 
 
-# # screen = pygame.display.set_mode((500,500))
-# # font = pygame.font.Font(None, 32)
-# # x=pygame.Surface((100, 100))
+screen = pygame.display.set_mode((500,500))
+font = pygame.font.SysFont('Arial Narrow', 30)
+x=pygame.Surface((100, 100))
 
-# # text = font.render('eeee', True, (0,0,0))
-# # x = text.get_rect()
-# # x.topleft = (10,100)
+text = font.render('the quick brown fox jumped over the lazy dog', True, (0,0,0))
+x = text.get_rect()
+x.topleft = (10,100)
 
-# # while run == True:
-# #     # Event handler for QUIT
-# #     screen.fill((255, 255, 255))
-# #     for event in pygame.event.get(): 
-# #         if event.type == QUIT:
-# #             run = False
+while run == True:
+    # Event handler for QUIT
+    screen.fill((255, 255, 255))
+    for event in pygame.event.get(): 
+        if event.type == QUIT:
+            run = False
 
-# #     screen.blit(text, x)
-# #     pygame.display.flip()
+    screen.blit(text, x)
+    pygame.display.flip()
     
                     
-# # pygame.quit()
+pygame.quit()
 
 # ### GAME RUNNING STUFF
 

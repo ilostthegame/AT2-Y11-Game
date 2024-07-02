@@ -3,6 +3,7 @@ from game_states.game_state import GameState
 from pygame.locals import *
 from assets import GAME_ASSETS
 from sprites.button import Button
+from button_output_getter import ButtonOutputGetter
 
 class TitleScreen(GameState):
     """
@@ -10,16 +11,21 @@ class TitleScreen(GameState):
     Loaded when game is initialised, and from 'save_and_exit' from GameMenu
 
     Attributes:
-        button_group (pygame.sprite.Group): Sprite group that contains buttons
+        button_group (pygame.sprite.Group): Sprite group that contains buttons:
+            Includes new_game, quit and load_game
 
         (Inherited)
-        displayed_sprites: Sprite group that represents all pygame sprites that are to be sent to display
-            
+        main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
+            Size: 1200 x 768
+
     Methods:
-        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: Runs all functions associated with TitleScreen. To be called each iteration of game loop.
+        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str:
+            Runs all functions associated with TitleScreen. To be called each iteration of game loop.
             Returns the next state game is to enter.
-        initialiseButtons(self) -> None: Creates start, quit buttons and adds them to button_group 
-        savedGameExist(self) -> bool: Evaluates whether a saved gamefile exists. Returns True/False
+        initialiseButtons(self) -> None:
+            Creates new_game, quit and load_game buttons and adds them to button_group
+        savedGameExist(self) -> bool:
+            Evaluates whether a saved gamefile exists. Returns True/False
     """
 
     # Attributes
@@ -45,76 +51,64 @@ class TitleScreen(GameState):
         Runs all functions associated with TitleScreen. To be called each iteration of game loop.
         Returns the next state game is to enter: in [title_screen, game_world, exit]
         """
-        button_outputs = list() # List of all outputs from activated buttons
-
-        # Button activation handler TODO this can be a function with parameters (pygame_events, mouse_pos, button_group)
-        for event in pygame_events:
-            # Handle mouse left-button click
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # left mouse button
-                buttons_pressed = [button for button in self.getButtonGroup() if button.getRect().collidepoint(mouse_pos)] # gets all button rects colliding with mouse
-                for button in buttons_pressed:
-                    button_outputs.append(button.getOutput())
-
-            # Handle keypress
-            elif event.type == pygame.KEYDOWN:
-                for button in self.getButtonGroup():
-                    connected_key = button.getConnectedKey()
-                    if connected_key: # if connected key exists
-                        if event.unicode.lower() == connected_key.lower(): # check if pressed key == connected key
-                            button_outputs.append(button.getOutput())
-
-            else:
-                continue
-            
+        
+        button_outputs = ButtonOutputGetter().getOutputs(self.getButtonGroup(), pygame_events, mouse_pos) # Gets all button outputs
+        next_state = 'title_screen'
+        
         # If there exists button output(s), interprets the first one in button_outputs.
         if button_outputs:
-            foo = button_outputs[0] # TODO fix name, and make the new_game, load_game cases activate some initialisation function. Perhaps within game_world
-            match foo:
+            button_output = button_outputs[0]
+            match button_output:
                 case 'new_game': 
-                    return 'world_init'
+                    next_state = 'world_init'
                 case 'load_game':
-                    return 'world_load'
-                case 'quit_game':
-                    return 'quit'
+                    next_state = 'world_load'
+                case 'quit':
+                    next_state = 'quit'
                 case _:
-                    raise Exception("Unknown button output")
+                    raise Exception(f"Button output {button_output} is unknown")
+                
+        # Blits all buttons to surface
+        main_surf = self.getMainSurf()
+        main_surf.fill((187, 211, 250))
+        for button in self.getButtonGroup():
+            main_surf.blit(button.getSurf(), button.getRect())
+        self.setMainSurf(main_surf)
 
-        return 'title_screen' # Re-enter title screen if no button pressed
+        return next_state
             
                 
     def initialiseButtons(self) -> None:
         """
-        Creates title screen buttons and adds them to button_group, and displayed_sprites
+        Creates title screen buttons and adds them to button_group.
         """
         button_group = self.getButtonGroup()
-        displayed_sprites = self.getDisplayedSprites()
         new_game_button = Button(pygame.Surface((256, 128)), 
                                  'New Game',
                                  32,
                                  (200, 100, 0),
                                  'new_game',
-                                 (600, 200))
-        exit_button = Button(pygame.Surface((256, 128)), 
-                                 'Quit Game',
+                                 (600, 200),
+                                 '1')
+        quit_button = Button(pygame.Surface((256, 128)), 
+                                 'Quit',
                                  32,
                                  (200, 100, 0),
-                                 'quit_game',
+                                 'quit',
                                  (600, 600),
-                                 'P')
-        button_group.add(new_game_button, exit_button) # adds new game and exit buttons
-
-        if self.savedGameExist(): # adds load game button if it exists
+                                 '0')
+        button_group.add(new_game_button, quit_button) 
+        if self.savedGameExist(): # Load Game only if saved game exists already.
             load_game_button = Button(pygame.Surface((256, 128)), 
                                       'Load Game',
                                       32,
                                       (200, 200, 200),
                                       'load_game',
-                                      (600, 400))
+                                      (600, 400),
+                                      '2')
             button_group.add(load_game_button)
-        
-        displayed_sprites.add(button_group)
         self.setButtonGroup(button_group)
-        self.setDisplayedSprites(displayed_sprites)
+        return
         
     
     def savedGameExist(self) -> bool:

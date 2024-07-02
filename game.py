@@ -7,7 +7,7 @@ from game_states.world_load import WorldLoad
 from assets import load_assets, GAME_ASSETS
 from pygame.locals import *
 from sprites.character import Character
-from healthbar import Healthbar
+from sprites.healthbar import Healthbar
 import random
 
 load_assets()
@@ -15,11 +15,10 @@ load_assets()
 # Constants
 class Game:
     """
-    A class representing the game. Contains game main loop. TODO fix up everything such that everything running is in the game main loop
-    TODO Give this class attributes such as the TitleScreen, GameWorld classes.
+    A class representing the game. Contains game main loop.
 
     Attributes:
-        screen (pygame.Surface): Display on which all objects are sent.
+        screen (pygame.Surface): Display on which all objects are sent. Size: 1200 x 768
         state (str): Represents the state the game is in: 
             in ['title_screen', 'world_init', 'world_load', 'game_world', 'game_menu', 'quit']
         is_running (bool): Whether game loop is to continue iteration.
@@ -31,11 +30,16 @@ class Game:
         game_menu (GameMenu)
         
     Methods:
-        run(self): Runs the game main loop
-        runTitleScreen(self): If state == 'title_screen', runs title screen
-        runGameWorld(self): If state == 'game_world', runs game world
-        runGameMenu(self): If state == 'game_menu, runs game menu
-        handleCleanup(self): To run when game loop is exited. Quits pygame. TODO save system.
+        run(self) -> None: 
+            Runs the game main loop
+        runTitleScreen(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
+            If state == 'title_screen', runs title screen
+        runGameWorld(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
+            If state == 'game_world', runs game world
+        runGameMenu(self) -> pygame.sprite.Group:
+            If state == 'game_menu, runs game menu
+        handleCleanup(self) -> None: 
+            To run when game loop is exited. Quits pygame. TODO save system.
     """
 
     # Attributes
@@ -53,23 +57,14 @@ class Game:
                  is_running: bool):
         self.setState(state)
         self.setIsRunning(is_running)
-        self.setScreen(pygame.display.set_mode((1200, 800)))
+        self.setScreen(pygame.display.set_mode((1200, 768)))
         self.setClock(pygame.time.Clock())
         self.setTitleScreen(TitleScreen())
         self.setGameMenu('placeholder')
 
-        #temp GameWorld init
-        character = Character('blue_orb',
-                              'Bob',
-                              25,
-                              25,
-                              100,
-                              100,
-                              'Sw',
-                              True,
-                              0,
-                              0,1, 0,list(),list(),0,Healthbar(100, 100))
-        game_world = GameWorld('Test', character)
+        # Temporary GameWorld initialisation. Can edit character's stuff here for testing.
+        character = Character(pygame.image.load(GAME_ASSETS['blue_orb']).convert_alpha(), 'Bob', 'Sw')
+        game_world = GameWorld('Dining Hall', character)
         game_world.initialiseLevel()
         self.setGameWorld(game_world)
 
@@ -106,7 +101,7 @@ class Game:
         self.__game_menu = game_menu
 
     # Methods
-    def run(self):
+    def run(self) -> None:
         """
         Runs the game loop
         """
@@ -123,26 +118,27 @@ class Game:
             state = self.getState()
             match state:
                 case 'title_screen':
-                    displayed_sprites = self.runTitleScreen(pygame_events, mouse_pos)
+                    main_surf = self.runTitleScreen(pygame_events, mouse_pos)
                 case 'world_init': # TODO fix up worldinit
-                    displayed_sprites = self.runGameWorld(pygame_events, mouse_pos) # self.runWorldInit()
+                    main_surf = self.runGameWorld(pygame_events, mouse_pos) # self.runWorldInit()
                 case 'world_load':
-                    displayed_sprites = self.runWorldLoad()
+                    main_surf = self.runWorldLoad()
                 case 'game_world':
-                    displayed_sprites = self.runGameWorld(pygame_events, mouse_pos)
+                    main_surf = self.runGameWorld(pygame_events, mouse_pos)
                 case 'game_menu':
-                    displayed_sprites = self.runGameMenu() 
+                    main_surf = self.runGameMenu() 
                 case 'quit':
                     self.setIsRunning(False)
                 case _:
-                    raise Exception("State does not exist")
+                    raise ValueError(f"State ({state}) is unknown")
             
             # Sends all sprites to the display.
             screen = self.getScreen()
             screen.fill((255, 255, 255))
-            for sprite in displayed_sprites:
-                screen.blit(sprite.getSurf(), sprite.getRect())
+            screen.blit(main_surf, (0, 0))
             pygame.display.flip()
+
+            self.getClock().tick(20)
 
         self.handleCleanup() # Runs cleanup, TODO save game.
 
@@ -154,11 +150,11 @@ class Game:
         """
         title_screen = self.getTitleScreen()
         next_state = title_screen.run(pygame_events, mouse_pos)
-        displayed_sprites = title_screen.getDisplayedSprites()
+        main_surf = title_screen.getMainSurf()
 
         self.setTitleScreen(title_screen)
         self.setState(next_state)
-        return displayed_sprites
+        return main_surf
     
     def runWorldInit(self):
         pass
@@ -174,11 +170,11 @@ class Game:
         game_world = self.getGameWorld()
         
         next_state = game_world.run(pygame_events, mouse_pos)
-        displayed_sprites = game_world.getDisplayedSprites()
+        main_surf = game_world.getMainSurf()
 
         self.setGameWorld(game_world)
         self.setState(next_state) # no problems here I think
-        return displayed_sprites
+        return main_surf
         
 
     def runGameMenu(self) -> pygame.sprite.Group:
@@ -188,7 +184,7 @@ class Game:
         pass
     
 
-    def handleCleanup(self):
+    def handleCleanup(self) -> None:
         """
         To run when game loop is exited. Quits pygame. TODO save system.
         """

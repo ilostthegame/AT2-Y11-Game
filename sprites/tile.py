@@ -6,7 +6,7 @@ class Tile(pygame.sprite.Sprite):
     TODO optional - convert this to a file system too.
     
     Attributes:
-        surf (pygame.Surface)
+        surf (pygame.Surface): Size: 64 x 64
         accessible (bool): Whether tile can be entered by an entity
         occupied (bool): Whether an ActiveEntity is on the tile
         damage (int): How much damage an entity takes upon entering tile
@@ -24,8 +24,13 @@ class Tile(pygame.sprite.Sprite):
                  damage: int = 0, 
                  occupied: bool = False):
         super().__init__()
-        self.setSurf(pygame.Surface((64, 64)))
-        self.getSurf().fill(colour)
+
+        # Creates tile surface with grey border
+        surf = pygame.Surface((64, 64))
+        surf.fill((128, 128, 128)) # creates border
+        pygame.draw.rect(surf, colour, (1, 1, 62, 62)) # Inner square of tile
+        self.setSurf(surf)
+
         self.setAccessible(accessible)
         self.setDamage(damage)
         self.setOccupied(occupied)

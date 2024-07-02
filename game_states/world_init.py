@@ -5,7 +5,7 @@ from assets import GAME_ASSETS
 from sprites.character import Character
 from game_states.game_world import GameWorld
 
-class WorldInit(GameState):
+class WorldInit(GameState): # TODO unfinished
     """
     Class for world initialisation game state. Has parent GameState.
     Initialises Character and GameWorld objects
@@ -13,14 +13,18 @@ class WorldInit(GameState):
 
     Attributes:
         (Inherited)
-        displayed_sprites: Sprite group that represents all pygame sprites that are to be sent to display
-            
+        main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
+            Size: 1200 x 768
+
     Methods:
-        run(self) -> str: Runs all functions to initialise the game world
+        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: 
+            Runs all functions to initialise the game world
             To be called each iteration of game loop while state == 'world_init'.
             Returns the next state game is to enter.
-        initialiseGameWorld(self, character: Character) -> GameWorld: Creates and returns initial GameWorld object
-        initialiseCharacter(self) -> Character: Creates and returns initial character object
+        initialiseGameWorld(self, character: Character) -> GameWorld: 
+            Creates and returns initial GameWorld object
+        initialiseCharacter(self) -> Character: 
+            Creates and returns initial character object
 
     # TODO turn this into an actual class where you can select stuff actually.
     """
@@ -39,16 +43,11 @@ class WorldInit(GameState):
         """
         Creates and returns initial GameWorld object
         """
+        pass
 
     def initialiseCharacter(self) -> Character:
         """
         Creates and returns initial character object
         """
-        init_character = Character(
-            'blue_orb',
-            25,
-            25,
-            100,
-            100,
-
-        )
+        pass
+        initial_character = Character('placeholder_image', 'placeholder_name', 'placeholder_weapon_id')

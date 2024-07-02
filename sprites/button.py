@@ -1,22 +1,24 @@
 import pygame
 from pygame.locals import *
+from typing import Optional
 
 class Button(pygame.sprite.Sprite):
     """
     Class for a generalised button
     
     Attributes:
-        surf (pygame.Surface): Surface for the button.
+        surf (pygame.Surface): Surface for the button. Variable size.
         rect (pygame.Rect): Rectangle underlying the button.
         text (str): What the button says on it
         font_size (int): Font size of text on button
-        colour (tuple[int, int, int]): Colour of button
+        colour (tuple[int, int, int]): Background colour of button
         output (str): What the button should return when activated (clicked/connected_key pressed)
         centre_coords (tuple[int, int]): Coordinates of the centre of button
         connected_key (str): Key that when pressed activates button. May be None.
 
     Methods:
-        initialiseButtonSurf(self): Positions, colours and writes text onto button surface
+        initialiseButtonSurf(self): 
+            Sets position and colour of button, and writes text onto button surface
     """
 
     # Attributes
@@ -37,7 +39,7 @@ class Button(pygame.sprite.Sprite):
                 colour: tuple[int, int, int], 
                 output: str, 
                 centre_coords: tuple[int, int], 
-                connected_key: str = None):
+                connected_key: Optional[str] = None):
         super().__init__()
         self.setSurf(surf)
         self.setRect(self.getSurf().get_rect())
@@ -89,7 +91,7 @@ class Button(pygame.sprite.Sprite):
     # Methods
     def initialiseButtonSurf(self):
         """
-        Positions, colours and writes text onto button surface
+        Sets position and colour of button, and writes text onto button surface
         """
         button_surf = self.getSurf()
         button_rect = self.getRect()

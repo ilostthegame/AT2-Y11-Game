@@ -6,30 +6,32 @@ class GameState(ABC):
     Class that represents a general game state.
 
     Attributes:
-        displayed_sprites (pygame.sprite.Group): Sprite group that represents all pygame sprites that are to be sent to display
+        main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted. 
+            Size: 1200 x 768
 
     Methods:
-        run(self) -> str @abstractmethod: Runs all functions associated with game state. To be called each iteration of game loop.
+        run(self) -> str @abstractmethod: 
+            Runs all functions associated with game state. To be called each iteration of game loop.
             Returns the next state game is to enter.
     """
     # Attributes
-    __displayed_sprites = None
+    __main_surf = None
 
     # Constructor
     def __init__(self):
-        self.setDisplayedSprites(pygame.sprite.Group())
+        self.setMainSurf(pygame.Surface((1200, 768)))
 
     # Getters
-    def getDisplayedSprites(self):
-        return self.__displayed_sprites
+    def getMainSurf(self):
+        return self.__surf
 
     # Setters
-    def setDisplayedSprites(self, displayed_sprites):
-        self.__displayed_sprites = displayed_sprites
+    def setMainSurf(self, surf):
+        self.__surf = surf
     
     # Methods
     @abstractmethod
-    def run(self):
+    def run(self) -> str:
         """
         Runs all functions associated with game state. To be called each iteration of game loop.
         """

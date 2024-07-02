@@ -2,7 +2,7 @@ import pygame
 from sprites.active_entity import ActiveEntity
 from pygame.locals import *
 from assets import GAME_ASSETS
-from healthbar import Healthbar
+from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
 
 class Character(ActiveEntity):
@@ -11,112 +11,96 @@ class Character(ActiveEntity):
 
     Attributes:
         (Inherited)
-        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar - 64x64 transparent square
-        image (pygame.Surface): Surface representing entity's sprite image
-        rect (pygame.Rect): Rectangle representing entity Surface position
+        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar.
+            Size: 64 x 64, transparent.
+        image (pygame.Surface): Surface representing entity's sprite image.
+            Size: 32 x 48, transparent.
         name (str): Name of character
         attack (int): Attack stat
         defence (int): Defence stat
         max_health (int): Maximum health stat
         health (int): Current health stat
+        health_regen (int): How much health regenerates each turn
         weapon (Weapon): Currently held weapon
         is_alive (bool): Whether entity's is alive: health above 0 or not
         xcoord (int): X coordinate of entity in world
         ycoord (int): Y coordinate of entity in world
         healthbar (Healthbar): Healthbar of entity
 
-        MAX_LEVEL (int): Maximum level of character
         level (int): Current level of character
-        experience_points (int): Experience point stat
-        skills (list[*Skill]): List of skills the character has 
-        items (list[*Item]): List of items the character has 
-        gold (int): Amount of gold character has 
-        
+        exp (int): Exp stat
+
     Methods:
-        gainExperience(self, experience): Increases experience, and if possible levels up.
-        updateStats(self): Updates attack, defence based on level.
-        calcRequiredExperience(self): Calculates total required experience for the next level.
-        takeDamage(self, damage): Changes health according to defence and damage.
-        getInfo(self) @abstractmethod: Returns the info of entity for saving. TODO might not even be needed with pickling.
+        gainExp(self, exp: int) -> None: 
+            Increases exp, and if possible levels up.
+        updateStats(self) -> None: 
+            Updates attack, defence based on level.
+        calcRequiredExp(self) -> int: 
+            Returns total required exp for the next level.
+        takeDamage(self, damage: int) -> None: 
+            Changes health according to defence and damage.
+        getInfo(self) @abstractmethod: 
+            Returns the info of entity for saving. TODO might not even be needed with pickling.
         
         (Inherited)
-        updateSurf(self): Blits the entity image, healthbar and weapon onto the entity's Surface.
-        updatePos(self): Changes position of Rect according to xcoord, ycoord
+        updateSurf(self):  
+            Blits the entity image, healthbar and weapon onto the entity's Surface.
+        updatePos(self): 
+            Changes position of Rect according to xcoord, ycoord
     """
     
     # Attributes
-    MAX_LEVEL = 50
     __level = None
-    __experience_points = None
-    __skills = None
-    __items = None
-    __gold = None
+    __exp = None
 
     # Constructor
     def __init__(self,  
                  image: pygame.Surface, 
-                 name: str, 
-                 attack: int, 
-                 defence: int, 
-                 max_health: int, 
-                 health: int, 
+                 name: str,
                  weapon_id: str, 
-                 is_alive: bool, 
-                 xcoord: int, 
-                 ycoord: int, 
-                 level: int, 
-                 experience_points: int, 
-                 skills: list, 
-                 items: list, 
-                 gold: int, 
-                 healthbar: Healthbar):
-        super().__init__(image, name, attack, defence, max_health, health, weapon_id, is_alive, xcoord, ycoord, healthbar) 
+                 attack: int = 25, 
+                 defence: int = 25, 
+                 max_health: int = 100, 
+                 health: int = 100, 
+                 health_regen: int = 2,
+                 is_alive: bool = True, 
+                 xcoord: int = 0, 
+                 ycoord: int = 0, 
+                 level: int = 1, 
+                 exp: int = 0):
+        super().__init__(image, name, attack, defence, max_health, health, health_regen, 
+                         Weapon(weapon_id, xcoord, ycoord),
+                         is_alive, xcoord, ycoord, Healthbar(health, max_health)) 
         self.setLevel(level)
-        self.setExperiencePoints(experience_points)
-        self.setSkills(skills)
-        self.setItems(items)
-        self.setGold(gold)
+        self.setExp(exp)
 
     # Getters
     def getLevel(self):
         return self.__level
-    def getExperiencePoints(self):
-        return self.__experience_points
-    def getSkills(self):
-        return self.__skills
-    def getItems(self):
-        return self.__items
-    def getGold(self):
-        return self.__gold
-
+    def getExp(self):
+        return self.__exp
+    
     # Setters
     def setLevel(self, level):
         self.__level = level
-    def setExperiencePoints(self, experience_points):
-        self.__experience_points = experience_points
-    def setSkills(self, skills):
-        self.__skills = skills
-    def setItems(self, items):
-        self.__items = items
-    def setGold(self, gold):
-        self.__gold = gold
-
+    def setExp(self, exp):
+        self.__exp = exp
 
     # Methods
-    def gainExperience(self, experience):
+    def gainExp(self, exp):
         """
-        Increases character's experience, and increases levels accordingly. Subtracts used experience.
+        Increases character's exp, and increases levels accordingly. Subtracts used exp.
         Runs stat increase method based on levels gained.
         """
         original_level = self.getLevel()
-        self.setExperiencePoints(self.getExperiencePoints() + experience)  # Increase character's experience points
-        required_experience = self.calcRequiredExperience() # Calculate experience required for next level
+        self.setExp(self.getExp() + exp)
+        required_exp = self.calcRequiredExp() # Calculate exp required for next level
 
-        # Level up character while character has enough experience to level up and is below the level cap.
-        while self.getExperiencePoints() >= required_experience and self.getLevel() < self.MAX_LEVEL:
+        # Level up character while character has enough exp to level up and is below the level cap (50).
+        while self.getExp() >= required_exp and self.getLevel() < 50:
             self.setLevel(self.getLevel() + 1)
-            self.setExperiencePoints(self.getExperiencePoints() - required_experience) # subtract used experience points.
-            required_experience = self.calcRequiredExperience() # Re-calculate experience required for next level
+            self.setExp(self.getExp() - required_exp) # subtract used exps.
+            required_exp = self.calcRequiredExp() # Re-calculate exp required for next level
 
         # Update attack/defence and if levelled up, prints levelup info.
         level_increase = self.updateStats(original_level)
@@ -134,11 +118,11 @@ class Character(ActiveEntity):
         self.setDefence(self.getDefence() + defence_increase)
         return (level_increase, attack_increase, defence_increase)
 
-    def calcRequiredExperience(self):
+    def calcRequiredExp(self):
         """
-        Calculates total required experience to get to next level
+        Calculates total required exp to get to next level
         """ 
-        return int(100 * (1.5 ** (self.getLevel()))) # Current formula TODO change: 100 * 1.5^level.
+        return int(100 * (1.5 ** (self.getLevel())))  # Current formula TODO change: 100 * 1.5^level.
 
     def getInfo(self):
         """
