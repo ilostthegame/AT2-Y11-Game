@@ -180,6 +180,17 @@ class GameWorld(GameState):
         #############
         
         return 'game_world'
+    
+
+    def handleEnemyTurn(self) -> list[str]:
+        """
+        Runs action() method for each enemy in enemy_group.
+        Returns a list of game events representing the actions by each enemy.
+        """
+        enemy_event_list = list()
+        for enemy in self.getEnemyGroup():
+            enemy_event_list.extend([i for i in enemy.action()]) # Does enemy action, and adds events.
+        return enemy_event_list
 
 
     # Level initialisation methods.

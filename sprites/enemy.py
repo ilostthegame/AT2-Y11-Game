@@ -5,6 +5,10 @@ from sprites.active_entity import ActiveEntity
 from assets import GAME_ASSETS, load_assets
 from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
+from sprites.character import Character
+from sprites.tile import Tile
+from sprites.portal import Portal
+from sprites.npc import Npc
 
 class Enemy(ActiveEntity):
     """
@@ -80,5 +84,25 @@ class Enemy(ActiveEntity):
         self.__exp_yield = exp_yield
 
     # Methods
+    def action(self, 
+               character: Character, 
+               enemy_group: pygame.sprite.Group, 
+               npc_group: pygame.sprite.Group, 
+               portal_group: pygame.sprite.Group, 
+               position_tile_dict: dict[tuple[int, int], Tile]) -> list[str]:
+        """
+        Runs a single turn's action for the enemy.
+        Returns a list of game events done by the enemy.
+        """
+
+        # Get character's position
+
+        # Get a list of inaccessible tiles (these can't be fired over either)
+
+        # Calculate whether character is in range of any attack in randomised order. If so, then do attack.
+        # Else, calculate potential movements based on movement pattern.
+
+
+
     def getInfo(self):
         pass
