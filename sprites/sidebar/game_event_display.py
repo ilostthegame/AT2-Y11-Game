@@ -1,6 +1,6 @@
 import pygame
 from assets import GAME_ASSETS
-from typing import Optional
+from typing import Optional, Union
 from sprites.button import Button
 from math import ceil
 from button_output_getter import ButtonOutputGetter
@@ -14,22 +14,19 @@ class GameEventDisplay(pygame.sprite.Sprite):
 
     Attributes:
         surf (pygame.Surface): Surface to which all events are displayed. Size: 432 x 324
-        valid_event_list (Optional[list[str]]): List of valid events. To be updated after a valid turn
-        invalid_event (Optional[str]): Invalid event. To be replaced after a valid or invalid turn
+        valid_event_list (Optional[list[str]]): List of valid events. 
+        invalid_event (Optional[str]): Invalid event. 
         total_pages (int): Number of pages. Defaults to 1 if valid_event_list is empty.
         current_page (int): Current page. 0-indexed, defaults to 0 when valid_event_list is updated.
         button_group (pygame.sprite.Group): Group containing 'Prev page' and 'Next page' buttons.
 
     Methods:
-        update(self, 
-               pygame_events: list[pygame.event.Event], 
-               mouse_pos: tuple[int, int],
-               valid_event_list: list[Optional[str]],
-               invalid_event: Optional[str]) -> None:
-
-            Updates the events displayed on surf.
+        update(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> None:
+            Updates the surface with the currently active events.
             To be run each iteration of GameWorld.
-
+        updateEvents(self, turn_is_valid: bool, events: Union[list[str], str]) -> None:
+            Updates the events that are to be displayed on surface.
+            To be run whenever an action is made by user.
         drawTemplate(self) -> None:
             Draws the template surface onto the surf attribute, overriding previously displayed events.
         getDisplayedEvents(self) -> list[str]:
@@ -49,8 +46,6 @@ class GameEventDisplay(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.setSurf(pygame.Surface((432, 324)))
-        self.setValidEventList(list())
-        self.setInvalidEvent(str())
         self.setTotalPages(1)
         self.setCurrentPage(0)
 
@@ -92,23 +87,11 @@ class GameEventDisplay(pygame.sprite.Sprite):
     # Methods
     def update(self, 
                pygame_events: list[pygame.event.Event], 
-               mouse_pos: tuple[int, int],
-               valid_event_list: list[Optional[str]],
-               invalid_event: Optional[str]) -> None:
+               mouse_pos: tuple[int, int]) -> None:
         """
-        Updates the events displayed on surf.
+        Updates the surface with the currently active events
         To be run each iteration of GameWorld.
         """
-
-        # Checks whether valid_event_list or invalid_event have changed.
-        # If valid_event_list has changed, then replace valid_event_list attribute, and set current_page = 1.
-        # If invalid_event has changed, then replace invalid_event attribute.
-        if valid_event_list != self.getValidEventList():
-            self.setValidEventList(valid_event_list)
-            self.setCurrentPage(0)
-            self.setTotalPages(max(ceil(len(valid_event_list) / 6), 1))
-        if invalid_event != self.getInvalidEvent():
-            self.setInvalidEvent(invalid_event)
 
         # Checks for button activations. Changes current_page accordingly
         relative_mouse_pos = (mouse_pos[0] - 768, mouse_pos[1] - 444)
@@ -145,6 +128,28 @@ class GameEventDisplay(pygame.sprite.Sprite):
             surf.blit(event_surf, event_rect)
         
         self.setSurf(surf)
+        return
+
+    def updateEvents(self, turn_is_valid: bool, events: Union[list[str], str]) -> None:
+        """
+        Updates the events that are to be displayed on surface.
+        To be run whenever an action is made by user.
+
+        Arguments:
+            turn_is_valid - Whether the turn was valid/invalid.
+            events - The new event(s) that occurred that turn.
+        """
+        
+        # If valid_event_list has changed, then replace valid_event_list attribute, 
+        # delete invalid_event, and set current_page = 0.
+        # If invalid_event has changed, then replace invalid_event attribute.
+        if turn_is_valid:
+            self.setValidEventList(events)
+            self.setCurrentPage(0)
+            self.setTotalPages(max(ceil(len(events) / 6), 1))
+            self.setInvalidEvent(None)
+        else:
+            self.setInvalidEvent(events)
         return
 
     def drawTemplate(self) -> None:

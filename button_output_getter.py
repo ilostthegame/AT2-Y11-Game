@@ -25,7 +25,8 @@ class ButtonOutputGetter:
         for event in pygame_events:
             # Handle left mouse button press
             if event.type == MOUSEBUTTONDOWN and event.button == 1:
-                buttons_pressed = [button for button in button_group if button.getRect().collidepoint(mouse_pos)] # gets all button rects colliding with mouse
+                # Get all button outputs the mouse collides with
+                buttons_pressed = [button for button in button_group if button.getRect().collidepoint(mouse_pos)] 
                 for button in buttons_pressed:
                     button_outputs.append(button.getOutput())
 

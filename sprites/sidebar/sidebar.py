@@ -30,10 +30,7 @@ class Sidebar(pygame.sprite.Sprite):
                exp: int,
                req_exp: int,
                level_name: str,
-               attack_list: list[Optional[Attack]],
-               valid_event_list: list[str],
-               invalid_event: str) -> Optional[str]: 
-
+               attack_list: list[Optional[Attack]]) -> Optional[str]: 
             Updates all components of the sidebar, and blits them onto surf.
             To be run each iteration of GameWorld run().
 
@@ -84,9 +81,7 @@ class Sidebar(pygame.sprite.Sprite):
                exp: int,
                req_exp: int,
                level_name: str,
-               attack_list: list[Optional[Attack]],
-               valid_event_list: list[str],
-               invalid_event: str) -> Optional[str]: 
+               attack_list: list[Optional[Attack]]) -> Optional[str]: 
         """
         Updates all components of the sidebar, and blits them onto surf.
         To be run each iteration of GameWorld run().
@@ -101,7 +96,7 @@ class Sidebar(pygame.sprite.Sprite):
         # Update components of sidebar
         data_display.update(character_level, exp, req_exp, health, max_health, level_name)
         used_attack = attack_buttons.update(pygame_events, mouse_pos, attack_list)
-        game_event_display.update(pygame_events, mouse_pos, valid_event_list, invalid_event)
+        game_event_display.update(pygame_events, mouse_pos)
         self.setDataDisplay(data_display)
         self.setAttackButtons(attack_buttons)
         self.setGameEventDisplay(game_event_display)

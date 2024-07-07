@@ -4,6 +4,7 @@ from pygame.locals import *
 from assets import GAME_ASSETS
 from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
+from attack import Attack
 
 class Character(ActiveEntity):
     """
@@ -87,6 +88,36 @@ class Character(ActiveEntity):
         self.__exp = exp
 
     # Methods
+    def move(self, direction: str, occupied_squares: list) -> bool:
+        """
+        Given a direction, moves character one space if possible.
+        Returns True if movement was successful, False if movement was obstructed
+        """
+        pass
+
+
+    def interact(self, direction: str, some_group: pygame.sprite.Group) -> bool:
+        """
+        Given a direction, has character interact with adjacent entity in that direction.
+        Valid entities are: npc, portal
+        """
+        pass
+
+    def attack(self, target):
+        """
+        Given a target, determines whether it is in range, then attacks it
+        
+        TODO will need to insert unpassable squares
+        """
+        pass
+
+    def tilesInRange(self, attack, tile_group, all_entities):
+        """
+        Returns a list of all tiles in range of attack.
+        Takes the attack used, and the groups of tiles and all entities as arguments. 
+        """
+        pass
+
     def gainExp(self, exp):
         """
         Increases character's exp, and increases levels accordingly. Subtracts used exp.

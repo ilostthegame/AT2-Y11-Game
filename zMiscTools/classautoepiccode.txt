@@ -1,14 +1,14 @@
 # Attributes
-__surf = None
+__tile_group = None
 
 # Constructor
-def __init__(self, surf):
-    self.setSurf(surf)
+def __init__(self, tile_group):
+    self.setTileGroup(tile_group)
 
 # Getters
-def getSurf(self):
-    return self.__surf
+def getTileGroup(self):
+    return self.__tile_group
 
 # Setters
-def setSurf(self, surf):
-    self.__surf = surf
+def setTileGroup(self, tile_group):
+    self.__tile_group = tile_group
