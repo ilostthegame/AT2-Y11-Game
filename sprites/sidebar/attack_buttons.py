@@ -110,11 +110,11 @@ class AttackButtons(pygame.sprite.Sprite):
         if attack_list != self.getAttackList(): # Checks that attack_list is new
             self.setAttackList(attack_list)
             attack_button_group = pygame.sprite.Group()
-            button_pos_dict = {0: (108, 61), 1: (324, 61), 2: (108, 183), 3: (324, 183)} # Relates attack index to position of button
+            attack_id_to_button_pos = {0: (108, 61), 1: (324, 61), 2: (108, 183), 3: (324, 183)} # Relates attack index to position of button
 
-            for pos, attack in enumerate(attack_list):
-                if pos <= 3:
-                    button = Button(pygame.Surface((180, 100)), attack.getName(), 32, (200, 50, 50), f"attack {pos}", button_pos_dict[pos], str(pos+1))
+            for id, attack in enumerate(attack_list):
+                if id <= 3:
+                    button = Button(pygame.Surface((180, 100)), attack.getName(), 32, (200, 50, 50), f"attack {id}", attack_id_to_button_pos[id], str(id+1))
                     attack_button_group.add(button)
                 else:
                     raise ValueError(f"attack_list has too many elements (maximum is 4).\nCurrent attack list: {attack_list}")

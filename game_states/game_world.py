@@ -18,7 +18,7 @@ class GameWorld(GameState):
     Attributes:
         sidebar (Sidebar): In-game sidebar
         level_name (str): Name of the current level
-        internal_state (str): Current internal state: in ['main', 'select_attack_target']
+        internal_state (str): Current internal state: in ['main', 'attack_target_selection']
     
         character (Character): Character sprite controlled by player
         board (Board): Board sprite - 12x12 grid of tiles.
@@ -178,7 +178,7 @@ class GameWorld(GameState):
                 elif key == K_ESCAPE:
                     return 'game_menu'
             
-        if self.getInternalState() == 'select_attack_target':
+        if self.getInternalState() == 'attack_target_selection':
             if 1 in mouse_presses: # left mouse button
                 for enemy in self.getEnemyGroup():
                     if enemy.getRect().collidepoint(mouse_pos): # Gets the clicked enemy
@@ -269,6 +269,7 @@ class GameWorld(GameState):
 
 
     # Level initialisation methods. TODO move to a separate class.
+    # TODO make the initialisers actually input which entity is on the tile.
     def initialiseLevel(self) -> None:
         """
         Initialises the level's board and entities.
@@ -318,9 +319,9 @@ class GameWorld(GameState):
         tile_type, entity_type, entity_id = tile_info[0].split('_')
         xcoord, ycoord = tile_info[1], tile_info[2] # coordinates of tile
 
-        # Adding tile to Board's position_tile_dict
+        # Adding tile to Board's coords_to_tile
         board = self.getBoard()
-        position_tile_dict = board.getPositionTileDict()
+        coords_to_tile = board.getCoordsToTile()
         match tile_type:
             case 'G': # grass
                 tile = Tile((123, 245, 10), True)
@@ -330,8 +331,8 @@ class GameWorld(GameState):
                 tile = Tile((209, 23, 23), True, 10)
             case _:
                 raise ValueError(f"Tile type ({tile_type}) cannot be found")
-        position_tile_dict[(xcoord, ycoord)] = tile
-        board.setPositionTileDict(position_tile_dict)
+        coords_to_tile[(xcoord, ycoord)] = tile
+        board.setCoordsToTile(coords_to_tile)
         self.setBoard(board)
 
         # Adding entity (if exists) to respective group, and to all_sprites

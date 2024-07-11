@@ -117,35 +117,14 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.__image = image
     def setName(self, name):
         self.__name = name
-
     def setAttack(self, attack):
-        if attack < 0:
-            self.__attack = 0
-        else:
-            self.__attack = attack
-
+        self.__attack = attack
     def setDefence(self, defence):
-        if defence < 0:
-            self.__defence = 0
-        else:
-            self.__defence = defence
-
+        self.__defence = defence
     def setMaxHealth(self, max_health):
-        if max_health <= 0: # makes sure max_health > 0
-            self.setMaxHealth(1)
-        else:
-            self.__max_health = max_health
-
+        self.__max_health = max_health
     def setHealth(self, health):
-        max_health = self.getMaxHealth() 
-        if health > max_health: # ensures 0 <= health <= max_health
-            self.__health = max_health
-        elif health < 0:
-            self.__health = 0
-            self.setIsAlive(False)
-        else:
-            self.__health = health
-
+        self.__health = health
     def setHealthRegen(self, health_regen):
         self.__health_regen = health_regen
     def setWeapon(self, weapon):

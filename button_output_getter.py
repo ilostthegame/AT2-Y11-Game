@@ -37,8 +37,5 @@ class ButtonOutputGetter:
                     if connected_key: # if connected key exists
                         if event.unicode.lower() == connected_key.lower(): # check if pressed key == connected key
                             button_outputs.append(button.getOutput())
-            
-            else:
-                continue
         
         return button_outputs
