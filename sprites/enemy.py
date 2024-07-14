@@ -9,6 +9,9 @@ from sprites.character import Character
 from sprites.tile import Tile
 from sprites.portal import Portal
 from sprites.npc import Npc
+from typing import Optional, Union
+from pathfinder import Pathfinder
+from tile_enterable_checker import TileEnterableChecker
 
 class Enemy(ActiveEntity):
     """
@@ -47,6 +50,14 @@ class Enemy(ActiveEntity):
             Blits the entity image, healthbar and weapon onto the entity's Surface.
         updatePos(self): 
             Changes position of Rect according to xcoord, ycoord
+
+        (Movement/pathfinding methods)
+        moveToCharacter(self, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
+            Main movement method to be called: moves enemy towards character.
+        getCharacterCoords(self, coords_to_tile: dict[tuple[int, int], Tile]) -> Optional[tuple[int, int]]:
+            Returns the coordinates of character if they are found in coords_to_tile, else returns None.
+        moveInDirection(self, direction: str, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
+            Given a direction, if the tile in that direction is unoccupied, moves there.
     """
 
     # Attributes
@@ -89,12 +100,12 @@ class Enemy(ActiveEntity):
                enemy_group: pygame.sprite.Group, 
                npc_group: pygame.sprite.Group, 
                portal_group: pygame.sprite.Group, 
-               position_tile_dict: dict[tuple[int, int], Tile]) -> list[str]:
+               coords_to_tile: dict[tuple[int, int], Tile]) -> list[str]:
         """
         Runs a single turn's action for the enemy.
         Returns a list of game events done by the enemy.
         """
-
+        pass
         # Get character's position
 
         # Get a list of inaccessible tiles (these can't be fired over either)
@@ -103,6 +114,72 @@ class Enemy(ActiveEntity):
         # Else, calculate potential movements based on movement pattern.
 
 
+    def moveToCharacter(self, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
+        """
+        Main movement method to be called: moves enemy towards character.
+
+        First attempts to find a path between enemy and character that doesn't pass through other enemies.
+        If impossible, then attempts to find a path between enemy and character that can pass through other enemies.
+        NOTE: The reasoning for this implementation is so that even if an enemy's path to the character is blocked by 
+        other enemies, it will still keep moving to the character, based on an optimal situation without other enemies.
+
+        Moves according to the first path found (using moveInDirection()).
+        Else if no path was found in either of these attempts, raises an Exception.
+        """
+    
+        pathfinder = Pathfinder()
+        self_coords = (self.getXcoord(), self.getYcoord())
+        character_coords = self.getCharacterCoords()
+        # Finds path which doesn't pass through other enemies
+        path = pathfinder.findPath(coords_to_tile, ['character', 'enemy', 'npc', 'portal'], self_coords, character_coords)
+        # If no such path, finds a path which can pass through other enemies
+        if path == None:
+            path = pathfinder.findPath(coords_to_tile, ['character', 'enemy', 'npc', 'portal'], self_coords, character_coords)
+        # If no path found still, raises an Exception.
+        if path == None:
+            raise Exception('Path cannot be found between enemy and player')
+        else: 
+            self.moveInDirection(path[0], coords_to_tile)
+        return
+    
+    def getCharacterCoords(self, coords_to_tile) -> Optional[tuple[int, int]]:
+        """
+        Returns the coordinates of character if they are found in coords_to_tile, else returns None.
+        """
+        for coords, tile in coords_to_tile.items():
+            if tile.getOccupiedBy() == 'character':
+                return coords
+        return
+
+    def moveInDirection(self, direction: str, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
+        """
+        Given a direction, if the tile in that direction is unoccupied, moves there.
+        Returns True if the movement was successful, else returns False.
+        """
+        
+        # Gets the new coordinates of the movement.
+        current_xcoord = self.getXcoord()
+        current_ycoord = self.getYcoord()
+        match direction:
+            case 'right':
+                new_coords = (current_xcoord + 1, current_ycoord)
+            case 'left':
+                new_coords = (current_xcoord + 1, current_ycoord)
+            case 'up':
+                new_coords = (current_xcoord + 1, current_ycoord)
+            case 'down':
+                new_coords = (current_xcoord + 1, current_ycoord)
+            case _:
+                raise ValueError(f"({direction}) is not a valid direction")
+        
+        # Checking whether the new coordinates can be entered
+        tile_enterable_checker = TileEnterableChecker()
+        obstructed_coords = tile_enterable_checker.getObstructedCoords(coords_to_tile, ['enemy', 'character', 'npc', 'portal'])
+        is_enterable = tile_enterable_checker.checkTileEnterable(coords_to_tile, obstructed_coords, new_coords)
+        if is_enterable: # If enterable, change enemy's coordinates.
+            self.setXcoord(new_coords[0])
+            self.setYcoord(new_coords[1])
+        return
 
     def getInfo(self):
         pass
