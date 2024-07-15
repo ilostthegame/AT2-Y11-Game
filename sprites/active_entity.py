@@ -5,8 +5,8 @@ from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
 
 class ActiveEntity(pygame.sprite.Sprite, ABC):
-    """
-    Abstract class with children Character and Entity sprites. Represents moving/battling sprites
+    """Abstract class that represents 'active' (moving/battling) entities
+
     Attributes:
         surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar
             Size: 64 x 64, transparent
@@ -23,15 +23,6 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         xcoord (int): X coordinate of entity in world
         ycoord (int): Y coordinate of entity in world
         healthbar (Healthbar): Healthbar of entity
-
-    Methods:
-        updateSurf(self): 
-            Blits the character image, healthbar and weapon onto the entity's Surface.
-        updatePos(self): 
-            Changes xcoord, ycoord based on pygame events.
-        getInfo(self) @abstractmethod: 
-            Returns the info of entity for saving. TODO might not even be needed with pickling.
-
     """
 
     # Attributes
@@ -141,9 +132,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
 
     # Methods
     def updateSurf(self) -> None:
-        """
-        Blits the character image, healthbar and weapon onto the entity's Surface.
-        """
+        """Blits the character image, healthbar and weapon onto the entity's Surface."""
         surf = self.getSurf()
         surf.fill((0,0,0,0))
         surf.blit(self.getImage(), (0, 0))
@@ -151,24 +140,12 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         surf.blit(self.getWeapon().getSurf(), (32, 0))
         self.setSurf(surf)
         return
-    
-    def updatePos(self, pygame_events: list[pygame.event.Event]) -> None:
-        """
-        Changes xcoord, ycoord based on pygame events.
-        """
-        pass
-    
+
     def updateHealthbar(self):
-        """
-        Updates healthbar attributes, and its surface.
-        """
+        """Updates healthbar attributes, and its surface."""
         self.getHealthbar().setEntityMaxHealth(self.getMaxHealth())
         self.getHealthbar().setEntityHealth(self.getHealth())
         self.getHealthbar().updateSurf()
 
-    @abstractmethod
-    def getInfo(self):
-        """
-        Returns entity info.
-        """
+    def takeDamage(self, damage):
         pass

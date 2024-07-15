@@ -4,15 +4,14 @@ from assets import GAME_ASSETS
 from file_id_interpreter import FileIdInterpreter
 
 class Npc(pygame.sprite.Sprite):
-    """
+    """Class representing an Npc entity.
+    
     Attributes:
         surf (pygame.Surface): Image of npc. Size: 64 x 64, transparent
         name (str): Name of npc
         dialogue (str): Dialogue npc says when interacted with
         xcoord (int): Xcoord of npc
         ycoord (int): Ycoord of npc
-
-    Methods: TODO
     """
 
     # Attributes

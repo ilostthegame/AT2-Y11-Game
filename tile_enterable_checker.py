@@ -2,29 +2,16 @@ from sprites.tile import Tile
 
 class TileEnterableChecker:
     """
-    Class containing methods to determine all obstructed coordinates, and check whether a
-    tile fulfils a set of conditions that determines whether it is enterable.
-
-    Methods:
-        getObstructedCoords(self,
-                           coords_to_tile: dict[tuple[int, int], Tile],
-                           obstruction_entity_types: list[str]) -> list[tuple[int, int]]:
-            Given obstructed_entity_types, determines which coordinates within
-            coords_to_tile can be entered by an entity.
-            Returns the list of obstructed coordinates.
-        
-        checkTileEnterable(self, 
-                           coords_to_tile: dict[tuple[int, int], Tile],
-                           obstructed_coords: list[tuple[int, int]],
-                           coords_to_check: tuple[int, int]) -> bool:
-            Checks coords_to_tile to determine whether it is enterable by an entity.
-            Returns True if the coords fulfil these conditions, else returns False
+    Class containing methods for:
+        - Determining all obstructed coordinates in a board.
+        - Checking whether a singular tile is enterable.
     """
 
     def getObstructedCoords(self,
                            coords_to_tile: dict[tuple[int, int], Tile],
                            obstruction_entity_types: list[str]) -> list[tuple[int, int]]:
-        """
+        """Determines all obstructed coordinates in a board.
+
         Given obstructed_entity_types, determines which coordinates within
         coords_to_tile can be entered by an entity.
         """
@@ -41,7 +28,8 @@ class TileEnterableChecker:
                            coords_to_tile: dict[tuple[int, int], Tile],
                            obstructed_coords: list[tuple[int, int]],
                            coords_to_check: tuple[int, int]) -> bool:
-        """
+        """Checks whether a single tile is enterable.
+
         Checks the coords_to_check, to see if it fulfils the following conditions:
             - Is in the set of coordinates defined by the board.
             - Is not in obstructed_coords.

@@ -2,17 +2,12 @@ import pygame
 from sprites.tile import Tile
 
 class Board(pygame.sprite.Sprite):
-    """
-    Class that represents the game board sprite. 
+    """Class that represents the game board sprite. 
 
     Attributes:
         surf (pygame.Surface): Surface representing board. Size: 768 x 768
         coords_to_tile (dict[tuple[int, int], Tile]): Dictionary that relates coordinate tuples to Tiles 
             {(xcoord, ycoord): Tile})
-
-    Methods:
-        drawBoardSurface(self) -> None: 
-            Using coords_to_tile dictionary, draws tile surfaces onto board surface
     """
 
     # Attributes
@@ -41,9 +36,7 @@ class Board(pygame.sprite.Sprite):
 
     # Methods
     def drawBoardSurface(self) -> None:
-        """
-        Using coords_to_tile dictionary, draws tile surfaces onto board surface
-        """
+        """Draws tile surfaces onto board surface."""
         coords_to_tile = self.getCoordsToTile()
         board_surf = self.getSurf()
         # Iterating through all coordinates, and drawing tiles.

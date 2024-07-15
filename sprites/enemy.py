@@ -14,8 +14,7 @@ from pathfinder import Pathfinder
 from tile_enterable_checker import TileEnterableChecker
 
 class Enemy(ActiveEntity):
-    """
-    Class representing an enemy sprite, with parent ActiveEntity
+    """Class representing an enemy entity.
 
     Attributes:
         (Inherited)
@@ -37,27 +36,6 @@ class Enemy(ActiveEntity):
 
         movement_pattern (str): Represents the algorithm to be used for 
         exp_yield (int): Represents how much exp is earned through defeating enemy
-    
-    Methods:
-        calcMovement(self, user_position: tuple[int, int]): 
-            Returns a tuple (xcoord, ycoord) representing the square enemy will move to.
-        TODO
-        getInfo(self): 
-            Returns info of enemy
-        
-        (Inherited)
-        updateSurf(self): 
-            Blits the entity image, healthbar and weapon onto the entity's Surface.
-        updatePos(self): 
-            Changes position of Rect according to xcoord, ycoord
-
-        (Movement/pathfinding methods)
-        moveToCharacter(self, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
-            Main movement method to be called: moves enemy towards character.
-        getCharacterCoords(self, coords_to_tile: dict[tuple[int, int], Tile]) -> Optional[tuple[int, int]]:
-            Returns the coordinates of character if they are found in coords_to_tile, else returns None.
-        moveInDirection(self, direction: str, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
-            Given a direction, if the tile in that direction is unoccupied, moves there.
     """
 
     # Attributes
@@ -145,7 +123,7 @@ class Enemy(ActiveEntity):
     def getCharacterCoords(self, coords_to_tile) -> Optional[tuple[int, int]]:
         """
         Returns the coordinates of character if they are found in coords_to_tile, else returns None.
-        """
+        """ # TODO fix
         for coords, tile in coords_to_tile.items():
             if tile.getOccupiedBy() == 'character':
                 return coords

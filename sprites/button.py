@@ -3,8 +3,7 @@ from pygame.locals import *
 from typing import Optional
 
 class Button(pygame.sprite.Sprite):
-    """
-    Class for a generalised button
+    """Class that represents a GUI button
     
     Attributes:
         surf (pygame.Surface): Surface for the button. Variable size.
@@ -15,10 +14,6 @@ class Button(pygame.sprite.Sprite):
         output (str): What the button should return when activated (clicked/connected_key pressed)
         centre_coords (tuple[int, int]): Coordinates of the centre of button
         connected_key (str): Key that when pressed activates button. May be None.
-
-    Methods:
-        initialiseButtonSurf(self): 
-            Sets position and colour of button, and writes text onto button surface
     """
 
     # Attributes

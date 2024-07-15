@@ -5,8 +5,7 @@ from assets import GAME_ASSETS
 from attack import Attack
 
 class Weapon(pygame.sprite.Sprite): 
-    """
-    A class representing a weapon.
+    """A class representing a weapon.
 
     Attributes:
         surf (pygame.Surface): The weapon's image. Size: 32 x 48, transparent
@@ -14,9 +13,6 @@ class Weapon(pygame.sprite.Sprite):
         attack_list (list[Attack]): List of attacks on the weapon
         entity_xcoord (int): The xcoord of the entity holding weapon
         entity_ycoord (int): The ycoord of the entity holding weapon
-
-    Methods:
-    TODO
     """
 
     # Attributes

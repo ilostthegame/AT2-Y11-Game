@@ -2,14 +2,7 @@ import pygame
 from pygame.locals import MOUSEBUTTONDOWN, KEYDOWN
 
 class ButtonOutputGetter:
-    """
-    Contains method that returns all button outputs in an iteration of game loop
-
-    Methods:
-        getOutputs(self, button_group: pygame.sprite.Group, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> list[str]:
-            Finds all buttons in button_group that were activated, either by mouse or connected_key.
-            Returns a list containing all button outputs.
-    """
+    """Class containing method that gets button outputs in an iteration of game loop."""
 
     # Methods
     def getOutputs(self, 

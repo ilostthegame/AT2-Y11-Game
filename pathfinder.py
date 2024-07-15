@@ -3,28 +3,7 @@ from tile_enterable_checker import TileEnterableChecker
 from sprites.tile import Tile
 
 class Pathfinder:
-    """
-    Class containing methods that facilitate a pathfinding algorithm.
-
-    Methods:
-        findPath(self,
-                 coords_to_tile: dict[tuple[int, int], Tile],
-                 obstruction_entity_types: list[str],
-                 starting_coords: tuple[int, int],
-                 target_coords: tuple[int, int]) -> Optional[list[str]]:
-            Returns the shortest path to get to the character, as a list containing movement directions in order.
-            If no path exists, returns None.
-        
-        findAdjacentPaths(self,
-                          coords_to_tile: dict[tuple[int, int], Tile],
-                          coords_to_path: dict[tuple[int, int], Tile], 
-                          root_coords: tuple[int, int], 
-                          target_coords: tuple[int, int],
-                          obstructed_coords: list[tuple[int, int]]) -> dict[tuple[int, int], Tile]:
-            Intermediate step in the pathfinding algorithm: given root_coords, this checks each
-            adjacent coords, and if they fulfil certain validity conditions, adds them to coords_to_path.
-            Returns the updated coords_to_path dictionary.
-    """
+    """Class containing methods that facilitate a pathfinding algorithm."""
 
     def findPath(self,
                  coords_to_tile: dict[tuple[int, int], Tile],

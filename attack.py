@@ -1,8 +1,7 @@
 from file_id_interpreter import FileIdInterpreter
 
 class Attack:
-    """
-    A class representing an attack
+    """Class representing an attack.
 
     Attributes:
         name (int): Name of attack
@@ -10,11 +9,8 @@ class Attack:
         accuracy (int): Accuracy of attack, out of 100.
         range (int): Number of squares 
         cooldown (int): Number of turns before next use (0 => no cooldown)
-
-    Methods: TODO
-        getInfo(self): 
-            Returns the info.
     """
+
     # Attributes
     __name = None
     __power = None

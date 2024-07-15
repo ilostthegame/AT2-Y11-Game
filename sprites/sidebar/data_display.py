@@ -1,27 +1,17 @@
 import pygame
 
 class DataDisplay(pygame.sprite.Sprite):
-    """
-    Sidebar component which displays the following:
+    """Sidebar component that displays character and level information.
+
+    Displays the following:
         - Character level
         - Exp / req exp
         - Health / max health, 
         - Level name
-    To be updated each iteration with new information.
 
     Attributes:
         surf (pygame.Surface): Surface to which data is displayed
             Size: 432 x 200
-    
-    Methods:
-        update(self,
-               character_level: int,
-               exp: int,
-               req_exp: int,
-               health: int,
-               max_health: int,
-               level_name: int) -> None:
-            Updates surface with new data
     """
 
     # Attributes

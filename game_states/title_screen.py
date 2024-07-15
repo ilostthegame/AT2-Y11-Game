@@ -6,8 +6,8 @@ from sprites.button import Button
 from button_output_getter import ButtonOutputGetter
 
 class TitleScreen(GameState):
-    """
-    Class for title screen game state. Has parent GameState.
+    """Class for title screen game state.
+    
     Loaded when game is initialised, and from 'save_and_exit' from GameMenu
 
     Attributes:
@@ -17,15 +17,6 @@ class TitleScreen(GameState):
         (Inherited)
         main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted.
             Size: 1200 x 768
-
-    Methods:
-        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str:
-            Runs all functions associated with TitleScreen. To be called each iteration of game loop.
-            Returns the next state game is to enter.
-        initialiseButtons(self) -> None:
-            Creates new_game, quit and load_game buttons and adds them to button_group
-        savedGameExist(self) -> bool:
-            Evaluates whether a saved gamefile exists. Returns True/False
     """
 
     # Attributes

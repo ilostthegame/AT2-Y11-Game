@@ -2,8 +2,7 @@ import pygame
 
 class Tile(pygame.sprite.Sprite):
     """
-    Class representing a tile sprite
-    TODO optional - convert this to a file system too.
+    Class representing a tile sprite.
     
     Attributes:
         surf (pygame.Surface): Size: 64 x 64

@@ -2,18 +2,13 @@ from abc import ABC, abstractmethod
 import pygame
 
 class GameState(ABC):
-    """
-    Class that represents a general game state.
+    """Abstract class that represents a general game state.
 
     Attributes:
         main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted. 
             Size: 1200 x 768
-
-    Methods:
-        run(self) -> str @abstractmethod: 
-            Runs all functions associated with game state. To be called each iteration of game loop.
-            Returns the next state game is to enter.
     """
+
     # Attributes
     __main_surf = None
 

@@ -8,8 +8,9 @@ from sprites.sidebar.attack_buttons import AttackButtons
 
 
 class Sidebar(pygame.sprite.Sprite):
-    """
-    Class that represents the in-game sidebar. Contains three components:
+    """Class that represents the in-game sidebar. 
+    
+    Contains three components:
     - DataDisplay - Displays character's healthbar/exp bar/level and the level name. Size: 432 x 200
     - AttackButtons - Handles attack buttons. Size: 432 x 244 space. Each button size is 200 x 100
     - GameEventDisplay: Displays game events. Size: 432 x 324
@@ -19,22 +20,6 @@ class Sidebar(pygame.sprite.Sprite):
         data_display (DataDisplay): Sprite that displays character healthbar, exp bar, and level.
         attack_buttons (AttackButtons): Sprite that displays and handles attack buttons.
         game_event_display (GameEventDisplay): Sprite that displays game events.
-
-    Methods:
-        update(self, 
-               pygame_events: list[pygame.event.Event], 
-               mouse_pos: tuple[int, int],
-               character_level: int,
-               health: int,
-               max_health: int,
-               exp: int,
-               req_exp: int,
-               level_name: str,
-               attack_list: list[Optional[Attack]]) -> Optional[str]: 
-            Updates all components of the sidebar, and blits them onto surf.
-            To be run each iteration of GameWorld run().
-
-            Returns 'attack X' if button is pressed: where X is the index of the attack.
     """
 
     # Attributes

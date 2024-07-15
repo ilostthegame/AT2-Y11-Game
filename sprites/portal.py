@@ -5,7 +5,7 @@ from file_id_interpreter import FileIdInterpreter
 
 class Portal(pygame.sprite.Sprite):
     """
-    Class representing a portal object
+    Class representing a portal entity.
 
     Attributes:
         surf (pygame.Surface): Represents portal's image. Size: 64 x 64, transparent

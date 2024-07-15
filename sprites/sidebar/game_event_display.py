@@ -6,8 +6,8 @@ from math import ceil
 from button_output_getter import ButtonOutputGetter
 
 class GameEventDisplay(pygame.sprite.Sprite):
-    """
-    Sidebar compomenent that represents the display to which game events are sent. 
+    """Sidebar compomenent that represents the display to which game events are sent.
+
     Has two separate parts:
         Valid events: Exist 6 slots, which can be cycled between.
         Invalid events: Exists 1 slot.
@@ -20,18 +20,6 @@ class GameEventDisplay(pygame.sprite.Sprite):
         current_page (int): Current page. 0-indexed, defaults to 0 when valid_event_list is updated.
         button_group (pygame.sprite.Group): Group containing 'Prev page' and 'Next page' buttons.
 
-    Methods:
-        update(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> None:
-            Updates the surface with the currently active events.
-            To be run each iteration of GameWorld.
-        updateEvents(self, turn_is_valid: bool, events: Union[list[str], str]) -> None:
-            Updates the events that are to be displayed on surface.
-            To be run whenever an action is made by user.
-        drawTemplate(self) -> None:
-            Draws the template surface onto the surf attribute, overriding previously displayed events.
-        getDisplayedEvents(self) -> list[str]:
-            Returns a list of valid events to be displayed in the current iteration.
-            Uses attributes valid_event_list, total_pages, and current_page.
     """
 
     # Attributes

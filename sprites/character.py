@@ -7,8 +7,7 @@ from sprites.weapon import Weapon
 from attack import Attack
 
 class Character(ActiveEntity):
-    """
-    Class representing a character sprite, with parent ActiveEntity
+    """Class representing a character entity.
 
     Attributes:
         (Inherited)
@@ -30,24 +29,6 @@ class Character(ActiveEntity):
 
         level (int): Current level of character
         exp (int): Exp stat
-
-    Methods:
-        gainExp(self, exp: int) -> None: 
-            Increases exp, and if possible levels up.
-        updateStats(self) -> None: 
-            Updates attack, defence based on level.
-        calcRequiredExp(self) -> int: 
-            Returns total required exp for the next level.
-        takeDamage(self, damage: int) -> None: 
-            Changes health according to defence and damage.
-        getInfo(self) @abstractmethod: 
-            Returns the info of entity for saving. TODO might not even be needed with pickling.
-        
-        (Inherited)
-        updateSurf(self):  
-            Blits the entity image, healthbar and weapon onto the entity's Surface.
-        updatePos(self): 
-            Changes position of Rect according to xcoord, ycoord
     """
     
     # Attributes

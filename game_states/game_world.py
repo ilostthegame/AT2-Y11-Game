@@ -13,9 +13,10 @@ from level_initialiser import LevelInitialiser
 from typing import Optional, Any, Callable
 
 class GameWorld(GameState):
-    """
-    Class representing the game world. Has parent GameState.
+    """Class representing the game world.
     
+    Loaded after completion of WorldInit and WorldLoad.
+
     Attributes:
         sidebar (Sidebar): In-game sidebar
         level_name (str): Name of the current level

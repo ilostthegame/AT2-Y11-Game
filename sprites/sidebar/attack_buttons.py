@@ -5,8 +5,7 @@ from typing import Optional
 from button_output_getter import ButtonOutputGetter
 
 class AttackButtons(pygame.sprite.Sprite):
-    """
-    Sidebar component that displays and handles the attack buttons
+    """Sidebar component that displays and handles the attack buttons
 
     Attributes:
         surf (pygame.Surface): Surface on which the attack buttons are blitted.
@@ -14,21 +13,7 @@ class AttackButtons(pygame.sprite.Sprite):
         attack_button_group (pygame.sprite.Group): Group of attack buttons:
             Each button returns 'attack X', where X is the corresponding index of the attack in attack_list.
             Each button has size: 180 x 100.
-        attack_list (list[Optional[Attack]]): List of character's attacks.
-        
-    Methods:
-        update(self, 
-               pygame_events: list[pygame.event.Event],
-               mouse_pos: tuple[int, int],
-               attack_list: list[Optional[Attack]]) -> Optional[str]:
-            Updates attack buttons, and checks if any are activated.
-            Blits attack buttons onto surf.
-            Returns a button output if it exists: 'attack X' where X is the index of the attack
-
-            To be run each iteration of GameWorld run().
-            
-        updateAttackButtons(self, attack_list: list[Optional[Attack]]) -> None:
-            Updates all buttons in attack_button_group based on attack_list
+        attack_list (list[Attack]): List of character's attacks.
     """
 
     # Attributes
@@ -63,7 +48,7 @@ class AttackButtons(pygame.sprite.Sprite):
     def update(self, 
                pygame_events: list[pygame.event.Event],
                mouse_pos: tuple[int, int],
-               attack_list: list[Optional[Attack]]) -> Optional[str]:
+               attack_list: list[Attack]) -> Optional[str]:
         """
         Updates attack buttons, and checks if any are activated.
         Blits attack buttons onto surf.
@@ -101,10 +86,8 @@ class AttackButtons(pygame.sprite.Sprite):
 
         return used_attack
 
-    def updateAttackButtons(self, attack_list: list[Optional[Attack]]) -> None:
-        """
-        Updates all buttons in attack_button_group based on attack_list
-        """
+    def updateAttackButtons(self, attack_list: list[Attack]) -> None:
+        """Updates all buttons in attack_button_group based on attack_list"""
 
         # Add attack buttons to attack_button_group
         if attack_list != self.getAttackList(): # Checks that attack_list is new

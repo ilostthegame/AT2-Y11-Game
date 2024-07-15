@@ -14,8 +14,7 @@ load_assets()
 
 # Constants
 class Game:
-    """
-    A class representing the game. Contains game main loop.
+    """A class representing the game. Contains game main loop.
 
     Attributes:
         screen (pygame.Surface): Display on which all objects are sent. Size: 1200 x 768
@@ -23,23 +22,6 @@ class Game:
             in ['title_screen', 'world_init', 'world_load', 'game_world', 'game_menu', 'quit']
         is_running (bool): Whether game loop is to continue iteration.
         clock (pygame.time.Clock): Clock to track framerate
-
-        Game States:
-        title_screen (TitleScreen)
-        game_world (GameWorld)
-        game_menu (GameMenu)
-        
-    Methods:
-        runMainLoop(self) -> None: 
-            Runs the main game loop
-        runTitleScreen(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
-            If state == 'title_screen', runs title screen
-        runGameWorld(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
-            If state == 'game_world', runs game world
-        runGameMenu(self) -> pygame.sprite.Group:
-            If state == 'game_menu, runs game menu
-        handleCleanup(self) -> None: 
-            To run when game loop is exited. Quits pygame. TODO save system.
     """
 
     # Attributes
@@ -185,8 +167,6 @@ class Game:
     
 
     def handleCleanup(self) -> None:
-        """
-        To run when game loop is exited. Quits pygame. TODO save system.
-        """
+        """To run when game loop is exited. Quits pygame. TODO save system."""
         pygame.quit()
 
