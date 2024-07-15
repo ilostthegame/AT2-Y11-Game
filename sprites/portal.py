@@ -4,8 +4,7 @@ from assets import GAME_ASSETS
 from file_id_interpreter import FileIdInterpreter
 
 class Portal(pygame.sprite.Sprite):
-    """
-    Class representing a portal entity.
+    """Class representing a portal entity.
 
     Attributes:
         surf (pygame.Surface): Represents portal's image. Size: 64 x 64, transparent
@@ -25,7 +24,7 @@ class Portal(pygame.sprite.Sprite):
         # Getting and unpacking file info
         image_name, destination = FileIdInterpreter().interpretFileInfo('gameinfostorage/portal_id.txt', portal_id) 
         
-        # Initialising portal object.
+        # Setting portal object's attributes
         super().__init__()
         self.setSurf(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha())
         self.setXcoord(xcoord)

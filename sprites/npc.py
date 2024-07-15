@@ -27,7 +27,7 @@ class Npc(pygame.sprite.Sprite):
         attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/npc_id.txt', npc_id) # [image_name, name, dialogue]
         image_name, name, dialogue = attribute_list # unpacks all npc information
         
-        # Initialising npc object.
+        # Setting npc object's attributes.
         super().__init__()
         self.setSurf(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha())
         self.setName(name)

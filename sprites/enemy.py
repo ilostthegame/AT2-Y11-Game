@@ -2,7 +2,7 @@ import pygame
 import random
 from file_id_interpreter import FileIdInterpreter
 from sprites.active_entity import ActiveEntity
-from assets import GAME_ASSETS, load_assets
+from assets import GAME_ASSETS
 from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
 from sprites.character import Character
@@ -44,17 +44,15 @@ class Enemy(ActiveEntity):
 
     # Constructor
     def __init__(self, enemy_id: str, xcoord: int, ycoord: int):
-        # Getting file info
-        # Attributes in attribute_list = [image, name, attack, defence, health, health_regen, weapon_id, movement_pattern, exp_yield]
         attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/enemy_id.txt', enemy_id) 
         
-        # Unpacking file info, and creating additional enemy attributes
-        image_name, name, attack, defence, health, health_regen, weapon_id, movement_pattern, exp_yield = attribute_list # unpacks attribute_list
-        attack, defence, health, health_regen, exp_yield = [int(i) for i in (attack, defence, health, health_regen, exp_yield)] # converts some attributes to integers
-        weapon = Weapon(weapon_id, xcoord, ycoord) # creates weapon object enemy is wielding
-        healthbar = Healthbar(health, health) # creates healthbar object attached to enemy
+        # Unpacking attribute_list, and creating additional enemy attributes
+        image_name, name, attack, defence, health, health_regen, weapon_id, movement_pattern, exp_yield = attribute_list 
+        attack, defence, health, health_regen, exp_yield = [int(i) for i in (attack, defence, health, health_regen, exp_yield)]
+        weapon = Weapon(weapon_id, xcoord, ycoord)
+        healthbar = Healthbar(health, health)
     
-        # Initialising enemy object. Note that health variable is used to set both max_health and health.
+        # Initialising enemy object. Note that health variable is used for both max_health and health.
         super().__init__(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha(), # enemy image
                          name, attack, defence, health, health, health_regen, weapon, True, xcoord, ycoord, healthbar)
         self.setMovementPattern(movement_pattern)
@@ -93,8 +91,7 @@ class Enemy(ActiveEntity):
 
 
     def moveToCharacter(self, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
-        """
-        Main movement method to be called: moves enemy towards character.
+        """Main movement method to be called: moves enemy towards character.
 
         First attempts to find a path between enemy and character that doesn't pass through other enemies.
         If impossible, then attempts to find a path between enemy and character that can pass through other enemies.
@@ -118,22 +115,16 @@ class Enemy(ActiveEntity):
             raise Exception('Path cannot be found between enemy and player')
         else: 
             self.moveInDirection(path[0], coords_to_tile)
-        return
     
-    def getCharacterCoords(self, coords_to_tile) -> Optional[tuple[int, int]]:
-        """
-        Returns the coordinates of character if they are found in coords_to_tile, else returns None.
-        """ # TODO fix
+    def getCharacterCoords(self, coords_to_tile) -> tuple[int, int]:
+        """Returns the coordinates of character."""
         for coords, tile in coords_to_tile.items():
             if tile.getOccupiedBy() == 'character':
                 return coords
-        return
+        raise Exception('No character exists')
 
     def moveInDirection(self, direction: str, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
-        """
-        Given a direction, if the tile in that direction is unoccupied, moves there.
-        Returns True if the movement was successful, else returns False.
-        """
+        """Given a direction, if the tile in that direction is unoccupied, moves there."""
         
         # Gets the new coordinates of the movement.
         current_xcoord = self.getXcoord()
@@ -157,7 +148,6 @@ class Enemy(ActiveEntity):
         if is_enterable: # If enterable, change enemy's coordinates.
             self.setXcoord(new_coords[0])
             self.setYcoord(new_coords[1])
-        return
 
     def getInfo(self):
         pass

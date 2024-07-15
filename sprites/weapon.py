@@ -5,7 +5,7 @@ from assets import GAME_ASSETS
 from attack import Attack
 
 class Weapon(pygame.sprite.Sprite): 
-    """A class representing a weapon.
+    """Class representing a weapon.
 
     Attributes:
         surf (pygame.Surface): The weapon's image. Size: 32 x 48, transparent
@@ -28,7 +28,7 @@ class Weapon(pygame.sprite.Sprite):
         attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/weapon_id.txt', weapon_id) # [image, name, *attacks]
         image_name, name = attribute_list[0], attribute_list[1]
         
-        # Initialising weapon object.
+        # Setting weapon object attributes.
         super().__init__()
         self.setSurf(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha())
         self.setName(name)

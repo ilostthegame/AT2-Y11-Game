@@ -25,7 +25,7 @@ class Attack:
         name, power, accuracy, range, cooldown = attribute_list # unpacks attribute_list
         power, accuracy, range, cooldown = [int(i) for i in (power, accuracy, range, cooldown)] # converts some attributes to integers
         
-        # Initialising attack object.
+        # Setting attributes.
         self.setName(name)
         self.setPower(power)
         self.setAccuracy(accuracy)
