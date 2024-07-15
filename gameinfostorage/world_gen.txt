@@ -4,7 +4,7 @@ Interpretation of file:
 - Level grid code included the line immediately after title, and forms a 12x12 array.
 - Each tile code represents: {tile}_{entity type}_{entity id}
 Tiles: {G: grass, W: wall}
-Entity type: {E: enemy, N: npc, P: portal, 0: no entity}
+Entity type: {C: character, E: enemy, N: npc, P: portal, 0: no entity}
 Entity id: 2 character string, {00: none}
 
 !!Dining Hall
@@ -13,7 +13,7 @@ L_0_00 G_0_00 L_0_00 G_0_00 G_0_00 W_0_00 G_0_00 L_0_00 G_0_00 L_0_00 G_0_00 G_0
 L_0_00 L_0_00 G_0_00 G_0_00 G_0_00 W_0_00 G_0_00 L_0_00 L_0_00 L_0_00 G_0_00 G_0_00
 L_0_00 G_0_00 L_0_00 G_N_Is G_0_00 W_0_00 G_0_00 L_0_00 G_0_00 L_0_00 G_0_00 G_0_00
 L_0_00 G_0_00 L_0_00 G_0_00 G_0_00 W_0_00 G_0_00 L_0_00 G_0_00 L_0_00 G_0_00 G_0_00
-G_0_00 G_0_00 G_0_00 G_0_00 G_0_00 G_N_Bo G_0_00 G_0_00 G_0_00 G_0_00 G_P_D2 G_0_00
+G_C_00 G_0_00 G_0_00 G_0_00 G_0_00 G_N_Bo G_0_00 G_0_00 G_0_00 G_0_00 G_P_D2 G_0_00
 W_0_00 W_0_00 W_0_00 G_0_00 L_0_00 L_0_00 L_0_00 G_0_00 W_0_00 G_0_00 G_0_00 G_0_00
 W_0_00 G_0_00 W_0_00 G_0_00 L_0_00 G_0_00 L_0_00 G_0_00 W_0_00 G_0_00 G_0_00 G_0_00
 W_0_00 G_0_00 W_0_00 G_0_00 L_0_00 G_0_00 L_0_00 G_0_00 W_0_00 G_0_00 G_0_00 G_0_00

@@ -9,6 +9,7 @@ from sprites.sidebar.sidebar import Sidebar
 from sprites.tile import Tile
 from sprites.board import Board
 from sprites.character import Character
+from level_initialiser import LevelInitialiser
 from typing import Optional, Any, Callable
 
 class GameWorld(GameState):
@@ -30,38 +31,6 @@ class GameWorld(GameState):
         (Inherited)
         main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted. 
             Size: 1200 x 768
-
-    Methods:
-        run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str: 
-            Runs all functions associated with GameWorld. 
-            To be called each iteration of game loop, while state == "game_world"
-            Returns the next state game is to enter.
-
-        interpretUserInput(self, 
-                     pygame_events: list[pygame.event.Event],
-                     mouse_pos: tuple[int, int]) -> Optional[str]:
-            Interprets pygame_events into actions, and handles each.
-            Returns 'game_menu' if ESC key pressed, else returns None
-        handleTurn(self, action: tuple[str, Any]) -> None:
-            Handles a single turn with the given user action.
-        handleEnemyActions(self) -> list[Optional[str]]:
-            Runs action() method for each enemy in enemy_group.
-            Returns a list of game events representing the actions by each enemy.
-        updateSidebar(self, pygame_events, mouse_pos) -> None:
-            Updates the Sidebar display, and checks if attack buttons pressed.
-            If an attack button is pressed, updates Character's selected attack, and GameWorld's internal state
-    
-        (Initialiser methods) TODO move to a separate class.
-        initialiseLevel(self) -> None: 
-            Initialises level tiles and entities
-        parseLevelCode(self) -> list[tuple[str, int, int]]: 
-            Returns list of tuples each representing a tile's info: 
-            (tile_code, xcoord, ycoord) - tile_code is X_X_XX string representing {tile_type}, {entity_type}, {entity_id}
-        interpretTileInfo(self, tile_info: tuple[str, int, int]): 
-            Interprets a single tile_info tuple.
-            - tile information gets sent to Board object.
-            - enemy/npc/portal information sent to their respective groups
-            
     """
 
     # Attributes
@@ -243,117 +212,36 @@ class GameWorld(GameState):
     
     def updateSidebar(self, pygame_events, mouse_pos) -> None:
         """
-        Updates the Sidebar display, and checks if attack buttons pressed.
+        Updates the Sidebar display, and checks if the attack buttons have been pressed.
         If an attack button is pressed, updates Character's selected attack,
-        and GameWorld's internal state
+        and GameWorld's internal state.
         """
-
-        # TODO idk will need to update sidebar a lot afterwards anyway.
-        # Also figure out how I will pass on to sidebar that user has done attack.
         pass 
-            # Get attributes needed to update Sidebar
-        character = self.getCharacter()
-        character_level = character.getLevel()
-        health = character.getHealth()
-        max_health = character.getMaxHealth()
-        exp = character.getExp()
-        req_exp = character.calcRequiredExp()
-        level_name = self.getLevelName()
-        attack_list = character.getWeapon().getAttackList()
+        # # Get attributes needed to update Sidebar
+        # character = self.getCharacter()
+        # character_level = character.getLevel()
+        # health = character.getHealth()
+        # max_health = character.getMaxHealth()
+        # exp = character.getExp()
+        # req_exp = character.calcRequiredExp()
+        # level_name = self.getLevelName()
+        # attack_list = character.getWeapon().getAttackList()
 
-        # Update Sidebar display
-        sidebar = self.getSidebar()
-        used_attack = sidebar.update(pygame_events, mouse_pos, character_level, health, max_health, exp, 
-                                     req_exp, level_name, attack_list)
-        self.setSidebar(sidebar)
+        # # Update Sidebar display
+        # sidebar = self.getSidebar()
+        # used_attack = sidebar.update(pygame_events, mouse_pos, character_level, health, max_health, exp, 
+        #                              req_exp, level_name, attack_list)
+        # self.setSidebar(sidebar)
 
-
-    # Level initialisation methods. TODO move to a separate class.
-    # TODO make the initialisers actually input which entity is on the tile.
     def initialiseLevel(self) -> None:
-        """
-        Initialises the level's board and entities.
-        """
-
-        # Interpret tile code, send info to sprite groups and Board object.
-        tile_info = self.parseLevelCode()
-        for tile in tile_info: # Iterates through all tuples
-            self.interpretTileInfo(tile)
-        
-        # Initialise board surface
-        board = self.getBoard()
-        board.drawBoardSurface()
+        """Sets Board, Character's coordinates, and entity groups based on level_name"""
+        level_contents = LevelInitialiser().getLevelContents(self.getLevelName())
+        board, character_coords, enemy_group, npc_group, portal_group = level_contents
         self.setBoard(board)
-
-    def parseLevelCode(self) -> list[tuple[str, int, int]]:
-        """
-        Returns list of tuples each representing a tile's info in form: 
-            (tile_code, xcoord, ycoord), where tile_code is X_X_XX string representing {tile_type}, {entity_type}, {entity_id}
-        """
-
-        str_to_find = '!!' + self.getLevelName() # marker string for the level code
-        with open('gameinfostorage/world_gen.txt', 'r') as world_gen_file:
-            file_lines = world_gen_file.readlines()
-
-            # Find place where level code begins
-            for pos, line in enumerate(file_lines):
-                if str_to_find in line:
-                    starting_pos = pos + 1 # position of line at which level code starts
-
-                    # Splits the 12x12 grid code into components.
-                    level_code_lines = [file_lines[starting_pos + i] for i in range(12)]
-                    tile_info = [(tile_code, int(xcoord), int(ycoord)) 
-                                 for ycoord, code_line in enumerate(level_code_lines) 
-                                 for xcoord, tile_code in enumerate(code_line.split())]
-                    return tile_info
-        
-        raise ValueError(f"Level name ({self.getLevelName()}) cannot be found in file 'world_gen.txt'.")
-
-    def interpretTileInfo(self, tile_info) -> None:
-        """
-        Interprets a single tile_info tuple.
-            - tile information gets sent to Board object.
-            - enemy/npc/portal information sent to their respective groups
-        """
-
-        tile_type, entity_type, entity_id = tile_info[0].split('_')
-        xcoord, ycoord = tile_info[1], tile_info[2] # coordinates of tile
-
-        # Adding tile to Board's coords_to_tile
-        board = self.getBoard()
-        coords_to_tile = board.getCoordsToTile()
-        match tile_type:
-            case 'G': # grass
-                tile = Tile((123, 245, 10), True)
-            case 'W': # wall
-                tile = Tile((77, 77, 77), False)
-            case 'L': # lava
-                tile = Tile((209, 23, 23), True, 10)
-            case _:
-                raise ValueError(f"Tile type ({tile_type}) cannot be found")
-        coords_to_tile[(xcoord, ycoord)] = tile
-        board.setCoordsToTile(coords_to_tile)
-        self.setBoard(board)
-
-        # Adding entity (if exists) to respective group, and to all_sprites
-        match entity_type:
-            case '0': # no entity exists
-                return
-            case 'E': # enemy
-                enemy_group = self.getEnemyGroup()
-                enemy = Enemy(entity_id, xcoord, ycoord)
-                enemy_group.add(enemy)
-                self.setEnemyGroup(enemy_group)
-            case 'N': # npc
-                npc_group = self.getNpcGroup()
-                npc = Npc(entity_id, xcoord, ycoord)
-                npc_group.add(npc)
-                self.setNpcGroup(npc_group)
-            case 'P': # portal
-                portal_group = self.getPortalGroup()
-                portal = Portal(entity_id, xcoord, ycoord)
-                portal_group.add(portal)
-                self.setPortalGroup(portal_group)
-            case _:
-                raise ValueError(f"Entity type ({entity_type}) cannot be found.")
-        return
+        self.setEnemyGroup(enemy_group)
+        self.setNpcGroup(npc_group)
+        self.setPortalGroup(portal_group)
+        character = self.getCharacter()
+        character.setXcoord(character_coords[0])
+        character.setXcoord(character_coords[1])
+        self.setCharacter(character)

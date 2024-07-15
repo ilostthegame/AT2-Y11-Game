@@ -11,8 +11,8 @@ class Board(pygame.sprite.Sprite):
             {(xcoord, ycoord): Tile})
 
     Methods:
-    drawBoardSurface(self) -> None: 
-        Using coords_to_tile, draws tiles onto board_surf
+        drawBoardSurface(self) -> None: 
+            Using coords_to_tile dictionary, draws tile surfaces onto board surface
     """
 
     # Attributes
@@ -42,11 +42,11 @@ class Board(pygame.sprite.Sprite):
     # Methods
     def drawBoardSurface(self) -> None:
         """
-        Using coords_to_tile dictionary, draws tiles onto surf
+        Using coords_to_tile dictionary, draws tile surfaces onto board surface
         """
         coords_to_tile = self.getCoordsToTile()
         board_surf = self.getSurf()
-        # Iterating through all xcoord, ycoord and tile_type, and drawing onto board_surf
+        # Iterating through all coordinates, and drawing tiles.
         for xcoord, ycoord in coords_to_tile.keys():
             tile = coords_to_tile[(xcoord, ycoord)]
             board_surf.blit(tile.getSurf(), (xcoord*64, ycoord*64, 64, 64))
