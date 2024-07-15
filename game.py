@@ -30,8 +30,8 @@ class Game:
         game_menu (GameMenu)
         
     Methods:
-        run(self) -> None: 
-            Runs the game main loop
+        runMainLoop(self) -> None: 
+            Runs the main game loop
         runTitleScreen(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
             If state == 'title_screen', runs title screen
         runGameWorld(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
@@ -101,9 +101,9 @@ class Game:
         self.__game_menu = game_menu
 
     # Methods
-    def run(self) -> None:
+    def runMainLoop(self) -> None:
         """
-        Runs the game loop
+        Runs the main game loop
         """
         while self.getIsRunning() == True:
             pygame_events = pygame.event.get()
