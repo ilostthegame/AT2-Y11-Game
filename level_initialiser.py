@@ -8,7 +8,8 @@ from sprites.board import Board
 class LevelInitialiser:
     """Class containing methods to initialise a level's board and entities."""
 
-    def getLevelContents(self, level_name: str) -> Board:
+    def getLevelContents(self, level_name: str
+                         ) -> tuple[Board, tuple[int, int], pygame.sprite.Group, pygame.sprite.Group, pygame.sprite.Group]:
         """
         Main method for getting the level's board and entities.
         Parses the level code, gets Board, character coords and entity sprite groups, and draws board surface.
@@ -42,7 +43,7 @@ class LevelInitialiser:
                                  for xcoord, tile_code in enumerate(code_line.split())]
                     return tile_info_list
         # If no marker is found within the file, raises ValueError.
-        raise ValueError(f"Level name ({self.getLevelName()}) cannot be found in file 'world_gen.txt'.")
+        raise ValueError(f"Level name ({level_name}) cannot be found in file 'world_gen.txt'.")
 
     def interpretTileInfo(self, 
                           tile_info_list: list[tuple[str, int, int]]
@@ -136,6 +137,12 @@ class LevelInitialiser:
             'N': 'npc',
             'P': 'portal'
         }
-        tile_type = tile_type_expand_dict[tile_type_id]
-        entity_type = entity_type_expand_dict[entity_type_id]
+        try:
+            tile_type = tile_type_expand_dict[tile_type_id]
+        except KeyError:
+            raise ValueError(f"Tile type id ({tile_type_id}) does not exist.")
+        try:
+            entity_type = entity_type_expand_dict[entity_type_id]
+        except KeyError:
+            raise ValueError(f"Entity type id ({tile_type_id}) does not exist.")
         return tile_type, entity_type

@@ -25,8 +25,6 @@ class Board(pygame.sprite.Sprite):
         return self.__surf
     def getCoordsToTile(self):
         return self.__coords_to_tile
-    def getTileGroup(self):
-        return self.__tile_group
 
     # Setters
     def setSurf(self, surf):

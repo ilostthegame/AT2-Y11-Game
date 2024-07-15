@@ -28,11 +28,14 @@ class Pathfinder:
         # or no new tiles are found.
         while target_coords not in coords_to_path.keys():
             num_found_tiles = len(coords_to_path.keys())
+            new_coords_to_path = coords_to_path.copy()
+            # Iterates through all existing coords.
             # If a tile was found the previous iteration (its path length equals the number of iterations), 
-            # then check the tiles adjacent to it.
+            # then check the tiles adjacent to it, to add to new_coords_to_path.
             for coords, path in coords_to_path.items():
                 if len(path) == num_iterations: 
-                    self.findAdjacentPaths(coords_to_tile, coords_to_path, coords, target_coords, obstructed_coords)
+                    self.findAdjacentPaths(coords_to_tile, new_coords_to_path, coords, target_coords, obstructed_coords)
+            coords_to_path = new_coords_to_path
             # If no new tiles have been found, break.
             new_num_found_tiles = len(coords_to_path.keys())
             if new_num_found_tiles == num_found_tiles:
@@ -67,8 +70,8 @@ class Pathfinder:
         adj_coords_to_direction = {
             (root_xcoord + 1, root_ycoord): 'right',
             (root_xcoord - 1, root_ycoord): 'left',
-            (root_xcoord, root_ycoord + 1): 'up',
-            (root_xcoord, root_ycoord - 1): 'down'
+            (root_xcoord, root_ycoord - 1): 'up',
+            (root_xcoord, root_ycoord + 1): 'down'
         }
 
         for coords_to_check in adj_coords_to_direction.keys():
