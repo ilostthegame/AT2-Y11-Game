@@ -5,6 +5,7 @@ from assets import GAME_ASSETS
 from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
 from attack import Attack
+from typing import Any, Optional
 
 class Character(ActiveEntity):
     """Class representing a character entity.
@@ -69,13 +70,28 @@ class Character(ActiveEntity):
         self.__exp = exp
 
     # Methods
-    def move(self, direction: str, occupied_squares: list) -> bool:
-        """
-        Given a direction, moves character one space if possible.
-        Returns True if movement was successful, False if movement was obstructed
-        """
-        pass
+    def handleAction(self, action: tuple[str, Any]) -> Optional[list[str]] | bool:
+        """Runs the character method for a given action.
 
+        Returns the list of events caused if the action was valid.
+        Else returns False if the action was invalid.
+        """
+        action_type = action[0]
+        action_arg = action[1]
+        # Determines and runs the corresponding character method.
+        match action_type:
+            case 'move':
+                character_caused_events = self.move(action_arg)
+            case 'interact':
+                character_caused_events = self.interact(action_arg)
+            case 'attack':
+                character_caused_events = self.attack(action_arg)
+            case _:
+                raise ValueError(f'Action ({action_type}) does not exist.')
+        return character_caused_events
+    
+    def move():
+        pass 
 
     def interact(self, direction: str, some_group: pygame.sprite.Group) -> bool:
         """
@@ -120,8 +136,9 @@ class Character(ActiveEntity):
 
 
     def updateStats(self, original_level):
-        """
-        Updates attack, defence based on change in level. Adds 2 per level. Returns tuple (level_increase, attack_increase, defence_increase)
+        """Updates attack, defence based on change in level.
+
+        Returns tuple (level_increase, attack_increase, defence_increase)
         """
         level_increase = self.getLeve() - original_level
         attack_increase = level_increase * 2
@@ -135,10 +152,3 @@ class Character(ActiveEntity):
         Calculates total required exp to get to next level
         """ 
         return int(100 * (1.5 ** (self.getLevel())))  # Current formula TODO change: 100 * 1.5^level.
-
-    def getInfo(self):
-        """
-        Returns character info
-        """
-        # TODO maybe this can just be generalised??? idk it's only useful for saving so do it later.
-        pass

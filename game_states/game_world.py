@@ -21,13 +21,11 @@ class GameWorld(GameState):
         sidebar (Sidebar): In-game sidebar
         level_name (str): Name of the current level
         internal_state (str): Current internal state: in ['main', 'attack_target_selection']
-    
         character (Character): Character sprite controlled by player
         board (Board): Board sprite - 12x12 grid of tiles.
         npc_group (pygame.sprite.Group): Group containing all npc sprites 
         enemy_group (pygame.sprite.Group): Group containing all enemy sprites
         portal_group (pygame.sprite.Group): Group containing all portal sprites
-        TODO need all_sprites
 
         (Inherited)
         main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted. 
@@ -101,7 +99,6 @@ class GameWorld(GameState):
         To be called each iteration of game loop, while state == "game_world"
         Returns the next state game is to enter.
         """
-
         board = self.getBoard()
         character = self.getCharacter()
         sidebar = self.getSidebar()
@@ -112,7 +109,8 @@ class GameWorld(GameState):
         if output == 'game_menu':
             return 'game_menu'
 
-        self.updateSidebar()
+        # This thing does all the attack button handling.
+        self.updateSidebar(pygame_events, mouse_pos) # TODO fix
 
         # Blit sprites onto main_surf
         main_surf = self.getMainSurf()
@@ -130,86 +128,68 @@ class GameWorld(GameState):
     def interpretUserInput(self, 
                      pygame_events: list[pygame.event.Event],
                      mouse_pos: tuple[int, int]) -> Optional[str]:
-        """
-        Interprets pygame_events into actions, and runs handleTurn() for each.
-        Returns 'game_menu' if ESC key pressed, else returns None
-        """
+        """Interprets pygame_events, for whether the user has made an action.
 
+        Checks whether ESC has been pressed: this returns to the gamestate GameMenu.
+        If internal_state is main, checks whether the user has tried to move or interact.
+        If internal_state is attack_target_selection, check whether user has tried to click an enemy.
+        Runs handleTurn() for any actions.
+        Returns 'game_menu' if ESC key pressed, else returns None.
+        """
         key_presses = [event.key for event in pygame_events if event.type == KEYDOWN]
         mouse_presses = [event.button for event in pygame_events if event.type == MOUSEBUTTONDOWN]
-
+        if K_ESCAPE in key_presses:
+            return 'game_menu'
         if self.getInternalState() == 'main':
-            # Checking for keypress-triggered actions: move and interact
-            keybinds = {K_UP: ('move', 'up'), K_DOWN: ('move', 'down'), K_RIGHT: ('move', 'right'), K_LEFT: ('move', 'left'),
-                        K_i: ('interact', 'up'), K_k: ('interact', 'down'), K_l: ('interact', 'right'), K_j: ('interact', 'left')}
+            key_to_action = {K_UP: ('move', 'up'),       K_DOWN: ('move', 'down'), 
+                             K_RIGHT: ('move', 'right'), K_LEFT: ('move', 'left'),
+                             K_i: ('interact', 'up'),    K_k: ('interact', 'down'), 
+                             K_l: ('interact', 'right'), K_j: ('interact', 'left')}
+            # For each user keypress, checks if it represents an action.
+            # If it does, sends the action to character.
             for key in key_presses:
-                if key in keybinds.keys(): # Checks whether the key would cause an action
-                    self.handleTurn(keybinds[key]) # Does turn associated with that key
-                elif key == K_ESCAPE:
-                    return 'game_menu'
-            
-        if self.getInternalState() == 'attack_target_selection':
-            if 1 in mouse_presses: # left mouse button
+                if key in key_to_action.keys():
+                    self.handleTurn(key_to_action[key])
+        elif self.getInternalState() == 'attack_target_selection':
+            if 1 in mouse_presses: # Left mouse button has been clicked.
                 for enemy in self.getEnemyGroup():
                     if enemy.getRect().collidepoint(mouse_pos): # Gets the clicked enemy
                         self.handleTurn(('attack', enemy))
-
-        return
+        return None
     
     def handleTurn(self, action: tuple[str, Any]) -> None:
-        """
-        Handles a single turn with the given user action.
+        """Handles a single turn given a user action.
 
         Given a player action: 
-            Runs corresponding Character method.
-            Only if the action was valid, runs all enemy actions.
-            Sends all events that occurred during that turn to the GameEventDisplay.
+            Runs corresponding Character method. If the action was valid:
+                Runs all enemy actions, and sends all events that 
+                occurred during that turn to the GameEventDisplay.
         """
-
-        action_type = action[0]
-        action_arg = action[1]
         character = self.getCharacter()
         game_event_display = self.getSidebar().getGameEventDisplay()
-        
-        # With action_type, determines and runs the corresponding character method.
-        #
-        # character_triggered_events is event(s) caused by the character action.
-        # It is a list if the event is valid, and is a string if event is invalid.
-        #
-        # E.g. if character attacks an enemy successfully, then character_triggered_events
-        # is a list with the attack used, and damage done to enemy.
-        match action_type: # TODO fix the methods such that they have correct arguments.
-            case 'move':
-                is_valid, character_triggered_events = character.move(action_arg)
-            case 'interact':
-                is_valid, character_triggered_events = character.interact(action_arg)
-            case 'attack':
-                is_valid, character_triggered_events = character.attack(action_arg)
-            case _:
-                raise ValueError(f'Action ({action_type}) does not exist.')
+        character_caused_events = character.handleAction(action)
+
         # Depending on validity of action, handles enemy turns and sends events to GameEventDisplay.
-        if is_valid:   
-            enemy_triggered_events = self.handleEnemyActions()
-            all_events = character_triggered_events + enemy_triggered_events
+        if character_caused_events != False:
+            enemy_caused_events = self.handleEnemyActions()
+            all_events = character_caused_events + enemy_caused_events
             game_event_display.updateEvents(True, all_events)
-        else:
-            game_event_display.updateEvents(False, character_triggered_events)
 
         self.setCharacter(character)
         self.setSidebar(self.getSidebar().setGameEventDisplay(game_event_display))
         return
 
     def handleEnemyActions(self) -> list[Optional[str]]:
-        """
+        """Handles the actions of all enemies on the board.
+
         Runs action() method for each enemy in enemy_group.
         Returns a list of game events representing the actions by each enemy.
         """
-
-        enemy_triggered_events = list()
-        # Does enemy action for each enemy, and adds events to enemy_triggered_events
+        enemy_caused_events = list()
+        # Does enemy action for each enemy, and adds events to enemy_caused_events
         for enemy in self.getEnemyGroup(): 
-            enemy_triggered_events.extend([i for i in enemy.action()])
-        return enemy_triggered_events
+            enemy_caused_events.extend([i for i in enemy.action()])
+        return enemy_caused_events
     
     def updateSidebar(self, pygame_events, mouse_pos) -> None:
         """

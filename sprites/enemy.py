@@ -11,7 +11,7 @@ from sprites.portal import Portal
 from sprites.npc import Npc
 from typing import Optional, Union
 from pathfinder import Pathfinder
-from tile_enterable_checker import TileEnterableChecker
+from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
 
 class Enemy(ActiveEntity):
     """Class representing an enemy entity.
@@ -114,7 +114,7 @@ class Enemy(ActiveEntity):
         if path == None:
             raise Exception('Path cannot be found between enemy and player')
         else: 
-            self.moveInDirection(path[0], coords_to_tile)
+            self.move(path[0], coords_to_tile)
     
     def getCharacterCoords(self, coords_to_tile) -> tuple[int, int]:
         """Returns the coordinates of character."""
@@ -122,32 +122,15 @@ class Enemy(ActiveEntity):
             if tile.getOccupiedBy() == 'character':
                 return coords
         raise Exception('No character exists')
-
-    def moveInDirection(self, direction: str, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
-        """Given a direction, if the tile in that direction is unoccupied, moves there."""
-        
+    
+    def move(self, direction: str, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
+        """Moves enemy in the specified direction if the tile is enterable."""
         # Gets the new coordinates of the movement.
-        current_xcoord = self.getXcoord()
-        current_ycoord = self.getYcoord()
-        match direction:
-            case 'right':
-                new_coords = (current_xcoord + 1, current_ycoord)
-            case 'left':
-                new_coords = (current_xcoord + 1, current_ycoord)
-            case 'up':
-                new_coords = (current_xcoord + 1, current_ycoord)
-            case 'down':
-                new_coords = (current_xcoord + 1, current_ycoord)
-            case _:
-                raise ValueError(f"({direction}) is not a valid direction")
-        
-        # Checking whether the new coordinates can be entered
-        tile_enterable_checker = TileEnterableChecker()
-        obstructed_coords = tile_enterable_checker.getObstructedCoords(coords_to_tile, ['enemy', 'character', 'npc', 'portal'])
-        is_enterable = tile_enterable_checker.checkTileEnterable(coords_to_tile, obstructed_coords, new_coords)
-        if is_enterable: # If enterable, change enemy's coordinates.
+        current_coords = (self.getXcoord(), self.getYcoord())
+        new_coords = getDestinationCoords(current_coords, direction)
+        # Checking whether the new coordinates can be entered.
+        obstructed_coords = getObstructedCoords(coords_to_tile, ['enemy', 'character', 'npc', 'portal'])
+        is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, new_coords)
+        if is_enterable: # If enterable, change entity's coordinates.
             self.setXcoord(new_coords[0])
             self.setYcoord(new_coords[1])
-
-    def getInfo(self):
-        pass

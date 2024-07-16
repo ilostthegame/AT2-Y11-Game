@@ -4,6 +4,8 @@ from sprites.tile import Tile
 class Board(pygame.sprite.Sprite):
     """Class that represents the game board sprite. 
 
+    NOTE: Board coordinates originate from top-left (0,0).
+
     Attributes:
         surf (pygame.Surface): Surface representing board. Size: 768 x 768
         coords_to_tile (dict[tuple[int, int], Tile]): Dictionary that relates coordinate tuples to Tiles 

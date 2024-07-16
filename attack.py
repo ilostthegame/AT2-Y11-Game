@@ -56,3 +56,8 @@ class Attack:
         self.__range = range
     def setCooldown(self, cooldown):
         self.__cooldown = cooldown
+
+    def isInRange(self, 
+                  self_coords: tuple[int, int],
+                  target_coords: tuple[int, int]) -> bool:
+        pass

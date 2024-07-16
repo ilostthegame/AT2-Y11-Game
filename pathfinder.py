@@ -1,5 +1,5 @@
 from typing import Optional
-from tile_enterable_checker import TileEnterableChecker
+from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
 from sprites.tile import Tile
 
 class Pathfinder:
@@ -19,8 +19,7 @@ class Pathfinder:
         If for example, 'enemy' is not included, the algorithm will allow enemies to be part of the path.
         """
 
-        tile_enterable_checker = TileEnterableChecker()
-        obstructed_coords = tile_enterable_checker.getObstructedCoords(coords_to_tile, obstruction_entity_types)
+        obstructed_coords = getObstructedCoords(coords_to_tile, obstruction_entity_types)
         coords_to_path = {starting_coords: []} # Dictionary to track found paths.
         num_iterations = 0
 
@@ -57,30 +56,20 @@ class Pathfinder:
         """Intermediate step in the pathfinding algorithm which checks adjacent coords to root_coords.
         
         Checks for the following condition:
-            The coords must either be the target_coords 
-            or be enterable (by tileEnterableChecker().checkTileEnterable()), 
+            The coords must either be the target_coords, or be enterable,
             and cannot already be in coords_to_path (hasn't previously been found by the algorithm).
         If these are fulfilled, the new coords and the path leading to it are added to coords_to_path.
         """
-
-        root_xcoord, root_ycoord = root_coords[0], root_coords[1]
         path_to_root = coords_to_path[root_coords]
-        # Dictionary that relates each adjacent tile's coords to
-        # their direction from the root tile.
-        adj_coords_to_direction = {
-            (root_xcoord + 1, root_ycoord): 'right',
-            (root_xcoord - 1, root_ycoord): 'left',
-            (root_xcoord, root_ycoord - 1): 'up',
-            (root_xcoord, root_ycoord + 1): 'down'
-        }
+        direction_list = ['right', 'left', 'up', 'down']
 
-        for coords_to_check in adj_coords_to_direction.keys():
-            # Checks whether the coords are either the target_coords or are enterable,
-            # and whether the coords are not already in coords_to_path.
-            if (    coords_to_check == target_coords or
-                    TileEnterableChecker().checkTileEnterable(coords_to_tile, obstructed_coords, coords_to_check) and
-                    coords_to_check not in coords_to_path.keys()):
+        for direction in direction_list:
+            dest_coords = getDestinationCoords(root_coords, direction)
+            # Checks destination coords for the condition specified in docstring.
+            if (    dest_coords == target_coords or
+                    checkTileEnterable(coords_to_tile, obstructed_coords, dest_coords) and
+                    dest_coords not in coords_to_path.keys()):
                 # Creates the new path leading to that tile, and adds it to coords_to_path
                 new_path = path_to_root.copy()
-                new_path.append(adj_coords_to_direction[coords_to_check])
-                coords_to_path[coords_to_check] = new_path
+                new_path.append(direction)
+                coords_to_path[dest_coords] = new_path
