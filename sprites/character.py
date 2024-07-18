@@ -75,7 +75,10 @@ class Character(ActiveEntity):
         self.__exp = exp
 
     # Methods
-    def handleAction(self, action: tuple[str, Any]) -> Optional[list[str]] | bool:
+    def handleAction(self, 
+                     action: tuple[str, Any],
+                     coords_to_tile: dict[tuple[int, int], Tile],
+                     num_enemies: int) -> Optional[list[str]] | bool:
         """Runs the character method for a given action.
 
         Returns the list of events caused if the action was valid.
@@ -86,7 +89,7 @@ class Character(ActiveEntity):
         # Determines and runs the corresponding character method.
         match action_type:
             case 'move':
-                character_caused_events = self.move(action_arg)
+                character_caused_events = self.move(action_arg, coords_to_tile, num_enemies)
             case 'attack':
                 character_caused_events = self.attack(action_arg)
             case _:
@@ -96,7 +99,7 @@ class Character(ActiveEntity):
     def moveOrInteract(self,
                        direction: str, 
                        coords_to_tile: dict[tuple[int, int], Tile],
-                       is_portal_unlocked: bool) -> Optional[list[str]] | None:
+                       num_enemies: int) -> Optional[list[str]] | None:
         """Attempts to move/interact in the specified direction.
 
         If the tile cannot be entered:
@@ -104,9 +107,9 @@ class Character(ActiveEntity):
         If the tile contains an Npc:
             Return a list containing the Npc's message.
         If the tile contains a Portal:
-            Check if is_portal_unlocked.
-            If True, move onto portal. Return None
-            If False, return a list containing an error message.
+            If num_enemies == 0, set the portal's is_activated to True. 
+                Return a list containing a success message.
+            Else, return a list containing an error message.
         If the tile is completely unoccupied:
             Move to the tile. Returns None
         """
@@ -114,7 +117,7 @@ class Character(ActiveEntity):
 
         current_coords = (self.getXcoord(), self.getYcoord())
         destination_coords = getDestinationCoords(current_coords, direction)
-        entity_occupied_by = coords_to_tile[destination_coords].getOccupiedBy()
+        occupying_entity = coords_to_tile[destination_coords].getOccupiedBy()
         # Checking whether the destination coordinates is either obstructed 
         # by a wall, by an enemy, or is not on the board.
         obstructed_coords = getObstructedCoords(coords_to_tile, [Enemy, Character])
@@ -122,17 +125,17 @@ class Character(ActiveEntity):
         if not is_enterable:
             return False
         # If occupied by Npc, return its message.
-        elif type(entity_occupied_by) == Npc:
-            message = f"{entity_occupied_by.getName()}: '{entity_occupied_by.getDialogue}'"
+        elif type(occupying_entity) == Npc:
+            message = f"{occupying_entity.getName()}: '{occupying_entity.getDialogue}'"
             return list(message)
         # If occupied by Portal, either move onto portal, or return error message.
-        elif entity_occupied_by == Portal:
-            if is_portal_unlocked:
-                self.setXcoord(destination_coords[0])
-                self.setYcoord(destination_coords[1])
-                return None
+        elif occupying_entity == Portal:
+            if num_enemies == 0:
+                occupying_entity.setIsActivated(True)
+                return list("You entered the portal! You feel yourself being teleported.")
             else:
-                return "You cannot enter a portal while there are still enemies remaining."
+                return list("You cannot enter a portal while there are still enemies remaining.")
+        # Tile is unobstructed and has no entities.
         else:
             self.setXcoord(destination_coords[0])
             self.setYcoord(destination_coords[1])

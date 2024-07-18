@@ -10,7 +10,8 @@ class Portal(pygame.sprite.Sprite):
         surf (pygame.Surface): Represents portal's image. Size: 64 x 64, transparent
         xcoord (int): Board xcoord of portal
         ycoord (int): Board ycoord of portal
-        destination (str): Represents the level portal leads to
+        destination (str): Represents the level portal leads to.
+        is_activated (bool): Whether the portal has been activated by Character.
     """
 
     # Attributes
@@ -18,6 +19,7 @@ class Portal(pygame.sprite.Sprite):
     __xcoord = None
     __ycoord = None
     __destination = None
+    __is_activated = None
 
     # Constructor
     def __init__(self, portal_id: str, xcoord: int, ycoord: int):
@@ -30,6 +32,7 @@ class Portal(pygame.sprite.Sprite):
         self.setXcoord(xcoord)
         self.setYcoord(ycoord)
         self.setDestination(destination)
+        self.setIsActivated(False)
 
     # Getters
     def getSurf(self):
@@ -40,6 +43,8 @@ class Portal(pygame.sprite.Sprite):
         return self.__ycoord
     def getDestination(self):
         return self.__destination
+    def getIsActivated(self):
+        return self.__is_activated
 
     # Setters
     def setSurf(self, surf):
@@ -50,3 +55,5 @@ class Portal(pygame.sprite.Sprite):
         self.__ycoord = ycoord
     def setDestination(self, destination):
         self.__destination = destination
+    def setIsActivated(self, is_activated):
+        self.__is_activated = is_activated

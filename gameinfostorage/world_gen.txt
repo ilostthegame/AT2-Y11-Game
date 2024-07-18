@@ -3,7 +3,7 @@ Interpretation of file:
 - Double exclamation mark (!!) marks the title of the backdrop.
 - Level grid code included the line immediately after title, and forms a 12x12 array.
 - Each tile code represents: {tile}_{entity type}_{entity id}
-Tiles: {G: grass, W: wall}
+Tiles: {G: grass, W: wall, L: lava}
 Entity type: {C: character, E: enemy, N: npc, P: portal, 0: no entity}
 Entity id: 2 character string, {00: none}
 

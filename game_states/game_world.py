@@ -12,6 +12,7 @@ from sprites.character import Character
 from level_initialiser import LevelInitialiser
 from typing import Optional, Any
 from sprites.entity import Entity
+from sprites.active_entity import ActiveEntity
 
 class GameWorld(GameState):
     """Class representing the game world.
@@ -27,6 +28,7 @@ class GameWorld(GameState):
         npc_group (pygame.sprite.Group): Group containing all npc sprites 
         enemy_group (pygame.sprite.Group): Group containing all enemy sprites
         portal_group (pygame.sprite.Group): Group containing all portal sprites
+        num_enemies (int): The number of remaining enemies in enemy_group.
 
         (Inherited)
         main_surf (pygame.Surface): Surface onto which all sprites in the game state are blitted. 
@@ -42,7 +44,7 @@ class GameWorld(GameState):
     __enemy_group = None
     __portal_group = None
     __internal_state = None
-    __num_remaining_enemies = None
+    __num_enemies = None
 
     # Constructor
     def __init__(self, 
@@ -72,8 +74,8 @@ class GameWorld(GameState):
         return self.__portal_group
     def getInternalState(self):
         return self.__internal_state
-    def getNumRemainingEnemies(self):
-        return self.__num_remaining_enemies
+    def getNumEnemies(self):
+        return self.__num_enemies
 
     # Setters
     def setSidebar(self, sidebar):
@@ -92,8 +94,8 @@ class GameWorld(GameState):
         self.__portal_group = portal_group
     def setInternalState(self, internal_state):
         self.__internal_state = internal_state
-    def setNumRemainingEnemies(self, num_remaining_enemies):
-        self.__num_remaining_enemies = num_remaining_enemies
+    def setNumEnemies(self, num_enemies):
+        self.__num_enemies = num_enemies
 
     # Methods
     def run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str:
@@ -169,18 +171,15 @@ class GameWorld(GameState):
                 occurred during that turn to the GameEventDisplay.
         """
         character = self.getCharacter()
-        game_event_display = self.getSidebar().getGameEventDisplay()
         character_caused_events = character.handleAction(action)
 
         # Depending on validity of action, handles enemy turns and sends events to GameEventDisplay.
         if character_caused_events != False:
             enemy_caused_events = self.handleEnemyActions()
             all_events = character_caused_events + enemy_caused_events
-            game_event_display.updateEvents(True, all_events)
+            self.handleEndOfTurn()
 
         self.setCharacter(character)
-
-        self.setSidebar(self.getSidebar().setGameEventDisplay(game_event_display))
         return
 
     def handleEnemyActions(self) -> list[Optional[str]]:
@@ -196,13 +195,29 @@ class GameWorld(GameState):
         return enemy_caused_events
 
     def handleEndOfTurn(self) -> None:
-        """
+        """Handles all calculations at the end of a turn.
         
+        - Updates how many enemies are still remaining.
+        - Computes tile damage for all entities currently on tile.
+        - If any portals have been activated, initialises the new level.
+        - Sends all information to Sidebar's GameEventDisplay and DataDisplay.
         """
-        # TODO: create method which handles all of the stuff at the end of a turn,
-        # such as the setting of sidebar, checking how many enemies are still on the board,
-        # checking for lava damage, and seeing if the Character is standing on a portal.
-        pass
+        coords_to_tile = self.getBoard().getCoordsToTile()
+        self.setNumEnemies(len(self.getEnemyGroup()))
+        # Checking for tile damage
+        for tile in coords_to_tile.keys():
+            occupying_entity = tile.getOccupied()
+            if isinstance(occupying_entity, ActiveEntity) == True:
+                occupying_entity.takeDamage(tile.getDamage())
+        # Checking for portal activation
+        for portal in self.getPortalGroup():
+            if portal.getIsActivated():
+                self.setLevelName(portal.getDestination())
+                self.initialiseLevel()
+        # Updating GameEventDisplay
+        game_event_display = self.getSidebar().getGameEventDisplay()
+        # TODO update the display
+        return
     
     def updateSidebar(self, pygame_events, mouse_pos) -> None:
         """
@@ -239,7 +254,8 @@ class GameWorld(GameState):
         self.setEnemyGroup(enemy_group)
         self.setNpcGroup(npc_group)
         self.setPortalGroup(portal_group)
-        self.setNumRemainingEnemies(len(enemy_group))
+        self.setNumEnemies(len(enemy_group))
+        # Setting coords of Character.
         character = self.getCharacter()
         character.setXcoord(character_coords[0])
         character.setYcoord(character_coords[1])
