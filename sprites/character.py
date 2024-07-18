@@ -6,6 +6,10 @@ from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
 from attack import Attack
 from typing import Any, Optional
+from tile import Tile
+from sprites.npc import Npc
+from sprites.portal import Portal
+from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
 
 class Character(ActiveEntity):
     """Class representing a character entity.
@@ -37,7 +41,8 @@ class Character(ActiveEntity):
     __exp = None
 
     # Constructor
-    def __init__(self,  
+    def __init__(self,  # TODO all of this stuff should not be optional arguments. 
+                        # Leave this for temporary testing before world_init is added.
                  image: pygame.Surface, 
                  name: str,
                  weapon_id: str, 
@@ -82,33 +87,67 @@ class Character(ActiveEntity):
         match action_type:
             case 'move':
                 character_caused_events = self.move(action_arg)
-            case 'interact':
-                character_caused_events = self.interact(action_arg)
             case 'attack':
                 character_caused_events = self.attack(action_arg)
             case _:
                 raise ValueError(f'Action ({action_type}) does not exist.')
         return character_caused_events
     
-    def move():
-        pass 
+    def moveOrInteract(self,
+                       direction: str, 
+                       coords_to_tile: dict[tuple[int, int], Tile],
+                       is_portal_unlocked: bool) -> Optional[list[str]] | None:
+        """Attempts to move/interact in the specified direction.
 
-    def interact(self, direction: str, some_group: pygame.sprite.Group) -> bool:
+        If the tile cannot be entered:
+            Return False.
+        If the tile contains an Npc:
+            Return a list containing the Npc's message.
+        If the tile contains a Portal:
+            Check if is_portal_unlocked.
+            If True, move onto portal. Return None
+            If False, return a list containing an error message.
+        If the tile is completely unoccupied:
+            Move to the tile. Returns None
         """
-        Given a direction, has character interact with adjacent entity in that direction.
-        Valid entities are: npc, portal
+        from enemy import Enemy
+
+        current_coords = (self.getXcoord(), self.getYcoord())
+        destination_coords = getDestinationCoords(current_coords, direction)
+        entity_occupied_by = coords_to_tile[destination_coords].getOccupiedBy()
+        # Checking whether the destination coordinates is either obstructed 
+        # by a wall, by an enemy, or is not on the board.
+        obstructed_coords = getObstructedCoords(coords_to_tile, [Enemy, Character])
+        is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, destination_coords)
+        if not is_enterable:
+            return False
+        # If occupied by Npc, return its message.
+        elif type(entity_occupied_by) == Npc:
+            message = f"{entity_occupied_by.getName()}: '{entity_occupied_by.getDialogue}'"
+            return list(message)
+        # If occupied by Portal, either move onto portal, or return error message.
+        elif entity_occupied_by == Portal:
+            if is_portal_unlocked:
+                self.setXcoord(destination_coords[0])
+                self.setYcoord(destination_coords[1])
+                return None
+            else:
+                return "You cannot enter a portal while there are still enemies remaining."
+        else:
+            self.setXcoord(destination_coords[0])
+            self.setYcoord(destination_coords[1])
+            return None
+
+    def attack(self, target): # TODO
+        """
+        Given a target within the list of enemies_in_range (or something), attacks it
+
+        Returns a list containing two game events, representing the kind of attack used
+        and how much damage was dealt/move missed.
         """
         pass
 
-    def attack(self, target):
-        """
-        Given a target, determines whether it is in range, then attacks it
-        
-        TODO will need to insert unpassable squares
-        """
-        pass
-
-    def tilesInRange(self, attack, tile_group, all_entities):
+    def tilesInRange(self, attack, tile_group, all_entities): # TODO probably move to attack class
         """
         Returns a list of all tiles in range of attack.
         Takes the attack used, and the groups of tiles and all entities as arguments. 
@@ -140,7 +179,7 @@ class Character(ActiveEntity):
 
         Returns tuple (level_increase, attack_increase, defence_increase)
         """
-        level_increase = self.getLeve() - original_level
+        level_increase = self.getLevel() - original_level
         attack_increase = level_increase * 2
         defence_increase = level_increase * 2
         self.setAttack(self.getAttack() + attack_increase)

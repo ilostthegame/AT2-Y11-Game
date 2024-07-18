@@ -4,6 +4,9 @@ from sprites.enemy import Enemy
 from sprites.npc import Npc
 from sprites.portal import Portal
 from sprites.board import Board
+from sprites.character import Character
+from typing import Optional
+from sprites.entity import Entity
 
 class LevelInitialiser:
     """Class containing methods to initialise a level's board and entities."""
@@ -66,7 +69,8 @@ class LevelInitialiser:
         for tile_info in tile_info_list:
             tile_type_id, entity_type_id, entity_id = tile_info[0].split('_')
             xcoord, ycoord = tile_info[1], tile_info[2] # Coordinates of tile
-            tile_type, entity_type = self.expandIdToType(tile_type_id, entity_type_id)
+            tile_type = self.tileIdToType(tile_type_id)
+            entity_type = self.entityIdToType(entity_type_id)
 
             self.addTileToBoard(board, tile_type, entity_type, xcoord, ycoord)
             # Saving character's coords/adding entity to group.
@@ -82,7 +86,7 @@ class LevelInitialiser:
         except NameError:
             raise Exception('Character was not located in tile info.')
     
-    def addTileToBoard(self, board: Board, tile_type: str, entity_type: str, 
+    def addTileToBoard(self, board: Board, tile_type: str, entity_type: Optional[Entity], 
                        xcoord: int, ycoord: int) -> None:
         """Adds a tile to Board's coord_to_tile dictionary."""
         coords_to_tile = board.getCoordsToTile()
@@ -101,7 +105,7 @@ class LevelInitialiser:
         return
 
     def addEntityToGroup(self, 
-                         entity_type: str, 
+                         entity_type: Entity, 
                          entity_id: str, 
                          xcoord: int, 
                          ycoord: int, 
@@ -109,40 +113,43 @@ class LevelInitialiser:
                          npc_group: pygame.sprite.Group, 
                          portal_group: pygame.sprite.Group) -> None:
         """Adds an enemy/portal/npc entity to its corresponding group."""
-        match entity_type:
-            case 'enemy':
-                enemy = Enemy(entity_id, xcoord, ycoord)
-                enemy_group.add(enemy)
-            case 'npc': # npc
-                npc = Npc(entity_id, xcoord, ycoord)
-                npc_group.add(npc)
-            case 'portal': # portal
-                portal = Portal(entity_id, xcoord, ycoord)
-                portal_group.add(portal)
-            case _:
-                raise ValueError(f"Entity type ({entity_type}) is unknown.")
+        if entity_type == Enemy:
+            enemy = Enemy(entity_id, xcoord, ycoord)
+            enemy_group.add(enemy)
+        elif entity_type == Npc:
+            npc = Npc(entity_id, xcoord, ycoord)
+            npc_group.add(npc)
+        elif entity_type == Portal:
+            portal = Portal(entity_id, xcoord, ycoord)
+            portal_group.add(portal)
+        else:
+            raise ValueError(f"Entity type ({entity_type}) is unknown.")
         return
 
-    def expandIdToType(self, tile_type_id: str, entity_type_id: str) -> tuple[str, str]:
-        """Expands tile/entity type IDs to the types they represent, and returns them."""
+    def tileIdToType(self, tile_type_id: str) -> str:
+        """Returns a string representing the tile type, given its ID."""
         tile_type_expand_dict = {
             'G': 'grass',
             'W': 'wall',
             'L': 'lava'
         }
-        entity_type_expand_dict = {
-            '0': None,
-            'C': 'character',
-            'E': 'enemy',
-            'N': 'npc',
-            'P': 'portal'
-        }
         try:
             tile_type = tile_type_expand_dict[tile_type_id]
         except KeyError:
             raise ValueError(f"Tile type id ({tile_type_id}) does not exist.")
+        return tile_type
+
+    def entityIdToType(self, entity_type_id: str) -> Optional[Entity]:
+        """Returns the class representing an entity type, given its ID."""
+        entity_type_expand_dict = {
+            '0': None,
+            'C': Character,
+            'E': Enemy,
+            'N': Npc,
+            'P': Portal
+        }
         try:
             entity_type = entity_type_expand_dict[entity_type_id]
         except KeyError:
-            raise ValueError(f"Entity type id ({tile_type_id}) does not exist.")
-        return tile_type, entity_type
+            raise ValueError(f"Entity type id ({entity_type_id}) does not exist.")
+        return entity_type

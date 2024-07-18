@@ -10,7 +10,8 @@ from sprites.tile import Tile
 from sprites.board import Board
 from sprites.character import Character
 from level_initialiser import LevelInitialiser
-from typing import Optional, Any, Callable
+from typing import Optional, Any
+from sprites.entity import Entity
 
 class GameWorld(GameState):
     """Class representing the game world.
@@ -41,6 +42,7 @@ class GameWorld(GameState):
     __enemy_group = None
     __portal_group = None
     __internal_state = None
+    __num_remaining_enemies = None
 
     # Constructor
     def __init__(self, 
@@ -49,11 +51,8 @@ class GameWorld(GameState):
         super().__init__()
         self.setLevelName(level_name)
         self.setCharacter(character)
+        self.initialiseLevel()
         self.setSidebar(Sidebar())
-        self.setBoard(Board())
-        self.setNpcGroup(pygame.sprite.Group())
-        self.setEnemyGroup(pygame.sprite.Group())
-        self.setPortalGroup(pygame.sprite.Group())
         self.setInternalState('main')
 
     # Getters
@@ -73,6 +72,8 @@ class GameWorld(GameState):
         return self.__portal_group
     def getInternalState(self):
         return self.__internal_state
+    def getNumRemainingEnemies(self):
+        return self.__num_remaining_enemies
 
     # Setters
     def setSidebar(self, sidebar):
@@ -91,6 +92,8 @@ class GameWorld(GameState):
         self.__portal_group = portal_group
     def setInternalState(self, internal_state):
         self.__internal_state = internal_state
+    def setNumRemainingEnemies(self, num_remaining_enemies):
+        self.__num_remaining_enemies = num_remaining_enemies
 
     # Methods
     def run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str:
@@ -109,7 +112,9 @@ class GameWorld(GameState):
         if output == 'game_menu':
             return 'game_menu'
 
-        # This thing does all the attack button handling.
+        # This thing does all the attack button handling. Should be runSidebar.
+        # Since I'll have an updateSidebarInfo function for what happens at the end of a turn
+        # And this runSidebar is for stuff like attack button handling etc.
         self.updateSidebar(pygame_events, mouse_pos) # TODO fix
 
         # Blit sprites onto main_surf
@@ -142,9 +147,7 @@ class GameWorld(GameState):
             return 'game_menu'
         if self.getInternalState() == 'main':
             key_to_action = {K_UP: ('move', 'up'),       K_DOWN: ('move', 'down'), 
-                             K_RIGHT: ('move', 'right'), K_LEFT: ('move', 'left'),
-                             K_i: ('interact', 'up'),    K_k: ('interact', 'down'), 
-                             K_l: ('interact', 'right'), K_j: ('interact', 'left')}
+                             K_RIGHT: ('move', 'right'), K_LEFT: ('move', 'left')}
             # For each user keypress, checks if it represents an action.
             # If it does, sends the action to character.
             for key in key_presses:
@@ -176,6 +179,7 @@ class GameWorld(GameState):
             game_event_display.updateEvents(True, all_events)
 
         self.setCharacter(character)
+
         self.setSidebar(self.getSidebar().setGameEventDisplay(game_event_display))
         return
 
@@ -190,6 +194,15 @@ class GameWorld(GameState):
         for enemy in self.getEnemyGroup(): 
             enemy_caused_events.extend([i for i in enemy.action()])
         return enemy_caused_events
+
+    def handleEndOfTurn(self) -> None:
+        """
+        
+        """
+        # TODO: create method which handles all of the stuff at the end of a turn,
+        # such as the setting of sidebar, checking how many enemies are still on the board,
+        # checking for lava damage, and seeing if the Character is standing on a portal.
+        pass
     
     def updateSidebar(self, pygame_events, mouse_pos) -> None:
         """
@@ -215,14 +228,19 @@ class GameWorld(GameState):
         # self.setSidebar(sidebar)
 
     def initialiseLevel(self) -> None:
-        """Sets Board, Character's coordinates, and entity groups based on level_name"""
+        """Initialises level contents based on level_name
+        
+        Sets the enemy/npc/portal sprite groups, Board, and num_enemies_remaining.
+        Gets the existing Character object and sets its coordinates.
+        """
         level_contents = LevelInitialiser().getLevelContents(self.getLevelName())
         board, character_coords, enemy_group, npc_group, portal_group = level_contents
         self.setBoard(board)
         self.setEnemyGroup(enemy_group)
         self.setNpcGroup(npc_group)
         self.setPortalGroup(portal_group)
+        self.setNumRemainingEnemies(len(enemy_group))
         character = self.getCharacter()
         character.setXcoord(character_coords[0])
-        character.setXcoord(character_coords[1])
+        character.setYcoord(character_coords[1])
         self.setCharacter(character)

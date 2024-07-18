@@ -1,4 +1,6 @@
 import pygame
+from typing import Optional
+from sprites.entity import Entity
 
 class Tile(pygame.sprite.Sprite):
     """
@@ -7,8 +9,7 @@ class Tile(pygame.sprite.Sprite):
     Attributes:
         surf (pygame.Surface): Size: 64 x 64
         accessible (bool): Whether tile can be entered by an entity
-        occupied_by (Optional[str]): What entity is occupying the tile currently:
-            Is None if no entity, else is in ['character', 'enemy', 'npc', 'portal']
+        occupied_by (Optional[Entity]]): The entity currently occupying the tile.
         damage (int): How much damage an entity takes upon entering tile
     """
     # Attributes
@@ -21,7 +22,7 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, 
                  colour: tuple[int, int, int], 
                  accessible: bool,
-                 occupied_by: str,
+                 occupied_by: Optional[Entity],
                  damage: int = 0):
         super().__init__()
 
@@ -40,7 +41,7 @@ class Tile(pygame.sprite.Sprite):
     def getAccessible(self):
         return self.__accessible
     def getOccupiedBy(self):
-        return self.__occupied
+        return self.__occupied_by
     def getDamage(self):
         return self.__damage
 
@@ -49,7 +50,7 @@ class Tile(pygame.sprite.Sprite):
         self.__surf = surf
     def setAccessible(self, accessible):
         self.__accessible = accessible
-    def setOccupiedBy(self, occupied):
-        self.__occupied = occupied
+    def setOccupiedBy(self, occupied_by):
+        self.__occupied_by = occupied_by
     def setDamage(self, damage):
         self.__damage = damage

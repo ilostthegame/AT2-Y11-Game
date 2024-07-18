@@ -3,21 +3,23 @@ Contains functions to facilitate ActiveEntity movement and pathfinding.
 """
 
 # Imports
+import pygame
 from sprites.tile import Tile
+from sprites.entity import Entity
 
 # Functions
 def getObstructedCoords(coords_to_tile: dict[tuple[int, int], Tile],
-                        obstruction_entity_types: list[str]) -> list[tuple[int, int]]:
+                        obstruction_entity_types: list[Entity]) -> list[tuple[int, int]]:
     """Determines all obstructed coordinates in a board.
 
-    Given obstructed_entity_types, determines which coordinates within
-    coords_to_tile can be entered by an entity.
+    A tile is obstructed if it is not accessible, or
+    contains an entity in obstruction_entity_types.
     """
     obstructed_coords = list()
     for coords, tile in coords_to_tile.items():
-        if tile.getAccessible() == False: # inaccessible tiles
+        if tile.getAccessible() == False:
             obstructed_coords.append(coords)
-        elif tile.getOccupiedBy() in obstruction_entity_types: # tiles obstructed by entities
+        elif type(tile.getOccupiedBy()) in obstruction_entity_types:
             obstructed_coords.append(coords)
     return obstructed_coords
 

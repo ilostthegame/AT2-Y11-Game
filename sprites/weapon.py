@@ -5,7 +5,10 @@ from assets import GAME_ASSETS
 from attack import Attack
 
 class Weapon(pygame.sprite.Sprite): 
-    """Class representing a weapon.
+    """Class representing a weapon sprite.
+
+    Weapon's surface is to be blitted alongside an ActiveEntity.
+    Additionally functions as a container object for attacks.
 
     Attributes:
         surf (pygame.Surface): The weapon's image. Size: 32 x 48, transparent

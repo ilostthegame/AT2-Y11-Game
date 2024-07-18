@@ -5,13 +5,13 @@ from sprites.active_entity import ActiveEntity
 from assets import GAME_ASSETS
 from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
-from sprites.character import Character
 from sprites.tile import Tile
 from sprites.portal import Portal
 from sprites.npc import Npc
 from typing import Optional, Union
 from pathfinder import Pathfinder
 from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
+
 
 class Enemy(ActiveEntity):
     """Class representing an enemy entity.
@@ -71,10 +71,10 @@ class Enemy(ActiveEntity):
         self.__exp_yield = exp_yield
 
     # Methods
-    def action(self, 
-               character: Character, 
-               enemy_group: pygame.sprite.Group, 
-               npc_group: pygame.sprite.Group, 
+    def action(self,
+               character_position: tuple[int, int],
+               enemy_group: pygame.sprite.Group,
+               npc_group: pygame.sprite.Group,
                portal_group: pygame.sprite.Group, 
                coords_to_tile: dict[tuple[int, int], Tile]) -> list[str]:
         """
@@ -101,15 +101,16 @@ class Enemy(ActiveEntity):
         Moves according to the first path found (using moveInDirection()).
         Else if no path was found in either of these attempts, raises an Exception.
         """
-    
+        from sprites.character import Character
+
         pathfinder = Pathfinder()
         self_coords = (self.getXcoord(), self.getYcoord())
         character_coords = self.getCharacterCoords()
         # Finds path which doesn't pass through other enemies
-        path = pathfinder.findPath(coords_to_tile, ['character', 'enemy', 'npc', 'portal'], self_coords, character_coords)
+        path = pathfinder.findPath(coords_to_tile, [Character, Enemy, Npc, Portal], self_coords, character_coords)
         # If no such path, finds a path which can pass through other enemies
         if path == None:
-            path = pathfinder.findPath(coords_to_tile, ['character', 'enemy', 'npc', 'portal'], self_coords, character_coords)
+            path = pathfinder.findPath(coords_to_tile, [Character, Npc, Portal], self_coords, character_coords)
         # If no path found still, raises an Exception.
         if path == None:
             raise Exception('Path cannot be found between enemy and player')
@@ -123,14 +124,15 @@ class Enemy(ActiveEntity):
                 return coords
         raise Exception('No character exists')
     
-    def move(self, direction: str, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
+    def move(self, 
+             direction: str, 
+             coords_to_tile: dict[tuple[int, int], Tile]) -> None:
         """Moves enemy in the specified direction if the tile is enterable."""
-        # Gets the new coordinates of the movement.
         current_coords = (self.getXcoord(), self.getYcoord())
-        new_coords = getDestinationCoords(current_coords, direction)
-        # Checking whether the new coordinates can be entered.
+        destination_coords = getDestinationCoords(current_coords, direction)
+        # Checking whether the destination coordinates can be entered.
         obstructed_coords = getObstructedCoords(coords_to_tile, ['enemy', 'character', 'npc', 'portal'])
-        is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, new_coords)
-        if is_enterable: # If enterable, change entity's coordinates.
-            self.setXcoord(new_coords[0])
-            self.setYcoord(new_coords[1])
+        is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, destination_coords)
+        if is_enterable:
+            self.setXcoord(destination_coords[0])
+            self.setYcoord(destination_coords[1])
