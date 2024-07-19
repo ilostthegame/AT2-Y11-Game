@@ -1,5 +1,5 @@
 import pygame
-import random
+from random import shuffle
 from file_id_interpreter import FileIdInterpreter
 from sprites.active_entity import ActiveEntity
 from assets import GAME_ASSETS
@@ -10,31 +10,33 @@ from sprites.portal import Portal
 from sprites.npc import Npc
 from typing import Optional, Union
 from pathfinder import Pathfinder
+from attack import Attack
 from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
-
 
 class Enemy(ActiveEntity):
     """Class representing an enemy entity.
 
     Attributes:
         (Inherited)
-        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar.
+        surf (pygame.Surface): Pygame surface for the enemy, onto which 
+                               to blit the enemy image, weapon and healthbar.
             Size: 64 x 64, transparent.
-        image (pygame.Surface): Surface representing entity's sprite image. 
+        image (pygame.Surface): Surface representing enemy's sprite image. 
             Size: 32 x 48, transparent
-        name (str): Name of character
-        attack (int): Attack stat
+        name (str): Name of enemy
+        strength (int): Strength stat
         defence (int): Defence stat
         max_health (int): Maximum health stat
         health (int): Current health stat
         health_regen (int): How much health regenerates each turn
         weapon (Weapon): Currently held weapon
-        is_alive (bool): Whether entity's is alive: health above 0 or not
+        is_alive (bool): Whether entity is alive: health above 0 or not
         xcoord (int): X coordinate of entity in world
         ycoord (int): Y coordinate of entity in world
         healthbar (Healthbar): Healthbar of entity
 
-        movement_pattern (str): Represents the algorithm to be used for 
+        movement_pattern (str): Represents the algorithm used for movement.
+            In ['stationary', 'direct', TODO 'random']
         exp_yield (int): Represents how much exp is earned through defeating enemy
     """
 
@@ -47,14 +49,14 @@ class Enemy(ActiveEntity):
         attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/enemy_id.txt', enemy_id) 
         
         # Unpacking attribute_list, and creating additional enemy attributes
-        image_name, name, attack, defence, health, health_regen, weapon_id, movement_pattern, exp_yield = attribute_list 
-        attack, defence, health, health_regen, exp_yield = [int(i) for i in (attack, defence, health, health_regen, exp_yield)]
+        image_name, name, strength, defence, health, health_regen, weapon_id, movement_pattern, exp_yield = attribute_list 
+        strength, defence, health, health_regen, exp_yield = [int(i) for i in (strength, defence, health, health_regen, exp_yield)]
         weapon = Weapon(weapon_id, xcoord, ycoord)
         healthbar = Healthbar(health, health)
     
         # Initialising enemy object. Note that health variable is used for both max_health and health.
         super().__init__(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha(), # enemy image
-                         name, attack, defence, health, health, health_regen, weapon, True, xcoord, ycoord, healthbar)
+                         name, strength, defence, health, health, health_regen, weapon, True, xcoord, ycoord, healthbar)
         self.setMovementPattern(movement_pattern)
         self.setExpYield(exp_yield)
 
@@ -72,25 +74,40 @@ class Enemy(ActiveEntity):
 
     # Methods
     def action(self,
-               character_position: tuple[int, int],
-               enemy_group: pygame.sprite.Group,
-               npc_group: pygame.sprite.Group,
-               portal_group: pygame.sprite.Group, 
-               coords_to_tile: dict[tuple[int, int], Tile]) -> list[str]:
-        """
-        Runs a single turn's action for the enemy.
+               character,
+               coords_to_tile: dict[tuple[int, int], Tile]) -> Optional[list[str]]:
+        """Runs a single turn's action for the enemy.
+
+        Attempts to attack character. If all its attacks are out of range,
+        then moves towards character.
         Returns a list of game events done by the enemy.
         """
-        pass
-        # Get character's position
+        from sprites.character import Character
+        self_coords = (self.getXcoord(), self.getYcoord())
+        character_coords = (character.getXcoord(), character.getYcoord())
+        attacks = self.getShuffledAttacks() # randomised order attacks
+        # Checks whether any attack is in range.
+        # If so, perform the attack, and return its results.
+        obstructed_coords = getObstructedCoords(coords_to_tile, [Character,Enemy,Npc,Portal])
+        for attack in attacks:
+            if attack.isInRange(self_coords, character_coords, obstructed_coords):
+                events = self.useAttack(attack, character)
+                return events
+        # If no attack was in range, enemy does movement.
+        if self.getMovementPattern() == 'direct':
+            self.moveToCharacter(coords_to_tile, character_coords)
+        return None
 
-        # Get a list of inaccessible tiles (these can't be fired over either)
+    def getShuffledAttacks(self) -> list[Attack]:
+        """Returns a list containing enemy's attacks in random order"""
+        attack_list = self.getWeapon().getAttackList()
+        randomised_list = attack_list.copy()
+        shuffle(randomised_list)
+        return randomised_list
 
-        # Calculate whether character is in range of any attack in randomised order. If so, then do attack.
-        # Else, calculate potential movements based on movement pattern.
-
-
-    def moveToCharacter(self, coords_to_tile: dict[tuple[int, int], Tile]) -> None:
+    def moveToCharacter(self, 
+                        coords_to_tile: dict[tuple[int, int], Tile],
+                        character_coords: tuple[int, int]) -> None:
         """Main movement method to be called: moves enemy towards character.
 
         First attempts to find a path between enemy and character that doesn't pass through other enemies.
@@ -105,24 +122,16 @@ class Enemy(ActiveEntity):
 
         pathfinder = Pathfinder()
         self_coords = (self.getXcoord(), self.getYcoord())
-        character_coords = self.getCharacterCoords()
         # Finds path which doesn't pass through other enemies
-        path = pathfinder.findPath(coords_to_tile, [Character, Enemy, Npc, Portal], self_coords, character_coords)
+        path = pathfinder.findPath(coords_to_tile, [Character,Enemy,Npc,Portal], self_coords, character_coords)
         # If no such path, finds a path which can pass through other enemies
         if path == None:
-            path = pathfinder.findPath(coords_to_tile, [Character, Npc, Portal], self_coords, character_coords)
+            path = pathfinder.findPath(coords_to_tile, [Character,Npc,Portal], self_coords, character_coords)
         # If no path found still, raises an Exception.
         if path == None:
             raise Exception('Path cannot be found between enemy and player')
         else: 
             self.move(path[0], coords_to_tile)
-    
-    def getCharacterCoords(self, coords_to_tile) -> tuple[int, int]:
-        """Returns the coordinates of character."""
-        for coords, tile in coords_to_tile.items():
-            if tile.getOccupiedBy() == 'character':
-                return coords
-        raise Exception('No character exists')
     
     def move(self, 
              direction: str, 

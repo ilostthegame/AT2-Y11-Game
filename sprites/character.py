@@ -20,20 +20,20 @@ class Character(ActiveEntity):
             Size: 64 x 64, transparent.
         image (pygame.Surface): Surface representing entity's sprite image.
             Size: 32 x 48, transparent.
-        name (str): Name of character
-        attack (int): Attack stat
-        defence (int): Defence stat
-        max_health (int): Maximum health stat
-        health (int): Current health stat
-        health_regen (int): How much health regenerates each turn
-        weapon (Weapon): Currently held weapon
-        is_alive (bool): Whether entity's is alive: health above 0 or not
-        xcoord (int): X coordinate of entity in world
-        ycoord (int): Y coordinate of entity in world
-        healthbar (Healthbar): Healthbar of entity
+        name (str): Name of character.
+        strength (int): Strength stat.
+        defence (int): Defence stat.
+        max_health (int): Maximum health stat.
+        health (int): Current health stat.
+        health_regen (int): How much health regenerates each turn.
+        weapon (Weapon): Currently held weapon.
+        is_alive (bool): Whether entity is alive: health above 0 or not.
+        xcoord (int): X coordinate of entity in world.
+        ycoord (int): Y coordinate of entity in world.
+        healthbar (Healthbar): Healthbar of entity.
 
-        level (int): Current level of character
-        exp (int): Exp stat
+        level (int): Current level of character.
+        exp (int): Exp stat.
     """
     
     # Attributes
@@ -46,7 +46,7 @@ class Character(ActiveEntity):
                  image: pygame.Surface, 
                  name: str,
                  weapon_id: str, 
-                 attack: int = 25, 
+                 strength: int = 25, 
                  defence: int = 25, 
                  max_health: int = 100, 
                  health: int = 100, 
@@ -56,7 +56,7 @@ class Character(ActiveEntity):
                  ycoord: int = 0, 
                  level: int = 1, 
                  exp: int = 0):
-        super().__init__(image, name, attack, defence, max_health, health, health_regen, 
+        super().__init__(image, name, strength, defence, max_health, health, health_regen, 
                          Weapon(weapon_id, xcoord, ycoord),
                          is_alive, xcoord, ycoord, Healthbar(health, max_health)) 
         self.setLevel(level)
@@ -78,7 +78,7 @@ class Character(ActiveEntity):
     def handleAction(self, 
                      action: tuple[str, Any],
                      coords_to_tile: dict[tuple[int, int], Tile],
-                     num_enemies: int) -> Optional[list[str]] | bool:
+                     num_enemies: int) -> Optional[list[str]] | False:
         """Runs the character method for a given action.
 
         Returns the list of events caused if the action was valid.
@@ -99,7 +99,7 @@ class Character(ActiveEntity):
     def moveOrInteract(self,
                        direction: str, 
                        coords_to_tile: dict[tuple[int, int], Tile],
-                       num_enemies: int) -> Optional[list[str]] | None:
+                       num_enemies: int) -> Optional[list[str]] | False:
         """Attempts to move/interact in the specified direction.
 
         If the tile cannot be entered:
@@ -125,7 +125,7 @@ class Character(ActiveEntity):
         if not is_enterable:
             return False
         # If occupied by Npc, return its message.
-        elif type(occupying_entity) == Npc:
+        elif isinstance(occupying_entity) == Npc:
             message = f"{occupying_entity.getName()}: '{occupying_entity.getDialogue}'"
             return list(message)
         # If occupied by Portal, either move onto portal, or return error message.

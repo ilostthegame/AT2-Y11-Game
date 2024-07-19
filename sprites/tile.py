@@ -7,19 +7,22 @@ class Tile(pygame.sprite.Sprite):
     Class representing a tile sprite.
     
     Attributes:
-        surf (pygame.Surface): Size: 64 x 64
-        accessible (bool): Whether tile can be entered by an entity
+        name (str): Name of tile.
+        surf (pygame.Surface): Size: 64 x 64.
+        accessible (bool): Whether tile can be entered by an entity.
         occupied_by (Optional[Entity]]): The entity currently occupying the tile.
-        damage (int): How much damage an entity takes upon entering tile
+        damage (int): How much damage an entity takes upon entering tile.
     """
     # Attributes
+    __name = None
     __surf = None
     __accessible = None
     __occupied_by = None
     __damage = None
 
     # Constructor
-    def __init__(self, 
+    def __init__(self,
+                 name: str,
                  colour: tuple[int, int, int], 
                  accessible: bool,
                  occupied_by: Optional[Entity],
@@ -30,12 +33,15 @@ class Tile(pygame.sprite.Sprite):
         surf = pygame.Surface((64, 64))
         surf.fill((128, 128, 128)) # creates border
         pygame.draw.rect(surf, colour, (1, 1, 62, 62)) # Inner square of tile
+        self.setName(name)
         self.setSurf(surf)
         self.setAccessible(accessible)
         self.setOccupiedBy(occupied_by)
         self.setDamage(damage)
 
     # Getters
+    def getName(self):
+        return self.__name
     def getSurf(self):
         return self.__surf
     def getAccessible(self):
@@ -46,6 +52,8 @@ class Tile(pygame.sprite.Sprite):
         return self.__damage
 
     # Setters
+    def setName(self, name):
+        self.__name = name
     def setSurf(self, surf):
         self.__surf = surf
     def setAccessible(self, accessible):

@@ -177,7 +177,7 @@ class GameWorld(GameState):
         if character_caused_events != False:
             enemy_caused_events = self.handleEnemyActions()
             all_events = character_caused_events + enemy_caused_events
-            self.handleEndOfTurn()
+            self.handleEndOfTurn(all_events)
 
         self.setCharacter(character)
         return
@@ -194,21 +194,33 @@ class GameWorld(GameState):
             enemy_caused_events.extend([i for i in enemy.action()])
         return enemy_caused_events
 
-    def handleEndOfTurn(self) -> None:
+    def handleEndOfTurn(self, events: list[str]) -> None:
         """Handles all calculations at the end of a turn.
         
         - Updates how many enemies are still remaining.
+        - Regenerates all entities.
         - Computes tile damage for all entities currently on tile.
+            Adds game events representing tile damage taken.
         - If any portals have been activated, initialises the new level.
         - Sends all information to Sidebar's GameEventDisplay and DataDisplay.
         """
         coords_to_tile = self.getBoard().getCoordsToTile()
         self.setNumEnemies(len(self.getEnemyGroup()))
-        # Checking for tile damage
+        # Regenerating all entities
+        self.getCharacter.regenerate()
+        for enemy in self.getEnemyGroup():
+            enemy.regenerate()
+        # Checking for tile damage TODO move to a new method for readability.
         for tile in coords_to_tile.keys():
+            tile_damage = tile.getDamage()
             occupying_entity = tile.getOccupied()
-            if isinstance(occupying_entity, ActiveEntity) == True:
-                occupying_entity.takeDamage(tile.getDamage())
+            # Checks that tile damage is nonzero, and a Character/Enemy is in the tile.
+            if tile_damage != 0 and isinstance(occupying_entity, ActiveEntity) == True:
+                damage_taken = occupying_entity.takeDamage(tile_damage)
+                events.append(f'{occupying_entity.getName()} took 
+                                {damage_taken} from a {tile.getName()} tile!')
+                if not occupying_entity.getIsAlive():
+                    events.append(f'{occupying_entity} fainted!')
         # Checking for portal activation
         for portal in self.getPortalGroup():
             if portal.getIsActivated():

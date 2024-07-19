@@ -3,6 +3,9 @@ from pygame.locals import *
 from abc import ABC, abstractmethod
 from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
+from attack import Attack
+from random import randint
+from math import sqrt, ceil
 
 class ActiveEntity(pygame.sprite.Sprite, ABC):
     """Abstract class that represents 'active' (moving/battling) entities
@@ -13,7 +16,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         image (pygame.Surface): Surface representing entity's sprite image. 
             Size: 32 x 48, transparent
         name (str): Name of character
-        attack (int): Attack stat
+        strength (int): Strength stat
         defence (int): Defence stat
         max_health (int): Maximum health stat
         health (int): Current health stat
@@ -29,7 +32,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
     __surf = None 
     __image = None 
     __name = None
-    __attack = None
+    __strength = None
     __defence = None
     __max_health = None
     __health = None
@@ -44,7 +47,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
     def __init__(self, 
                  image: pygame.Surface, 
                  name: str, 
-                 attack: int, 
+                 strength: int, 
                  defence: int, 
                  max_health: int, 
                  health: int,
@@ -58,7 +61,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setSurf(pygame.Surface((64, 64), SRCALPHA))
         self.setImage(image)
         self.setName(name)
-        self.setAttack(attack)
+        self.setStrength(strength)
         self.setDefence(defence)
         self.setMaxHealth(max_health)
         self.setHealth(health)
@@ -80,8 +83,8 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         return self.__image
     def getName(self):
         return self.__name
-    def getAttack(self):
-        return self.__attack
+    def getStrength(self):
+        return self.__strength
     def getDefence(self):
         return self.__defence
     def getMaxHealth(self):
@@ -108,14 +111,26 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.__image = image
     def setName(self, name):
         self.__name = name
-    def setAttack(self, attack):
-        self.__attack = attack
+    def setStrength(self, strength):
+        self.__strength = strength
     def setDefence(self, defence):
         self.__defence = defence
     def setMaxHealth(self, max_health):
         self.__max_health = max_health
+
     def setHealth(self, health):
-        self.__health = health
+        """Sets health. Ensures 0 <= health <= max_health.
+        
+        If health == 0, sets is_alive to False.
+        """
+        if health < 0:
+            self.setHealth(0)
+            self.setIsAlive(False)
+        elif health > self.getMaxHealth():
+            self.setHealth(self.getMaxHealth())
+        else:
+            self.setHealth(health)
+
     def setHealthRegen(self, health_regen):
         self.__health_regen = health_regen
     def setWeapon(self, weapon):
@@ -129,7 +144,6 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
     def setHealthbar(self, healthbar):
         self.__healthbar = healthbar
         
-
     # Methods
     def updateSurf(self) -> None:
         """Blits the character image, healthbar and weapon onto the entity's Surface."""
@@ -147,5 +161,50 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.getHealthbar().setEntityHealth(self.getHealth())
         self.getHealthbar().updateSurf()
 
-    def takeDamage(self, damage):
-        pass
+    def useAttack(self, attack: Attack, target) -> list[str]:
+        """Runs an attack.
+
+        Returns a list of two/three strings representing:
+            - The user/name/target of the attack.
+            - The result of the attack.
+            - (Optional) that the target fainted.
+        NOTE: This method does not check if the target is in range.
+        Args:
+            attack (Attack): The attack being used.
+            target (ActiveEntity): The target of the attack.
+        """
+        power = attack.getPower()
+        accuracy = attack.getAccuracy()
+        acc_roll = randint(1, 100)
+        events = []
+        events.append(f'{self.getName()} used {attack.getName()} on {target.getName()}.')
+        if acc_roll <= accuracy:
+            raw_damage = self.calcRawDamage(power)
+            damage_taken = target.takeDamage(raw_damage)
+            events.append(f'{target.getName()} took {damage_taken} damage!')
+            if not target.getIsAlive():
+                events.append(f'{target.getName()} fainted!')
+        else:
+            events.append('The attack missed!')
+        return events
+
+    def calcRawDamage(self, power: int) -> int:
+        """Returns raw damage of an attack based on power and strength."""
+        strength = self.getStrength()
+        return int(sqrt(strength)/10 * power)
+
+    def takeDamage(self, damage: int) -> int:
+        """Takes damage based on damage of the attack, and defence.
+        
+        If dead, kill()'s self. 
+        Returns the damage taken."""
+        defence = self.getDefence()
+        damage_taken = ceil((0.99)**defence * damage)
+        self.setHealth(self.getHealth() - damage_taken)
+        if not self.getIsAlive():
+            self.kill()
+        return damage_taken
+    
+    def regenerate(self) -> None:
+        """Regenerates health based on health_regen"""
+        self.setHealth(self.getHealth() + self.getHealthRegen())

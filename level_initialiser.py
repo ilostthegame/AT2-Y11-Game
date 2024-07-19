@@ -93,11 +93,11 @@ class LevelInitialiser:
         # Creates Tile object depending on tile_type
         match tile_type:
             case 'grass':
-                tile = Tile((123, 245, 10), True, entity_type)
+                tile = Tile('grass', (123, 245, 10), True, entity_type)
             case 'wall':
-                tile = Tile((77, 77, 77), False, entity_type)
+                tile = Tile('wall', (77, 77, 77), False, entity_type)
             case 'lava':
-                tile = Tile((209, 23, 23), True, entity_type, 10)
+                tile = Tile('lava', (209, 23, 23), True, entity_type, 10)
             case _:
                 raise ValueError(f"Tile type ({tile_type}) is unknown.")
         coords_to_tile[(xcoord, ycoord)] = tile
