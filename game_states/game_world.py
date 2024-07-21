@@ -120,6 +120,7 @@ class GameWorld(GameState):
         self.updateSidebar(pygame_events, mouse_pos) # TODO fix
 
         # Blit sprites onto main_surf
+        # TODO update display of all entities.
         main_surf = self.getMainSurf()
         main_surf.fill((0, 0, 0))
         main_surf.blit(board.getSurf(), (0, 0))

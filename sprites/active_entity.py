@@ -6,14 +6,19 @@ from sprites.weapon import Weapon
 from attack import Attack
 from random import randint
 from math import sqrt, ceil, floor
+from entity import Entity
 
-class ActiveEntity(pygame.sprite.Sprite, ABC):
+class ActiveEntity(Entity, ABC):
     """Abstract class that represents 'active' (moving/battling) entities
 
     Attributes:
+        (Inherited)
         surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar
             Size: 64 x 64, transparent
-        image (pygame.Surface): Surface representing entity's sprite image. 
+        xcoord (int): X coordinate of entity in world
+        ycoord (int): Y coordinate of entity in world
+            
+        entity_image (pygame.Surface): Surface representing entity's sprite image. 
             Size: 32 x 48, transparent
         name (str): Name of character
         strength (int): Strength stat
@@ -23,14 +28,11 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         health_regen (int): How much health regenerates each turn
         weapon (Weapon): Currently held weapon
         is_alive (bool): Whether entity's is alive: health above 0 or not
-        xcoord (int): X coordinate of entity in world
-        ycoord (int): Y coordinate of entity in world
         healthbar (Healthbar): Healthbar of entity
     """
 
     # Attributes
-    __surf = None 
-    __image = None 
+    __entity_image = None 
     __name = None
     __strength = None
     __defence = None
@@ -39,13 +41,11 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
     __health_regen = None
     __weapon = None
     __is_alive = None
-    __xcoord = None
-    __ycoord  = None
     __healthbar = None
 
     # Constructor
     def __init__(self, 
-                 image: pygame.Surface, 
+                 entity_image: pygame.Surface, 
                  name: str, 
                  strength: int, 
                  defence: int, 
@@ -57,9 +57,8 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
                  xcoord: float, 
                  ycoord: float, 
                  healthbar: Healthbar):
-        super().__init__()
-        self.setSurf(pygame.Surface((64, 64), SRCALPHA))
-        self.setImage(image)
+        super().__init__(pygame.Surface((64, 64), SRCALPHA), xcoord, ycoord)
+        self.setEntityImage(entity_image)
         self.setName(name)
         self.setStrength(strength)
         self.setDefence(defence)
@@ -68,19 +67,14 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         self.setHealthRegen(health_regen)
         self.setWeapon(weapon)
         self.setIsAlive(is_alive)
-        self.setXcoord(xcoord)
-        self.setYcoord(ycoord)
         self.setHealthbar(healthbar)
-
         # Updates the display of entity surface.
         self.updateHealthbar()
         self.updateSurf()
 
     # Getters
-    def getSurf(self):
-        return self.__surf
-    def getImage(self):
-        return self.__image
+    def getEntityImage(self):
+        return self.__entity_image
     def getName(self):
         return self.__name
     def getStrength(self):
@@ -97,27 +91,10 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         return self.__weapon
     def getIsAlive(self):
         return self.__is_alive
-    def getXcoord(self):
-        return self.__xcoord
-    def getYcoord(self):
-        return self.__ycoord
     def getHealthbar(self):
         return self.__healthbar
 
     # Setters
-    def setSurf(self, surf):
-        self.__surf = surf
-    def setImage(self, image):
-        self.__image = image
-    def setName(self, name):
-        self.__name = name
-    def setStrength(self, strength):
-        self.__strength = strength
-    def setDefence(self, defence):
-        self.__defence = defence
-    def setMaxHealth(self, max_health):
-        self.__max_health = max_health
-
     def setHealth(self, health):
         """Sets health. Ensures 0 <= health <= max_health.
         
@@ -131,25 +108,31 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         else:
             self.__health = health
 
+    def setEntityImage(self, entity_image):
+        self.__entity_image = entity_image
+    def setName(self, name):
+        self.__name = name
+    def setStrength(self, strength):
+        self.__strength = strength
+    def setDefence(self, defence):
+        self.__defence = defence
+    def setMaxHealth(self, max_health):
+        self.__max_health = max_health
     def setHealthRegen(self, health_regen):
         self.__health_regen = health_regen
     def setWeapon(self, weapon):
         self.__weapon = weapon
     def setIsAlive(self, is_alive):
         self.__is_alive = is_alive
-    def setXcoord(self, xcoord):
-        self.__xcoord = xcoord
-    def setYcoord(self, ycoord):
-        self.__ycoord = ycoord
     def setHealthbar(self, healthbar):
         self.__healthbar = healthbar
         
     # Methods
     def updateSurf(self) -> None:
-        """Blits the character image, healthbar and weapon onto the entity's Surface."""
+        """Blits the entity_image, healthbar and weapon onto the entity's Surface."""
         surf = self.getSurf()
-        surf.fill((0,0,0,0))
-        surf.blit(self.getImage(), (0, 0))
+        surf.fill((0,0,0,0)) # Renders as transparent.
+        surf.blit(self.getEntityImage(), (0, 0))
         surf.blit(self.getHealthbar().getSurf(), (0, 48))
         surf.blit(self.getWeapon().getSurf(), (32, 0))
         self.setSurf(surf)
