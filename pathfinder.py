@@ -2,14 +2,13 @@ from typing import Optional
 from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
 from sprites.tile import Tile
 import pygame
-from sprites.entity import Entity
 
 class Pathfinder:
     """Class containing methods that facilitate a pathfinding algorithm."""
 
     def findPath(self,
                  coords_to_tile: dict[tuple[int, int], Tile],
-                 obstruction_entity_types: list[Entity],
+                 obstruction_entity_types: tuple[type],
                  starting_coords: tuple[int, int],
                  target_coords: tuple[int, int]) -> list[str]:
         """Main pathfinding method - finds path between starting_coords and target_coords.

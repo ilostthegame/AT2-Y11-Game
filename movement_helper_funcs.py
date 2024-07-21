@@ -5,11 +5,10 @@ Contains functions to facilitate ActiveEntity movement and pathfinding.
 # Imports
 import pygame
 from sprites.tile import Tile
-from sprites.entity import Entity
 
 # Functions
 def getObstructedCoords(coords_to_tile: dict[tuple[int, int], Tile],
-                        obstruction_entity_types: list[Entity]) -> list[tuple[int, int]]:
+                        obstruction_entity_types: tuple[type]) -> list[tuple[int, int]]:
     """Determines all obstructed coordinates in a board.
 
     A tile is obstructed if it is not accessible, or
@@ -19,7 +18,7 @@ def getObstructedCoords(coords_to_tile: dict[tuple[int, int], Tile],
     for coords, tile in coords_to_tile.items():
         if tile.getAccessible() == False:
             obstructed_coords.append(coords)
-        elif type(tile.getOccupiedBy()) in obstruction_entity_types:
+        elif isinstance(tile.getOccupiedBy(), obstruction_entity_types):
             obstructed_coords.append(coords)
     return obstructed_coords
 

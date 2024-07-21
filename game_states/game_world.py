@@ -191,7 +191,9 @@ class GameWorld(GameState):
         enemy_caused_events = list()
         # Does enemy action for each enemy, and adds events to enemy_caused_events
         for enemy in self.getEnemyGroup(): 
-            enemy_caused_events.extend([i for i in enemy.action()])
+            enemy_caused_events.extend(enemy.action())
+            # TODO check that character is alive at each of each iteration.
+            # if dead, run a game over screen.
         return enemy_caused_events
 
     def handleEndOfTurn(self, events: list[str]) -> None:
@@ -217,8 +219,8 @@ class GameWorld(GameState):
             # Checks that tile damage is nonzero, and a Character/Enemy is in the tile.
             if tile_damage != 0 and isinstance(occupying_entity, ActiveEntity) == True:
                 damage_taken = occupying_entity.takeDamage(tile_damage)
-                events.append(f'{occupying_entity.getName()} took 
-                                {damage_taken} from a {tile.getName()} tile!')
+                events.append(f"{occupying_entity.getName()} took"
+                              f"{damage_taken} from a {tile.getName()} tile!")
                 if not occupying_entity.getIsAlive():
                     events.append(f'{occupying_entity} fainted!')
         # Checking for portal activation
@@ -258,17 +260,11 @@ class GameWorld(GameState):
         """Initialises level contents based on level_name
         
         Sets the enemy/npc/portal sprite groups, Board, and num_enemies_remaining.
-        Gets the existing Character object and sets its coordinates.
         """
-        level_contents = LevelInitialiser().getLevelContents(self.getLevelName())
-        board, character_coords, enemy_group, npc_group, portal_group = level_contents
+        level_contents = LevelInitialiser().getLevelContents(self.getLevelName(), self.getCharacter())
+        board, enemy_group, npc_group, portal_group = level_contents
         self.setBoard(board)
         self.setEnemyGroup(enemy_group)
         self.setNpcGroup(npc_group)
         self.setPortalGroup(portal_group)
         self.setNumEnemies(len(enemy_group))
-        # Setting coords of Character.
-        character = self.getCharacter()
-        character.setXcoord(character_coords[0])
-        character.setYcoord(character_coords[1])
-        self.setCharacter(character)

@@ -6,7 +6,7 @@ from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
 from attack import Attack
 from typing import Any, Optional
-from tile import Tile
+from sprites.tile import Tile
 from sprites.npc import Npc
 from sprites.portal import Portal
 from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
@@ -120,7 +120,7 @@ class Character(ActiveEntity):
         occupying_entity = coords_to_tile[destination_coords].getOccupiedBy()
         # Checking whether the destination coordinates is either obstructed 
         # by a wall, by an enemy, or is not on the board.
-        obstructed_coords = getObstructedCoords(coords_to_tile, [Enemy, Character])
+        obstructed_coords = getObstructedCoords(coords_to_tile, (Enemy, Character))
         is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, destination_coords)
         if not is_enterable:
             return False

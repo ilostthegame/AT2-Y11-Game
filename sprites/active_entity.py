@@ -5,7 +5,7 @@ from sprites.healthbar import Healthbar
 from sprites.weapon import Weapon
 from attack import Attack
 from random import randint
-from math import sqrt, ceil
+from math import sqrt, ceil, floor
 
 class ActiveEntity(pygame.sprite.Sprite, ABC):
     """Abstract class that represents 'active' (moving/battling) entities
@@ -124,12 +124,12 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
         If health == 0, sets is_alive to False.
         """
         if health < 0:
-            self.setHealth(0)
+            self.__health = 0
             self.setIsAlive(False)
         elif health > self.getMaxHealth():
-            self.setHealth(self.getMaxHealth())
+            self.__health = self.getMaxHealth()
         else:
-            self.setHealth(health)
+            self.__health = health
 
     def setHealthRegen(self, health_regen):
         self.__health_regen = health_regen
@@ -191,7 +191,7 @@ class ActiveEntity(pygame.sprite.Sprite, ABC):
     def calcRawDamage(self, power: int) -> int:
         """Returns raw damage of an attack based on power and strength."""
         strength = self.getStrength()
-        return int(sqrt(strength)/10 * power)
+        return floor(sqrt(strength)/10 * power)
 
     def takeDamage(self, damage: int) -> int:
         """Takes damage based on damage of the attack, and defence.

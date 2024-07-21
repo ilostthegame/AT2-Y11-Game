@@ -82,13 +82,12 @@ class Enemy(ActiveEntity):
         then moves towards character.
         Returns a list of game events done by the enemy.
         """
-        from sprites.character import Character
         self_coords = (self.getXcoord(), self.getYcoord())
         character_coords = (character.getXcoord(), character.getYcoord())
         attacks = self.getShuffledAttacks() # randomised order attacks
         # Checks whether any attack is in range.
         # If so, perform the attack, and return its results.
-        obstructed_coords = getObstructedCoords(coords_to_tile, [Character,Enemy,Npc,Portal])
+        obstructed_coords = getObstructedCoords(coords_to_tile, (ActiveEntity,Npc,Portal))
         for attack in attacks:
             if attack.isInRange(self_coords, character_coords, obstructed_coords):
                 events = self.useAttack(attack, character)
@@ -140,7 +139,7 @@ class Enemy(ActiveEntity):
         current_coords = (self.getXcoord(), self.getYcoord())
         destination_coords = getDestinationCoords(current_coords, direction)
         # Checking whether the destination coordinates can be entered.
-        obstructed_coords = getObstructedCoords(coords_to_tile, ['enemy', 'character', 'npc', 'portal'])
+        obstructed_coords = getObstructedCoords(coords_to_tile, (ActiveEntity,Npc,Portal))
         is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, destination_coords)
         if is_enterable:
             self.setXcoord(destination_coords[0])

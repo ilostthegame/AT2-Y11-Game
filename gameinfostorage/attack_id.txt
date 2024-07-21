@@ -9,4 +9,4 @@ Template for attack object as below:
 !!Ch~Chop/50/50/1
 !!Ha~Hack/60/40/1
 
-!!Co~Corrode/200/100/5
+!!Co~Corrode/200/100/30
