@@ -7,10 +7,13 @@ Template for weapon object as below:
 
 Character weapons:
 !!Sw~sword/Sword/Sl/Ch/Ha
-!!Mc~mace/Mace
-!!Cl~club/Club
+!!Mc~mace/Mace/
+!!Cl~club/Club/
 
 Music centre:
-!!Vi~violin/Violin
+!!VI~violin/Violin/
+!!Vi~viola/Viola/
+!!Ce~cello/Cello/
+!!Db~double_bass/Double Bass/
 
 !!WC~whiteboard_cleaner/Whiteboard Cleaner/Co
