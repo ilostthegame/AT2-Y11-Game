@@ -1,17 +1,20 @@
 import pygame
 from pygame.locals import MOUSEBUTTONDOWN, KEYDOWN
+from typing import Optional
 
 class ButtonOutputGetter:
-    """Class containing method that gets button outputs in an iteration of game loop."""
+    """Class containing method that gets button outputs in a frame (iteration of game loop)."""
 
     # Methods
     def getOutputs(self, 
                    button_group: pygame.sprite.Group, 
                    pygame_events: list[pygame.event.Event], 
-                   mouse_pos: tuple[int, int]) -> list[str]:
-        """
-        Finds all buttons in button_group that were activated.
-        Returns a list containing all button outputs.
+                   mouse_pos: tuple[int, int]) -> list[Optional[str]]:
+        """Returns a list containing all button outputs, for buttons that were activated.
+        
+        NOTE: It is possible for the user to press multiple buttons in a single frame.
+        To account for this in a situation where only a single button press should
+        be interpreted, access only the first item of the returned list.
         """
         button_outputs = list()
 

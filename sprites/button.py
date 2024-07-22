@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from typing import Optional
+from typing import Any
 
 class Button(pygame.sprite.Sprite):
     """Class that represents a GUI button
@@ -31,8 +32,8 @@ class Button(pygame.sprite.Sprite):
                 surf: pygame.Surface, 
                 text: str,
                 font_size: int,
-                colour: tuple[int, int, int], 
-                output: str, 
+                colour: tuple[int, int, int] | str, 
+                output: Any, 
                 centre_coords: tuple[int, int], 
                 connected_key: Optional[str] = None):
         super().__init__()
