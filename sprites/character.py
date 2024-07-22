@@ -9,6 +9,7 @@ from typing import Any, Optional
 from sprites.tile import Tile
 from sprites.npc import Npc
 from sprites.portal import Portal
+from sprites.entity import Entity
 from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
 
 class Character(ActiveEntity):
@@ -34,11 +35,15 @@ class Character(ActiveEntity):
 
         level (int): Current level of character.
         exp (int): Exp stat.
+        selected_attack (Optional[Attack])
+        enemies_in_range (list[Optional[Enemy]])
     """
     
     # Attributes
     __level = None
     __exp = None
+    __selected_attack = None
+    __enemies_in_range = None
 
     # Constructor
     def __init__(self,  # TODO all of this stuff should not be optional arguments. 
@@ -61,66 +66,48 @@ class Character(ActiveEntity):
                          is_alive, xcoord, ycoord, Healthbar(health, max_health)) 
         self.setLevel(level)
         self.setExp(exp)
+        self.setSelectedAttack(None)
+        self.setEnemiesInRange([])
 
     # Getters
     def getLevel(self):
         return self.__level
     def getExp(self):
         return self.__exp
+    def getSelectedAttack(self):
+        return self.__selected_attack
+    def getEnemiesInRange(self):
+        return self.__enemies_in_range
     
     # Setters
-    def setLevel(self, level):
-        self.__level = level
-    def setExp(self, exp):
-        self.__exp = exp
+    def setSelectedAttack(self, selected_attack):
+        self.__selected_attack = selected_attack
+    def setEnemiesInRange(self, enemies_in_range):
+        self.__enemies_in_range= enemies_in_range
 
-    # Methods
-    def handleAction(self, 
-                     action: tuple[str, Any],
-                     coords_to_tile: dict[tuple[int, int], Tile],
-                     num_enemies: int) -> Optional[list[str]] | False:
-        """Runs the character method for a given action.
-
-        Returns the list of events caused if the action was valid.
-        Else returns False if the action was invalid.
-        """
-        action_type = action[0]
-        action_arg = action[1]
-        # Determines and runs the corresponding character method.
-        match action_type:
-            case 'move':
-                character_caused_events = self.move(action_arg, coords_to_tile, num_enemies)
-            case 'attack':
-                character_caused_events = self.attack(action_arg)
-            case _:
-                raise ValueError(f'Action ({action_type}) does not exist.')
-        return character_caused_events
-    
     def moveOrInteract(self,
                        direction: str, 
                        coords_to_tile: dict[tuple[int, int], Tile],
-                       num_enemies: int) -> Optional[list[str]] | False:
+                       num_enemies: int) -> Optional[str] | False:
         """Attempts to move/interact in the specified direction.
 
         If the tile cannot be entered:
             Return False.
         If the tile contains an Npc:
-            Return a list containing the Npc's message.
+            Returns the Npc's message.
         If the tile contains a Portal:
             If num_enemies == 0, set the portal's is_activated to True. 
-                Return a list containing a success message.
-            Else, return a list containing an error message.
+                Return a success message.
+            Else, return an error message.
         If the tile is completely unoccupied:
             Move to the tile. Returns None
         """
-        from enemy import Enemy
-
         current_coords = (self.getXcoord(), self.getYcoord())
         destination_coords = getDestinationCoords(current_coords, direction)
         occupying_entity = coords_to_tile[destination_coords].getOccupiedBy()
         # Checking whether the destination coordinates is either obstructed 
         # by a wall, by an enemy, or is not on the board.
-        obstructed_coords = getObstructedCoords(coords_to_tile, (Enemy, Character))
+        obstructed_coords = getObstructedCoords(coords_to_tile, (ActiveEntity))
         is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, destination_coords)
         if not is_enterable:
             return False
@@ -134,30 +121,40 @@ class Character(ActiveEntity):
                 occupying_entity.setIsActivated(True)
                 return list("You entered the portal! You feel yourself being teleported.")
             else:
-                return list("You cannot enter a portal while there are still enemies remaining.")
+                return list("You try to enter the portal, but there are still enemies remaining.")
         # Tile is unobstructed and has no entities.
         else:
             self.setXcoord(destination_coords[0])
             self.setYcoord(destination_coords[1])
             return None
 
-    def attack(self, target): # TODO
+    def attack(self, enemy) -> Optional[list[str]] | False:
+        """If enemy is in range, attacks them.
+        
+        Returns a list of events if the enemy was in range.
+        Else if enemy not in range, returns False.
         """
-        Given a target within the list of enemies_in_range (or something), attacks it
+        if enemy in self.getEnemiesInRange():
+            events = self.useAttack(self.getSelectedAttack(), enemy)
+        else:
+            events = False
+        return events
 
-        Returns a list containing two game events, representing the kind of attack used
-        and how much damage was dealt/move missed.
-        """
-        pass
+    def calcEnemiesInRange(self, 
+                           coords_to_tile: dict[tuple[int, int], Tile],
+                           enemy_group: pygame.sprite.Group) -> list:
+        """Returns a list of all enemies in range of selected attack."""
+        enemies_in_range = []
+        self_coords = (self.getXcoord(), self.getYcoord())
+        selected_attack = self.getSelectedAttack()
+        obstructed_coords = getObstructedCoords(coords_to_tile, Entity)
+        for enemy in enemy_group:
+            enemy_coords = (enemy.getXcoord(), enemy.getYcoord())
+            if selected_attack.isInRange(self_coords, enemy_coords, obstructed_coords):
+                enemies_in_range.append(enemy)
+        return enemies_in_range
 
-    def tilesInRange(self, attack, tile_group, all_entities): # TODO probably move to attack class
-        """
-        Returns a list of all tiles in range of attack.
-        Takes the attack used, and the groups of tiles and all entities as arguments. 
-        """
-        pass
-
-    def gainExp(self, exp):
+    def gainExp(self, exp): # TODO make this have game event
         """
         Increases character's exp, and increases levels accordingly. Subtracts used exp.
         Runs stat increase method based on levels gained.
@@ -175,7 +172,6 @@ class Character(ActiveEntity):
         # Update attack/defence and if levelled up, prints levelup info.
         level_increase = self.updateStats(original_level)
         # TODO
-
 
     def updateStats(self, original_level):
         """Updates attack, defence based on change in level.

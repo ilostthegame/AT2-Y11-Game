@@ -20,7 +20,7 @@ class ActiveEntity(Entity, ABC):
             
         entity_image (pygame.Surface): Surface representing entity's sprite image. 
             Size: 32 x 48, transparent
-        name (str): Name of character
+        name (str): Name of entity
         strength (int): Strength stat
         defence (int): Defence stat
         max_health (int): Maximum health stat
