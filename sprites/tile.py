@@ -28,11 +28,8 @@ class Tile(pygame.sprite.Sprite):
                  occupied_by: Optional[Entity],
                  damage: int = 0):
         super().__init__()
-
-        # Creates tile surface with grey border
         surf = pygame.Surface((64, 64))
-        surf.fill((128, 128, 128)) # creates border
-        pygame.draw.rect(surf, colour, (1, 1, 62, 62)) # Inner square of tile
+        pygame.draw.rect(surf, colour, (0, 0, 64, 64)) 
         self.setName(name)
         self.setSurf(surf)
         self.setAccessible(accessible)

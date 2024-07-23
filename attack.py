@@ -66,7 +66,6 @@ class Attack:
             return False
         # Checks if any tiles between origin and target are obstructed.
         intersected_coords = self.getBetweenCoords(origin_coords, target_coords)
-        print(intersected_coords) # TODO remove Debugging
         for coords in intersected_coords:
             if coords in obstructed_coords:
                 return False
