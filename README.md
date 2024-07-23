@@ -1,7 +1,7 @@
 # King's Quest
 Welcome to "King's Quest," a realm of fantasy and adventure where heroes rise to face formidable challenges and seek untold treasures. In this immersive project, you'll step into the shoes of a budding game developer tasked with bringing to life an epic quest set in a mystical kingdom. Legends speak of an ancient relic, the "Crystal of Eternal Light," lost to the annals of time. As aspiring developers, your mission is to create a captivating 2D role-playing game (RPG) that chronicles the journey of a courageous hero on a quest to recover this legendary artifact.
 
-You must venture through five worlds: the Turning Centre, Music Centre, South Block, Foxwell's Fortress and Ianni's Isle. In each, you will collect items that will aid you further in your quest.
+You must venture through four worlds: the Turning Centre, Music Centre, South Block and Ianni's Isle. In each, you will collect items that will aid you further in your quest.
 
 # Guide
 ## Controls
