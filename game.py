@@ -4,6 +4,7 @@ from game_states.game_world import GameWorld
 from game_states.game_menu import GameMenu
 from game_states.world_init import WorldInit
 from game_states.world_load import WorldLoad
+from game_states.game_over import GameOver
 from assets import load_assets, GAME_ASSETS
 from pygame.locals import *
 from sprites.character import Character
@@ -14,8 +15,7 @@ load_assets()
 
 # Constants
 class Game:
-    """
-    A class representing the game. Contains game main loop.
+    """A class representing the game. Contains game main loop.
 
     Attributes:
         screen (pygame.Surface): Display on which all objects are sent. Size: 1200 x 768
@@ -23,23 +23,6 @@ class Game:
             in ['title_screen', 'world_init', 'world_load', 'game_world', 'game_menu', 'quit']
         is_running (bool): Whether game loop is to continue iteration.
         clock (pygame.time.Clock): Clock to track framerate
-
-        Game States:
-        title_screen (TitleScreen)
-        game_world (GameWorld)
-        game_menu (GameMenu)
-        
-    Methods:
-        run(self) -> None: 
-            Runs the game main loop
-        runTitleScreen(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
-            If state == 'title_screen', runs title screen
-        runGameWorld(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
-            If state == 'game_world', runs game world
-        runGameMenu(self) -> pygame.sprite.Group:
-            If state == 'game_menu, runs game menu
-        handleCleanup(self) -> None: 
-            To run when game loop is exited. Quits pygame. TODO save system.
     """
 
     # Attributes
@@ -50,6 +33,7 @@ class Game:
     __title_screen = None
     __game_world = None
     __game_menu = None
+    __game_over = None
 
     # Constructor
     def __init__(self, 
@@ -61,6 +45,7 @@ class Game:
         self.setClock(pygame.time.Clock())
         self.setTitleScreen(TitleScreen())
         self.setGameMenu('placeholder')
+        self.setGameOver(GameOver())
 
         # Temporary GameWorld initialisation. Can edit character's stuff here for testing.
         character = Character(pygame.image.load(GAME_ASSETS['blue_orb']).convert_alpha(), 'Bob', 'Sw')
@@ -83,6 +68,8 @@ class Game:
         return self.__game_world
     def getGameMenu(self):
         return self.__game_menu
+    def getGameOver(self):
+        return self.__game_over
 
     # Setters
     def setScreen(self, screen):
@@ -99,11 +86,13 @@ class Game:
         self.__game_world = game_world
     def setGameMenu(self, game_menu):
         self.__game_menu = game_menu
+    def setGameOver(self, game_over):
+        self.__game_over = game_over
 
     # Methods
-    def run(self) -> None:
+    def runMainLoop(self) -> None:
         """
-        Runs the game loop
+        Runs the main game loop
         """
         while self.getIsRunning() == True:
             pygame_events = pygame.event.get()
@@ -127,6 +116,8 @@ class Game:
                     main_surf = self.runGameWorld(pygame_events, mouse_pos)
                 case 'game_menu':
                     main_surf = self.runGameMenu() 
+                case 'game_over':
+                    main_surf = self.runGameOver()
                 case 'quit':
                     self.setIsRunning(False)
                 case _:
@@ -143,7 +134,7 @@ class Game:
         self.handleCleanup() # Runs cleanup, TODO save game.
 
 
-    def runTitleScreen(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
+    def runTitleScreen(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.Surface:
         """
         To run if state == 'title_screen'. Runs TitleScreen class.
         Returns sprite group containing all sprites associated with TitleScreen state.
@@ -162,31 +153,34 @@ class Game:
     def runWorldLoad(self):
         pass
 
-    def runGameWorld(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.sprite.Group:
+    def runGameWorld(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.Surface:
         """
         To run if state == 'game_world'. Runs GameWorld class.
         Returns sprite group containing all sprites associated with GameWorld state.
         """
         game_world = self.getGameWorld()
-        
         next_state = game_world.run(pygame_events, mouse_pos)
         main_surf = game_world.getMainSurf()
 
         self.setGameWorld(game_world)
-        self.setState(next_state) # no problems here I think
+        self.setState(next_state)
         return main_surf
-        
 
-    def runGameMenu(self) -> pygame.sprite.Group:
+    def runGameMenu(self) -> pygame.Surface:
         """
         TODO
         """
         pass
     
+    def runGameOver(self, pygame_events) -> pygame.Surface:
+        """Run method for GameOver"""
+        game_over_state = self.getGameOver()
+        next_state = game_over_state.run(pygame_events)
+        main_surf = game_over_state.getMainSurf()
+        self.setState(next_state)
+        return main_surf
 
     def handleCleanup(self) -> None:
-        """
-        To run when game loop is exited. Quits pygame. TODO save system.
-        """
+        """To run when game loop is exited. Quits pygame. TODO save system."""
         pygame.quit()
 

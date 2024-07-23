@@ -33,14 +33,36 @@ while run == True:
     # Event handler for QUIT
     screen.fill((255, 255, 255))
     for event in pygame.event.get(): 
-        if event.type == QUIT:
-            run = False
+        if event.type == KEYDOWN:
+            print(event.unicode)
 
-    screen.blit(text, x)
     pygame.display.flip()
     
+
+# run = True
+# pygame.init()
+
+
+# screen = pygame.display.set_mode((500,500))
+# font = pygame.font.SysFont('Arial Narrow', 30)
+# x=pygame.Surface((100, 100))
+
+# text = font.render('the quick brown fox jumped over the lazy dog', True, (0,0,0))
+# x = text.get_rect()
+# x.topleft = (10,100)
+
+# while run == True:
+#     # Event handler for QUIT
+#     screen.fill((255, 255, 255))
+#     for event in pygame.event.get(): 
+#         if event.type == QUIT:
+#             run = False
+
+#     screen.blit(text, x)
+#     pygame.display.flip()
+    
                     
-pygame.quit()
+# pygame.quit()
 
 # ### GAME RUNNING STUFF
 

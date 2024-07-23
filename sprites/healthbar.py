@@ -2,16 +2,12 @@ import pygame
 
 class Healthbar(pygame.sprite.Sprite):
     """
-    Class representing a healthbar sprite
+    Class representing a healthbar sprite.
 
     Attributes:
         surf (pygame.Surface): Represents the surface of the healthbar. Size: 64 x 16
         entity_health (int)
         entity_max_health (int)
-
-    Methods: 
-        updateSurf(self) -> None: 
-            Updates the health indicator of healthbar - to be called whenever entity health or max_health updates
     """
 
     # Attributes
@@ -44,7 +40,8 @@ class Healthbar(pygame.sprite.Sprite):
 
     def updateSurf(self) -> None:
         """
-        Updates the health indicator of healthbar - to be called whenever entity health or max_health updates
+        Updates the health indicator of healthbar.
+        To be called whenever entity health or max_health updates
         """
         surf = self.getSurf()
         length = int(self.getEntityHealth()/self.getEntityMaxHealth() * 62) # calculates length of healthbar to be filled based on percent.

@@ -3,10 +3,10 @@ Double exclamation mark (!!) marks the ID of attack, e.g. !!00
 ID is separated from attack object information by tilde (~)
 Attack object information is found on same line, separated by forward slashes (/)
 Template for attack object as below:
-!!{ID}~{name}/{power}/{accuracy}/{range}/{cooldown}
+!!{ID}~{name}/{power}/{accuracy}/{range}
 
-!!Sl~Slash/30/80/1/0
-!!Ch~Chop/50/50/1/0
-!!Ha~Hack/60/40/1/1
+!!Sl~Slash/30/80/1
+!!Ch~Chop/50/50/1
+!!Ha~Hack/60/40/1
 
-!!Co~Corrode/200/100/5/0
+!!Co~Corrode/200/100/30
