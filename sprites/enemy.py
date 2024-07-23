@@ -30,7 +30,6 @@ class Enemy(ActiveEntity):
         defence (int): Defence stat
         max_health (int): Maximum health stat
         health (int): Current health stat
-        health_regen (int): How much health regenerates each turn
         weapon (Weapon): Currently held weapon
         is_alive (bool): Whether entity is alive: health above 0 or not
         xcoord (int): X coordinate of entity in world
@@ -51,14 +50,14 @@ class Enemy(ActiveEntity):
         attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/enemy_id.txt', enemy_id) 
         
         # Unpacking attribute_list, and creating additional enemy attributes
-        image_name, name, strength, defence, health, health_regen, weapon_id, movement_pattern, exp_yield = attribute_list 
-        strength, defence, health, health_regen, exp_yield = [int(i) for i in (strength, defence, health, health_regen, exp_yield)]
+        image_name, name, strength, defence, health, weapon_id, movement_pattern, exp_yield = attribute_list 
+        strength, defence, health, exp_yield = [int(i) for i in (strength, defence, health, exp_yield)]
         weapon = Weapon(weapon_id, xcoord, ycoord)
         healthbar = Healthbar(health, health)
     
         # Initialising enemy object. Note that health variable is used for both max_health and health.
         super().__init__(pygame.image.load(GAME_ASSETS[image_name]).convert_alpha(), # enemy image
-                         name, strength, defence, health, health, health_regen, weapon, True, xcoord, ycoord, healthbar)
+                         name, strength, defence, health, health, weapon, True, xcoord, ycoord, healthbar)
         self.setMovementPattern(movement_pattern)
         self.setExpYield(exp_yield)
 

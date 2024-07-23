@@ -28,7 +28,7 @@ class Character(ActiveEntity):
         defence (int): Defence stat.
         max_health (int): Maximum health stat.
         health (int): Current health stat.
-        health_regen (int): How much health regenerates each turn.
+        
         weapon (Weapon): Currently held weapon.
         is_alive (bool): Whether entity is alive: health above 0 or not.
         xcoord (int): X coordinate of entity in world.
@@ -40,6 +40,7 @@ class Character(ActiveEntity):
         selected_attack (Optional[Attack]): The currently selected attack
         enemies_in_range (list[Optional[Enemy]]): The list of enemies in range
             of the currently selected attack (empty when no attack selected).
+        health_regen (int): How much health regenerates each turn.
     """
     
     # Attributes
@@ -47,6 +48,7 @@ class Character(ActiveEntity):
     __exp = None
     __selected_attack = None
     __enemies_in_range = None
+    __health_regen = None
 
     # Constructor
     def __init__(self,  # TODO all of this stuff should not be optional arguments. 
@@ -58,19 +60,20 @@ class Character(ActiveEntity):
                  defence: int = 25, 
                  max_health: int = 100000, 
                  health: int = 100000, 
-                 health_regen: int = 10000,
                  is_alive: bool = True, 
                  xcoord: int = 0, 
                  ycoord: int = 0, 
                  level: int = 1, 
-                 exp: int = 0):
-        super().__init__(image, name, strength, defence, max_health, health, health_regen, 
+                 exp: int = 0,
+                 health_regen: int = 10000):
+        super().__init__(image, name, strength, defence, max_health, health,
                          Weapon(weapon_id, xcoord, ycoord),
                          is_alive, xcoord, ycoord, Healthbar(health, max_health)) 
         self.setLevel(level)
         self.setExp(exp)
         self.setSelectedAttack(None)
         self.setEnemiesInRange([])
+        self.setHealthRegen(health_regen)
 
     # Getters
     def getLevel(self) -> int:
@@ -81,6 +84,8 @@ class Character(ActiveEntity):
         return self.__selected_attack
     def getEnemiesInRange(self):
         return self.__enemies_in_range
+    def getHealthRegen(self):
+        return self.__health_regen
     
     # Setters
     def setLevel(self, level):
@@ -90,7 +95,9 @@ class Character(ActiveEntity):
     def setSelectedAttack(self, selected_attack):
         self.__selected_attack = selected_attack
     def setEnemiesInRange(self, enemies_in_range):
-        self.__enemies_in_range= enemies_in_range
+        self.__enemies_in_range = enemies_in_range
+    def setHealthRegen(self, health_regen):
+        self.__health_regen = health_regen
 
     def moveOrInteract(self,
                        direction: str, 
@@ -202,3 +209,7 @@ class Character(ActiveEntity):
         Calculates total required exp to get to next level
         """ 
         return int(100 * (1.5 ** (self.getLevel())))  # Current formula TODO change: 100 * 1.5^level.
+    
+    def regenerate(self) -> None:
+        """Regenerates health based on health_regen"""
+        self.setHealth(self.getHealth() + self.getHealthRegen())

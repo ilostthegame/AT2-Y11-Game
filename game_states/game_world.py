@@ -247,7 +247,7 @@ class GameWorld(GameState):
         - Checks for all character/entity alive status.
             If character is dead, sets internal_state to 'game_over.
             If any enemy is dead, kill()s it.
-        - Regenerates all entities.
+        - Regenerates character
         - Updates the number of remaining enemies.
         - If any portals have been activated, initialises the new level.
         - Sends all information to Sidebar's GameEventDisplay and DataDisplay.
@@ -265,12 +265,8 @@ class GameWorld(GameState):
         # Checking for alive status of character.
         if not character.getIsAlive():
             self.setInternalState('game_over')
-        # Regenerating all entities.
-        self.getCharacter().regenerate()
-        for enemy in self.getEnemyGroup():
-            enemy.regenerate()
-        # Setting number of enemies.
-        self.setNumEnemies(len(self.getEnemyGroup()))
+        character.regenerate() # Regenerating character.
+        self.setNumEnemies(len(self.getEnemyGroup())) # Setting number of enemies.
         # Checking for portal activation.
         for portal in self.getPortalGroup():
             if portal.getIsActivated():

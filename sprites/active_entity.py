@@ -26,7 +26,6 @@ class ActiveEntity(Entity, ABC):
         defence (int): Defence stat
         max_health (int): Maximum health stat
         health (int): Current health stat
-        health_regen (int): How much health regenerates each turn
         weapon (Weapon): Currently held weapon
         is_alive (bool): Whether entity's is alive: health above 0 or not
         healthbar (Healthbar): Healthbar of entity
@@ -39,7 +38,6 @@ class ActiveEntity(Entity, ABC):
     __defence = None
     __max_health = None
     __health = None
-    __health_regen = None
     __weapon = None
     __is_alive = None
     __healthbar = None
@@ -52,7 +50,6 @@ class ActiveEntity(Entity, ABC):
                  defence: int, 
                  max_health: int, 
                  health: int,
-                 health_regen: int, 
                  weapon: Weapon, 
                  is_alive: bool, 
                  xcoord: float, 
@@ -65,7 +62,6 @@ class ActiveEntity(Entity, ABC):
         self.setDefence(defence)
         self.setMaxHealth(max_health)
         self.setHealth(health)
-        self.setHealthRegen(health_regen)
         self.setWeapon(weapon)
         self.setIsAlive(is_alive)
         self.setHealthbar(healthbar)
@@ -86,8 +82,6 @@ class ActiveEntity(Entity, ABC):
         return self.__max_health
     def getHealth(self) -> int:
         return self.__health
-    def getHealthRegen(self) -> int:
-        return self.__health_regen
     def getWeapon(self) -> Weapon:
         return self.__weapon
     def getIsAlive(self) -> bool:
@@ -119,8 +113,6 @@ class ActiveEntity(Entity, ABC):
         self.__defence = defence
     def setMaxHealth(self, max_health):
         self.__max_health = max_health
-    def setHealthRegen(self, health_regen):
-        self.__health_regen = health_regen
     def setWeapon(self, weapon):
         self.__weapon = weapon
     def setIsAlive(self, is_alive):
@@ -188,7 +180,3 @@ class ActiveEntity(Entity, ABC):
         damage_taken = ceil((0.99)**defence * damage)
         self.setHealth(self.getHealth() - damage_taken)
         return damage_taken
-    
-    def regenerate(self) -> None:
-        """Regenerates health based on health_regen"""
-        self.setHealth(self.getHealth() + self.getHealthRegen())
