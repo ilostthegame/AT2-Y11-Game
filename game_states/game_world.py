@@ -54,8 +54,10 @@ class GameWorld(GameState):
         self.setLevelName(level_name)
         self.setCharacter(character)
         self.initialiseLevel()
-        self.setSidebar(Sidebar(self.getCharacter().getWeapon().getAttackList()))
         self.setInternalState('main')
+        self.setSidebar(Sidebar(self.getCharacter().getWeapon().getAttackList()))
+        self.updateSidebarInfo(list())
+        self.updateDisplay()
 
     # Getters
     def getSidebar(self) -> Sidebar:
@@ -193,13 +195,16 @@ class GameWorld(GameState):
         character_caused_events = character.attack(target)
         # If attack was valid, carries out rest of turn.
         if character_caused_events != False:
-            # Checks if character killed enemy.
+            all_events = []
+            all_events.extend(character_caused_events)
+            # Checks if character killed enemy. 
             if not target.getIsAlive():
                 self.removeEnemy(target)
-                character.gainExp(target.getExpYield()) # TODO make this return events
+                level_up_events = character.gainExp(target.getExpYield()) 
+                all_events.extend(level_up_events)
             self.handleAttackDeselection()
             enemy_caused_events = self.doEnemyActions()
-            all_events = character_caused_events + enemy_caused_events
+            all_events.extend(enemy_caused_events)
             self.handleEndOfTurn(all_events)
         return
     

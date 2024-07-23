@@ -173,42 +173,44 @@ class Character(ActiveEntity):
                 enemies_in_range.append(enemy)
         self.setEnemiesInRange(enemies_in_range)
 
-    def gainExp(self, exp): # TODO make this have game event
-        """
-        Increases character's exp, and increases levels accordingly. Subtracts used exp.
-        Runs stat increase method based on levels gained.
+    def gainExp(self, exp) -> list[Optional[str]]:
+        """Increases exp, and levels up if possible.
+
+        Runs updateStats() for each level up.
+        Returns a list of strings representing game events for level ups.
         """
         original_level = self.getLevel()
         self.setExp(self.getExp() + exp)
-        required_exp = self.calcRequiredExp() # Calculate exp required for next level
-
-        # Level up character while character has enough exp to level up and is below the level cap (50).
-        while self.getExp() >= required_exp and self.getLevel() < 50:
+        required_exp = self.calcRequiredExp()
+        events = []
+        # Level up character while character has enough exp to level up.
+        while self.getExp() >= required_exp:
             self.setLevel(self.getLevel() + 1)
-            self.setExp(self.getExp() - required_exp) # subtract used exps.
-            required_exp = self.calcRequiredExp() # Re-calculate exp required for next level
+            hp_incr, str_incr, def_incr = self.updateStats() # TODO TODO TODO make it so when enemy dies to lava 
+            # character will also gain exp.
+            events.append(f"Level up! +{hp_incr} Health! +{str_incr} Strength! "
+                          f"+{def_incr} Defence!")
+            self.setExp(self.getExp() - required_exp) # Subtract used exp.
+            required_exp = self.calcRequiredExp() # Recalculate exp for next level.
+        return events
 
-        # Update attack/defence and if levelled up, prints levelup info.
-        level_increase = self.updateStats(original_level)
-        # TODO
+    def updateStats(self) -> tuple[int, int, int]:
+        """Updates max_health/health, attack, defence upon level up.
 
-    def updateStats(self, original_level):
-        """Updates attack, defence based on change in level.
-
-        Returns tuple (level_increase, attack_increase, defence_increase)
+        Returns tuple (max_health_increase, strength_increase, defence_increase).
         """
-        level_increase = self.getLevel() - original_level
-        attack_increase = level_increase * 2
-        defence_increase = level_increase * 2
-        self.setStrength(self.getStrength() + attack_increase)
+        health_increase = 20
+        strength_increase = 5
+        defence_increase = 5
+        self.setMaxHealth(self.getMaxHealth() + health_increase)
+        self.setHealth(self.getHealth() + health_increase)
+        self.setStrength(self.getStrength() + strength_increase)
         self.setDefence(self.getDefence() + defence_increase)
-        return (level_increase, attack_increase, defence_increase)
+        return (health_increase, strength_increase, defence_increase)
 
     def calcRequiredExp(self):
-        """
-        Calculates total required exp to get to next level
-        """ 
-        return int(100 * (1.5 ** (self.getLevel())))  # Current formula TODO change: 100 * 1.5^level.
+        """Calculates total required exp to get to next level.""" 
+        return int(10 * self.getLevel() ** 2) # TODO change formula - need one that is flatter at the start.
     
     def regenerate(self) -> None:
         """Regenerates health based on health_regen"""
