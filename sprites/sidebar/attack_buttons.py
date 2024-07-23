@@ -71,11 +71,11 @@ class AttackButtons(pygame.sprite.Sprite):
         """Creates all buttons in attack_button_group."""
         attack_button_group = pygame.sprite.Group()
         # Dictionary that relates attack index to position of button.
-        attack_id_to_button_pos = {0: (108, 61), 1: (324, 61), 2: (108, 183), 3: (324, 183)} 
+        attack_id_to_button_pos = {0: (216, 60), 1: (216, 110), 2: (216, 160), 3: (216, 210)} 
         # Creating buttons for each attack.
         for id, attack in enumerate(attack_list):
             if id <= 3:
-                button = Button(pygame.Surface((180, 100)), attack.getName(), 32, (200, 50, 50), 
+                button = Button(pygame.Surface((380, 38)), attack.getName(), 32, (245, 185, 66), 
                                 id, attack_id_to_button_pos[id], str(id+1))
                 attack_button_group.add(button)
             else:
@@ -89,7 +89,13 @@ class AttackButtons(pygame.sprite.Sprite):
         """
         surf = pygame.Surface((432, 244))
         surf.fill((255, 255, 255))
-        # Blits all buttons to surface.
+        # Creating title text surface
+        font = pygame.font.Font(None, 32)
+        title_text = font.render('Attacks:', True, (0,0,0))
+        title_text_rect = title_text.get_rect()
+        title_text_rect.center = (216, 20)
+        # Blits all objects to surface.
+        surf.blit(title_text, title_text_rect)
         for button in self.getAttackButtonGroup():
             surf.blit(button.getSurf(), button.getRect())
         self.setSurf(surf)

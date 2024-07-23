@@ -1,7 +1,9 @@
-import pygame
-# Code taken and adapted from Stack Overflow
+# Module containing class TextRectException and 
+# a function for creating multi-line text.
+# Code taken from Stack Overflow.
 # https://stackoverflow.com/questions/32590131/pygame-blitting-text-with-an-escape-character-or-newline
-# TODO convert into OOP and check for efficiency.
+
+import pygame
 
 class TextRectException:
     def __init__(self, message=None):
@@ -65,7 +67,7 @@ def multiLineSurface(string: str, font: pygame.font.Font, rect: pygame.rect.Rect
     accumulatedHeight = 0
     for line in finalLines:
         if accumulatedHeight + font.size(line)[1] >= rect.height:
-             raise TextRectException("Once word-wrapped, the text string was too tall to fit in the rect.")
+            raise TextRectException("Once word-wrapped, the text string was too tall to fit in the rect.")
         if line != "":
             tempSurface = font.render(line, 1, fontColour)
         if justification == 0:

@@ -4,6 +4,7 @@ from typing import Optional
 from sprites.button import Button
 from math import ceil
 from button_output_getter import ButtonOutputGetter
+from multiline_text_converter import multiLineSurface, TextRectException
 
 class GameEventDisplay(pygame.sprite.Sprite):
     """Sidebar component that represents the display to which game events are sent.
@@ -64,15 +65,24 @@ class GameEventDisplay(pygame.sprite.Sprite):
         """
         self.drawTemplate() # Draws template, overriding previously displayed events.
         displayed_events = self.getDisplayedEvents() # List of events to display.
-        font = pygame.font.Font(None, 20)
+        font = pygame.font.Font(None, 24)
         surf = self.getSurf()
 
         # Create font objects for each displayed  event, and blit to surf.
-        for pos, event in enumerate(displayed_events): # TODO fix so it is multiline
-            event_surf = font.render(f"> {event}", True, (255, 255, 255))
-            event_rect = event_surf.get_rect()
-            event_rect.topleft = (15, 50 + pos * 50) 
-            surf.blit(event_surf, event_rect)
+        for pos, event in enumerate(displayed_events): 
+            text_surf = multiLineSurface(f"> {event}", font, 
+                                         pygame.Rect(0, 0, 400, 50), 
+                                         (255, 255, 255), (0,0,0))
+            text_rect = text_surf.get_rect()
+            text_rect.topleft = (15, 50 + pos * 59)
+            # text_surf = font.render(f"> {event}", True, (255, 255, 255))
+            # text_rect = text_surf.get_rect()
+            # text_rect.topleft = (15, 50 + pos * 60) 
+            # test= pygame.Surface((400, 50))
+            # test.fill((120, 120, 120))
+            # test_rect = test.get_rect()
+            # test_rect.topleft = (15, 50 + pos * 58)
+            surf.blit(text_surf, text_rect)
         return
 
     def updatePage(self,
@@ -125,7 +135,7 @@ class GameEventDisplay(pygame.sprite.Sprite):
         """
         Draws the template surface onto the surf attribute, overriding previously displayed events.
         """
-        font = pygame.font.Font(None, 24)
+        font = pygame.font.Font(None, 30)
 
         # Create title text font object
         title_text_surf = font.render('GAME EVENT OUTPUT', True, (255, 255, 255))
@@ -135,7 +145,7 @@ class GameEventDisplay(pygame.sprite.Sprite):
         # Create page number font object
         page_number_surf = font.render(f"{self.getCurrentPage() + 1} / {self.getTotalPages()}", True, (255, 255, 255))
         page_number_rect = page_number_surf.get_rect()
-        page_number_rect.center = (216, 250)
+        page_number_rect.center = (216, 295)
 
         # Blit template onto surf
         surf = self.getSurf()
@@ -151,8 +161,8 @@ class GameEventDisplay(pygame.sprite.Sprite):
     def createPageNavButtons(self) -> None:
         """Creates the group containing prev page and next page buttons."""
         page_nav_buttons = pygame.sprite.Group()
-        page_nav_buttons.add(Button(pygame.Surface((80, 24)), 'prev page', 16, 
-                                    (255, 255, 255), 'prev page', (60, 248), '-')) 
-        page_nav_buttons.add(Button(pygame.Surface((80, 24)), 'next page', 16, 
-                                    (255, 255, 255), 'next page', (372, 248), '='))
+        page_nav_buttons.add(Button(pygame.Surface((100, 32)), 'prev page', 16, 
+                                    (255, 255, 255), 'prev page', (70, 295), ',')) 
+        page_nav_buttons.add(Button(pygame.Surface((100, 32)), 'next page', 16, 
+                                    (255, 255, 255), 'next page', (362, 295), '.'))
         self.setPageNavButtons(page_nav_buttons)

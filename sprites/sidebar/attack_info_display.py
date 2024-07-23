@@ -54,7 +54,22 @@ class AttackInfoDisplay(pygame.sprite.Sprite):
         power_text = font.render(f"Power: {power}", True, 'black')
         accuracy_text = font.render(f"Accuracy: {accuracy}", True, 'black')
         range_text = font.render(f"Range: {range}", True, 'black')
-        instruction_text = font.render("Click on a highlighted enemy to attack them.", True, 'black')
+        instruction_text_1 = font.render("Click on a highlighted enemy", True, 'black')
+        instruction_text_2 = font.render("to attack them.", True, 'black')
+
+        # Adjusting text object positions
+        name_rect = name_text.get_rect()
+        name_rect.center = (216, 30)
+        power_rect = power_text.get_rect()
+        power_rect.topleft = (20, 60)
+        accuracy_rect = accuracy_text.get_rect()
+        accuracy_rect.topleft = (20, 90)
+        range_rect = range_text.get_rect()
+        range_rect.topleft = (20, 120)
+        instruction_rect_1 = instruction_text_1.get_rect()
+        instruction_rect_1.center = (216, 170)
+        instruction_rect_2 = instruction_text_2.get_rect()
+        instruction_rect_2.center = (216, 200)
 
         # Getting back_button surface and rect.
         back_button = self.getBackButtonGroup().sprites()[0]
@@ -62,14 +77,14 @@ class AttackInfoDisplay(pygame.sprite.Sprite):
         back_button_rect = back_button.getRect()
 
         # Blitting text objects and back button onto surface.
-        # TODO fix the exact positionings. This can actually be in a separate section ig. (like data_display)
         surf = self.getSurf()
         surf.fill((255, 255, 255))
-        surf.blit(name_text, (100,20))
-        surf.blit(power_text, (30,50))
-        surf.blit(accuracy_text, (30,80))
-        surf.blit(range_text, (30,110))
-        surf.blit(instruction_text, (80,150))
+        surf.blit(name_text, name_rect)
+        surf.blit(power_text, power_rect)
+        surf.blit(accuracy_text, accuracy_rect)
+        surf.blit(range_text, range_rect)
+        surf.blit(instruction_text_1, instruction_rect_1)
+        surf.blit(instruction_text_2, instruction_rect_2)
         surf.blit(back_button_surf, back_button_rect)
 
     def isBackPressed(self, 
