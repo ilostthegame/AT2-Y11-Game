@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from assets import GAME_ASSETS
 from file_id_interpreter import FileIdInterpreter
-from entity import Entity
+from sprites.entity import Entity
 
 class Portal(Entity):
     """Class representing a portal entity.

@@ -22,7 +22,7 @@ class GameWorld(GameState):
     Attributes:
         sidebar (Sidebar): In-game sidebar
         level_name (str): Name of the current level
-        internal_state (str): Current internal state: in ['main', 'attack_target_selection']
+        internal_state (str): Current internal state: in ['main', 'attack_target_selection', 'game_over']
         character (Character): Character sprite controlled by player
         board (Board): Board sprite - 12x12 grid of tiles.
         npc_group (pygame.sprite.Group): Group containing all npc sprites 
@@ -54,27 +54,27 @@ class GameWorld(GameState):
         self.setLevelName(level_name)
         self.setCharacter(character)
         self.initialiseLevel()
-        self.setSidebar(Sidebar())
+        self.setSidebar(Sidebar(self.getCharacter().getWeapon().getAttackList()))
         self.setInternalState('main')
 
     # Getters
-    def getSidebar(self):
+    def getSidebar(self) -> Sidebar:
         return self.__sidebar
-    def getLevelName(self):
+    def getLevelName(self) -> str:
         return self.__level_name
-    def getCharacter(self):
+    def getCharacter(self) -> Character:
         return self.__character
-    def getBoard(self):
+    def getBoard(self) -> Board:
         return self.__board
-    def getNpcGroup(self):
+    def getNpcGroup(self) -> pygame.sprite.Sprite:
         return self.__npc_group
-    def getEnemyGroup(self):
+    def getEnemyGroup(self) -> pygame.sprite.Sprite:
         return self.__enemy_group
-    def getPortalGroup(self):
+    def getPortalGroup(self) -> pygame.sprite.Sprite:
         return self.__portal_group
-    def getInternalState(self):
+    def getInternalState(self) -> str:
         return self.__internal_state
-    def getNumEnemies(self):
+    def getNumEnemies(self) -> int:
         return self.__num_enemies
 
     # Setters
@@ -98,92 +98,133 @@ class GameWorld(GameState):
         self.__num_enemies = num_enemies
 
     # Methods
-    def run(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> str:
-        """
-        Runs all functions associated with GameWorld. 
-        To be called each iteration of game loop, while state == "game_world"
+    def run(self, 
+            pygame_events: list[pygame.event.Event], 
+            mouse_pos: tuple[int, int]) -> str:
+        """Main function for GameWorld game state.
+
+        To be called each iteration of game loop, while state == "game_world".
+        Interprets user input and runs turns. Updates surfaces.
         Returns the next state game is to enter.
         """
-        board = self.getBoard()
-        character = self.getCharacter()
-        sidebar = self.getSidebar()
-
-        # Interprets pygame events, and runs turns.
-        # If output is 'game_menu', switches game state to GameMenu.
+        # Interprets pygame events, and runs turns accordingly
         output = self.interpretUserInput(pygame_events, mouse_pos)
         if output == 'game_menu':
             return 'game_menu'
-
-        # This thing does all the attack button handling. Should be runSidebar.
-        # Since I'll have an updateSidebarInfo function for what happens at the end of a turn
-        # And this runSidebar is for stuff like attack button handling etc.
-        self.updateSidebar(pygame_events, mouse_pos) # TODO fix
-
-        # Blit sprites onto main_surf
-        # TODO update display of all entities.
-        main_surf = self.getMainSurf()
-        main_surf.fill((0, 0, 0))
-        main_surf.blit(board.getSurf(), (0, 0))
-        main_surf.blit(sidebar.getSurf(), (768, 0))
-        for entity in self.getNpcGroup():
-            entity_screen_pos = (entity.getXcoord()*64, entity.getYcoord()*64)
-            main_surf.blit(entity.getSurf(), entity_screen_pos)
-        self.setMainSurf(main_surf)
-
-        return 'game_world'
-    
+        self.updateDisplay()
+        if self.getInternalState() == 'game_over':
+            return 'game_over'
+        else:
+            return 'game_world'
     
     def interpretUserInput(self, 
-                     pygame_events: list[pygame.event.Event],
-                     mouse_pos: tuple[int, int]) -> Optional[str]:
-        """Interprets pygame_events, for whether the user has made an action.
+                           pygame_events: list[pygame.event.Event],
+                           mouse_pos: tuple[int, int]) -> Optional[str]:
+        """Interprets pygame_events, and runs methods accordingly.
 
-        Checks whether ESC has been pressed: this returns to the gamestate GameMenu.
-        If internal_state is main, checks whether the user has tried to move or interact.
-        If internal_state is attack_target_selection, check whether user has tried to click an enemy.
-        Runs handleTurn() for any actions.
         Returns 'game_menu' if ESC key pressed, else returns None.
         """
         key_presses = [event.key for event in pygame_events if event.type == KEYDOWN]
         mouse_presses = [event.button for event in pygame_events if event.type == MOUSEBUTTONDOWN]
         if K_ESCAPE in key_presses:
             return 'game_menu'
-        if self.getInternalState() == 'main':
-            key_to_action = {K_UP: ('move', 'up'),       K_DOWN: ('move', 'down'), 
-                             K_RIGHT: ('move', 'right'), K_LEFT: ('move', 'left')}
-            # For each user keypress, checks if it represents an action.
-            # If it does, sends the action to character.
-            for key in key_presses:
-                if key in key_to_action.keys():
-                    self.handleTurn(key_to_action[key])
-        elif self.getInternalState() == 'attack_target_selection':
-            if 1 in mouse_presses: # Left mouse button has been clicked.
-                for enemy in self.getEnemyGroup():
-                    if enemy.getRect().collidepoint(mouse_pos): # Gets the clicked enemy
-                        self.handleTurn(('attack', enemy))
+        self.checkForActions(key_presses, mouse_presses, mouse_pos)
+        self.checkSidebarInteraction(pygame_events, mouse_pos)
         return None
     
-    def handleTurn(self, action: tuple[str, Any]) -> None:
-        """Handles a single turn given a user action.
+    def checkForActions(self, 
+                        key_presses: list[int], 
+                        mouse_presses: list[int], 
+                        mouse_pos: tuple[int, int]) -> None:
+        """Checks if user has done an action, and runs a turn for each action.
 
-        Given a player action: 
-            Runs corresponding Character method. If the action was valid:
-                Runs all enemy actions, and sends all events that 
-                occurred during that turn to the GameEventDisplay.
+        If internal_state == 'main':
+            Runs characterMoveAction() if the character has 
+            pressed an arrow key.
+        If internal_state == 'attack_target_selection':
+            Runs characterAttackAction() if the character has
+            clicked an enemy on the board.
         """
-        character = self.getCharacter()
-        character_caused_events = character.handleAction(action)
-
-        # Depending on validity of action, handles enemy turns and sends events to GameEventDisplay.
-        if character_caused_events != False:
-            enemy_caused_events = self.handleEnemyActions()
-            all_events = character_caused_events + enemy_caused_events
-            self.handleEndOfTurn(all_events)
-
-        self.setCharacter(character)
+        if self.getInternalState() == 'main':
+            key_to_direction = {K_UP: 'up',       K_DOWN: 'down', 
+                                K_RIGHT: 'right', K_LEFT: 'left'}
+            # For each user keypress, checks if it triggers a movement.
+            for key in key_presses:
+                if key in key_to_direction.keys():
+                    self.characterMoveAction(key_to_direction[key])
+        elif self.getInternalState() == 'attack_target_selection':
+            if 1 in mouse_presses: # Left mouse button.
+                # Tries to locate the clicked enemy.
+                for enemy in self.getEnemyGroup():
+                    if enemy.getSurf().get_rect().collidepoint(mouse_pos): 
+                        self.characterAttackAction(enemy)
         return
 
-    def handleEnemyActions(self) -> list[Optional[str]]:
+    def checkSidebarInteraction(self,
+                                pygame_events: list[pygame.event.Event],
+                                mouse_pos: tuple[int, int]) -> None:
+        """Checks if user has pressed any buttons in sidebar, 
+        and runs subsequent functions.
+        """
+        # Checking the attack button handlers for attack selection/deselection.
+        if self.getInternalState() == 'main':
+            attack_buttons = self.getSidebar().getAttackButtons()
+            # Getting the selected attack, if any.
+            selected_attack_index = attack_buttons.getAttackSelected(pygame_events, mouse_pos)
+            if selected_attack_index:
+                self.handleAttackSelection(selected_attack_index)
+        elif self.getInternalState() == 'attack_target_selection':
+            attack_info_display = self.getSidebar().getAttackInfoDisplay()
+            if attack_info_display.isBackPressed(pygame_events, mouse_pos):
+                self.handleAttackDeselection()
+        # Checking the game event display for page turns.
+        game_event_display = self.getSidebar().getGameEventDisplay()
+        game_event_display.updatePage(pygame_events, mouse_pos)
+        return
+    
+    def characterMoveAction(self, direction: str) -> None:
+        """Handles a turn starting with a character movement.
+
+        Runs character moveOrInteract(). If the action was valid, then:
+        - Run all enemy actions.
+        - Run handleEndOfTurn().
+        """
+        character = self.getCharacter()
+        coords_to_tile = self.getBoard().getCoordsToTile()
+        num_enemies = self.getNumEnemies()
+        character_caused_event = character.moveOrInteract(direction, coords_to_tile, num_enemies)
+        # If movement/interaction was valid, carries out rest of turn.
+        if character_caused_event != False:
+            # all_events is all events caused by enemies.
+            # The character event is added to this list.
+            all_events = self.doEnemyActions()
+            all_events.append(character_caused_event)
+            self.handleEndOfTurn(all_events)
+        return
+
+    def characterAttackAction(self, target: Enemy) -> None:
+        """Handles a turn starting with a character attack selection.
+
+        Runs character attack(). If the target was valid, then:
+        - Carries out attack and subsequent processes.
+        - Run all enemy actions.
+        - Run handleEndOfTurn().
+        """
+        character = self.getCharacter()
+        character_caused_events = character.attack(target)
+        # If attack was valid, carries out rest of turn.
+        if character_caused_events != False:
+            # Checks if character killed enemy.
+            if not target.getIsAlive():
+                target.kill() # Removes from enemy_group
+                character.gainExp(target.getExpYield()) # TODO make this return events
+            self.handleAttackDeselection()
+            enemy_caused_events = self.doEnemyActions()
+            all_events = character_caused_events + enemy_caused_events
+            self.handleEndOfTurn(all_events)
+        return
+
+    def doEnemyActions(self) -> list[Optional[str]]:
         """Handles the actions of all enemies on the board.
 
         Runs action() method for each enemy in enemy_group.
@@ -191,8 +232,9 @@ class GameWorld(GameState):
         """
         enemy_caused_events = list()
         # Does enemy action for each enemy, and adds events to enemy_caused_events
-        for enemy in self.getEnemyGroup(): 
-            enemy_caused_events.extend(enemy.action())
+        for enemy in self.getEnemyGroup():
+            events = enemy.action()
+            enemy_caused_events.extend(events)
             # TODO check that character is alive at each of each iteration.
             # if dead, run a game over screen.
         return enemy_caused_events
@@ -200,23 +242,52 @@ class GameWorld(GameState):
     def handleEndOfTurn(self, events: list[str]) -> None:
         """Handles all calculations at the end of a turn.
         
-        - Updates how many enemies are still remaining.
-        - Regenerates all entities.
         - Computes tile damage for all entities currently on tile.
             Adds game events representing tile damage taken.
+        - Checks for all character/entity alive status.
+            If character is dead, sets internal_state to 'game_over.
+            If any enemy is dead, kill()s it.
+        - Regenerates all entities.
+        - Updates the number of remaining enemies.
         - If any portals have been activated, initialises the new level.
         - Sends all information to Sidebar's GameEventDisplay and DataDisplay.
         """
         coords_to_tile = self.getBoard().getCoordsToTile()
-        self.setNumEnemies(len(self.getEnemyGroup()))
-        # Regenerating all entities
-        self.getCharacter.regenerate()
+        character = self.getCharacter()
+        enemy_group = self.getEnemyGroup()
+        # Does tile damage to each entity.
+        tile_damage_events = self.tileDamage(coords_to_tile)
+        events.extend(tile_damage_events)
+        # Checking for alive status of character/enemies.
+        if not character.getIsAlive():
+            self.setInternalState('game_over')
+        for enemy in enemy_group:
+            if not enemy.getIsAlive():
+                enemy.kill()
+        # Regenerating all entities.
+        self.getCharacter().regenerate()
         for enemy in self.getEnemyGroup():
             enemy.regenerate()
-        # Checking for tile damage TODO move to a new method for readability.
-        for tile in coords_to_tile.keys():
+        # Setting number of enemies.
+        self.setNumEnemies(len(self.getEnemyGroup()))
+        # Checking for portal activation.
+        for portal in self.getPortalGroup():
+            if portal.getIsActivated():
+                self.setLevelName(portal.getDestination())
+                self.initialiseLevel()
+        # Updating Sidebar information.
+        self.updateSidebarInfo(events)
+    
+    def tileDamage(self,
+                   coords_to_tile: dict[tuple[int, int], Tile]) -> list[str]:
+        """Computes tile damage.
+        
+        Returns a list of events caused.
+        """
+        events = []
+        for tile in coords_to_tile.values():
             tile_damage = tile.getDamage()
-            occupying_entity = tile.getOccupied()
+            occupying_entity = tile.getOccupiedBy()
             # Checks that tile damage is nonzero, and a Character/Enemy is in the tile.
             if tile_damage != 0 and isinstance(occupying_entity, ActiveEntity) == True:
                 damage_taken = occupying_entity.takeDamage(tile_damage)
@@ -224,38 +295,37 @@ class GameWorld(GameState):
                               f"{damage_taken} from a {tile.getName()} tile!")
                 if not occupying_entity.getIsAlive():
                     events.append(f'{occupying_entity} fainted!')
-        # Checking for portal activation
-        for portal in self.getPortalGroup():
-            if portal.getIsActivated():
-                self.setLevelName(portal.getDestination())
-                self.initialiseLevel()
-        # Updating GameEventDisplay
-        game_event_display = self.getSidebar().getGameEventDisplay()
-        # TODO update the display
-        return
-    
-    def updateSidebar(self, pygame_events, mouse_pos) -> None:
-        """
-        Updates the Sidebar display, and checks if the attack buttons have been pressed.
-        If an attack button is pressed, updates Character's selected attack,
-        and GameWorld's internal state.
-        """
-        pass 
-        # # Get attributes needed to update Sidebar
-        # character = self.getCharacter()
-        # character_level = character.getLevel()
-        # health = character.getHealth()
-        # max_health = character.getMaxHealth()
-        # exp = character.getExp()
-        # req_exp = character.calcRequiredExp()
-        # level_name = self.getLevelName()
-        # attack_list = character.getWeapon().getAttackList()
+        return events
 
-        # # Update Sidebar display
-        # sidebar = self.getSidebar()
-        # used_attack = sidebar.update(pygame_events, mouse_pos, character_level, health, max_health, exp, 
-        #                              req_exp, level_name, attack_list)
-        # self.setSidebar(sidebar)
+    
+    def handleAttackSelection(self, selected_attack_index: int) -> None:
+        """Handles events if an attack is selected in AttackButtons.
+        
+        Changes internal state to 'attack_target_selection, and
+        sets selected_attack and enemies_in_range in the Character instance.
+        Sends the selected attack information to AttackInfoDisplay
+        """
+        self.setInternalState('attack_target_selection')
+        # Selecting attack and getting enemies in range, in Character.
+        character = self.getCharacter()
+        character_attack_list = character.getWeapon().getAttackList()
+        selected_attack = character_attack_list[selected_attack_index]
+        character.setSelectedAttack(selected_attack)
+        character.calcEnemiesInRange(self.getBoard().getCoordsToTile(),
+                                     self.getEnemyGroup())
+        attack_info_display = self.getSidebar().getAttackInfoDisplay()
+        attack_info_display.updateSurf(selected_attack)
+        return
+
+    def handleAttackDeselection(self) -> None:
+        """Handles events if an attack is deselected.
+        
+        Changes internal state to 'main', and removes info from Character.
+        """
+        self.setInternalState('main')
+        self.getCharacter().setSelectedAttack(None)
+        self.getCharacter().setEnemiesInRange([])
+        return
 
     def initialiseLevel(self) -> None:
         """Initialises level contents based on level_name
@@ -269,3 +339,50 @@ class GameWorld(GameState):
         self.setNpcGroup(npc_group)
         self.setPortalGroup(portal_group)
         self.setNumEnemies(len(enemy_group))
+        return
+    
+    def updateSidebarInfo(self, events: list[str]) -> None:
+        """Updates DataDisplay and GameEventDisplay."""
+        data_display = self.getSidebar().getDataDisplay()
+        game_event_display = self.getSidebar().getGameEventDisplay()
+        data_display.updateSurf(self.getCharacter(), self.getLevelName(),
+                                self.getNumEnemies())
+        game_event_display.updateEvents(events)
+
+    def updateDisplay(self) -> None:
+        """Updates all surfaces and blits onto main_surf.
+        
+        Updates the surfaces of sidebar and active entities.
+        Highlights enemies in range of Character's attack.
+        Blits board, sidebar and entities onto main_surf.
+        """
+        board = self.getBoard()
+        character = self.getCharacter()
+        sidebar = self.getSidebar()
+        main_surf = self.getMainSurf()
+        # Updating entity/sidebar surfaces.
+        character.updateSurf()
+        for enemy in self.getEnemyGroup():
+            enemy.updateSurf()
+        sidebar.updateSurf(self.getInternalState())
+        # Highlight all enemies of character's selected attack
+        highlighted_tiles = []
+        for enemy in character.getEnemiesInRange():
+            # Creates a transparent yellow square at the position of the enemy.
+            tile_pos = (enemy.getXcoord()*64, enemy.getYcoord()*64)
+            highlighted_square = pygame.Surface((64, 64), SRCALPHA)
+            highlighted_square.fill((255, 255, 0, 0.7))
+            highlighted_square.get_rect().topleft = tile_pos
+            highlighted_tiles.append(highlighted_square)
+        # Blitting all surfaces onto main_surf.
+        main_surf.fill((0, 0, 0))
+        main_surf.blit(board.getSurf(), (0, 0))
+        main_surf.blit(sidebar.getSurf(), (768, 0))
+        main_surf.blit(character.getSurf(), (character.getXcoord()*64, character.getYcoord()*64))
+        for entity in (self.getNpcGroup().sprites() + self.getEnemyGroup().sprites() + 
+                       self.getPortalGroup().sprites()):
+            entity_screen_pos = (entity.getXcoord()*64, entity.getYcoord()*64)
+            main_surf.blit(entity.getSurf(), entity_screen_pos)
+        for tile_overlay in highlighted_tiles:
+            main_surf.blit(tile_overlay, tile_overlay.get_rect)
+        return

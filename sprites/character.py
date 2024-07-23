@@ -35,8 +35,9 @@ class Character(ActiveEntity):
 
         level (int): Current level of character.
         exp (int): Exp stat.
-        selected_attack (Optional[Attack])
-        enemies_in_range (list[Optional[Enemy]])
+        selected_attack (Optional[Attack]): The currently selected attack
+        enemies_in_range (list[Optional[Enemy]]): The list of enemies in range
+            of the currently selected attack (empty when no attack selected).
     """
     
     # Attributes
@@ -70,16 +71,20 @@ class Character(ActiveEntity):
         self.setEnemiesInRange([])
 
     # Getters
-    def getLevel(self):
+    def getLevel(self) -> int:
         return self.__level
-    def getExp(self):
+    def getExp(self) -> int:
         return self.__exp
-    def getSelectedAttack(self):
+    def getSelectedAttack(self) -> Attack:
         return self.__selected_attack
     def getEnemiesInRange(self):
         return self.__enemies_in_range
     
     # Setters
+    def setLevel(self, level):
+        self.__level = level
+    def setExp(self, exp):
+        self.__exp = exp
     def setSelectedAttack(self, selected_attack):
         self.__selected_attack = selected_attack
     def setEnemiesInRange(self, enemies_in_range):
@@ -104,15 +109,15 @@ class Character(ActiveEntity):
         """
         current_coords = (self.getXcoord(), self.getYcoord())
         destination_coords = getDestinationCoords(current_coords, direction)
-        occupying_entity = coords_to_tile[destination_coords].getOccupiedBy()
         # Checking whether the destination coordinates is either obstructed 
         # by a wall, by an enemy, or is not on the board.
         obstructed_coords = getObstructedCoords(coords_to_tile, (ActiveEntity))
         is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, destination_coords)
         if not is_enterable:
             return False
+        occupying_entity = coords_to_tile[destination_coords].getOccupiedBy()
         # If occupied by Npc, return its message.
-        elif isinstance(occupying_entity) == Npc:
+        if isinstance(occupying_entity, Npc):
             message = f"{occupying_entity.getName()}: '{occupying_entity.getDialogue}'"
             return list(message)
         # If occupied by Portal, either move onto portal, or return error message.
@@ -136,9 +141,9 @@ class Character(ActiveEntity):
         """
         if enemy in self.getEnemiesInRange():
             events = self.useAttack(self.getSelectedAttack(), enemy)
+            return events
         else:
-            events = False
-        return events
+            return False
 
     def calcEnemiesInRange(self, 
                            coords_to_tile: dict[tuple[int, int], Tile],

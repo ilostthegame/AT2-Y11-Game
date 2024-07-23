@@ -6,7 +6,7 @@ from sprites.weapon import Weapon
 from attack import Attack
 from random import randint
 from math import sqrt, ceil, floor
-from entity import Entity
+from sprites.entity import Entity
 
 class ActiveEntity(Entity, ABC):
     """Abstract class that represents 'active' (moving/battling) entities
@@ -73,25 +73,25 @@ class ActiveEntity(Entity, ABC):
         self.updateSurf()
 
     # Getters
-    def getEntityImage(self):
+    def getEntityImage(self) -> pygame.Surface:
         return self.__entity_image
-    def getName(self):
+    def getName(self) -> str:
         return self.__name
-    def getStrength(self):
+    def getStrength(self) -> int:
         return self.__strength
-    def getDefence(self):
+    def getDefence(self) -> int:
         return self.__defence
-    def getMaxHealth(self):
+    def getMaxHealth(self) -> int:
         return self.__max_health
-    def getHealth(self):
+    def getHealth(self) -> int:
         return self.__health
-    def getHealthRegen(self):
+    def getHealthRegen(self) -> int:
         return self.__health_regen
-    def getWeapon(self):
+    def getWeapon(self) -> Weapon:
         return self.__weapon
-    def getIsAlive(self):
+    def getIsAlive(self) -> bool:
         return self.__is_alive
-    def getHealthbar(self):
+    def getHealthbar(self) -> Healthbar:
         return self.__healthbar
 
     # Setters

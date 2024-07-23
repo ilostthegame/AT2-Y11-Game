@@ -8,7 +8,7 @@ from sprites.tile import Tile
 
 # Functions
 def getObstructedCoords(coords_to_tile: dict[tuple[int, int], Tile],
-                        obstruction_entity_types: tuple[type]) -> list[tuple[int, int]]:
+                        obstruction_entity_types: tuple[type] | type) -> list[tuple[int, int]]:
     """Determines all obstructed coordinates in a board.
 
     A tile is obstructed if it is not accessible, or

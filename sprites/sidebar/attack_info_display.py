@@ -27,7 +27,7 @@ class AttackInfoDisplay(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.setSurf(pygame.Surface((432, 244)))
-        self.createBackButton()
+        self.createBackButtonGroup()
 
     # Getters
     def getSurf(self) -> pygame.Surface:
@@ -47,27 +47,30 @@ class AttackInfoDisplay(pygame.sprite.Sprite):
         # Parsing attack info.
         name, power = attack.getName(), attack.getPower()
         accuracy, range = attack.getAccuracy(), attack.getRange()
+
         # Creating text objects.
         font = pygame.font.Font(None, 32)
-        name_text = font.render(f"Using attack: {name}", True)
-        power_text = font.render(f"Power: {power}", True)
-        accuracy_text = font.render(f"Accuracy: {accuracy}", True)
-        range_text = font.render(f"Range: {range}", True)
-        instruction_text = font.render("Click on a highlighted enemy to attack them.")
-        # Getting back button surface and rect.
+        name_text = font.render(f"Using attack: {name}", True, 'black')
+        power_text = font.render(f"Power: {power}", True, 'black')
+        accuracy_text = font.render(f"Accuracy: {accuracy}", True, 'black')
+        range_text = font.render(f"Range: {range}", True, 'black')
+        instruction_text = font.render("Click on a highlighted enemy to attack them.", True, 'black')
+
+        # Getting back_button surface and rect.
         back_button = self.getBackButtonGroup().sprites()[0]
         back_button_surf = back_button.getSurf()
         back_button_rect = back_button.getRect()
+
         # Blitting text objects and back button onto surface.
-        # TODO fix the exact positionings.
+        # TODO fix the exact positionings. This can actually be in a separate section ig. (like data_display)
         surf = self.getSurf()
         surf.fill((255, 255, 255))
-        surf.blits(((name_text, (100,20)),
-                    (power_text, (30,50)),
-                    (accuracy_text, (30,80)),
-                    (range_text, (30,110)),
-                    (instruction_text, (80,150)),
-                    (back_button_surf, back_button_rect)))
+        surf.blit(name_text, (100,20))
+        surf.blit(power_text, (30,50))
+        surf.blit(accuracy_text, (30,80))
+        surf.blit(range_text, (30,110))
+        surf.blit(instruction_text, (80,150))
+        surf.blit(back_button_surf, back_button_rect)
 
     def isBackPressed(self, 
                       pygame_events: list[pygame.event.Event],
@@ -82,8 +85,10 @@ class AttackInfoDisplay(pygame.sprite.Sprite):
         else:
             return False
 
-    def createBackButton(self) -> None:
+    def createBackButtonGroup(self) -> None:
         """Creates back button and adds to the back_button_group attribute."""
+        back_button_group = pygame.sprite.Group()
         back_button = Button(pygame.Surface((100, 50)), 'Back', 
                              32, 'grey', 'Back', (370, 210), 'B')
-        self.getBackButtonGroup().add(back_button)
+        back_button_group.add(back_button)
+        self.setBackButtonGroup(back_button_group)

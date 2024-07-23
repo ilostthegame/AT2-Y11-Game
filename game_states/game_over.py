@@ -29,11 +29,12 @@ class GameOver(GameState):
                 return 'title_screen'
         return 'game_over'
 
-    def createSurf(self, last_game_world_screen: pygame.Surface) -> None:
+    def createSurf(self) -> None:
         """Creates the game_over screen surface."""
         main_surf = self.getMainSurf()
         font = pygame.font.Font(None, 64)
         main_surf.blit(font.render("GAME OVER", True, (0,0,0)), (500, 200))
         main_surf.blit(font.render("Press any key to exit", True, (0,0,0)), (300, 400))
+        return
     
 

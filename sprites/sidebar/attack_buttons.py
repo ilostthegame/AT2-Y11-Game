@@ -32,7 +32,7 @@ class AttackButtons(pygame.sprite.Sprite):
         super().__init__()
         self.setSurf(pygame.Surface((432, 244)))
         self.createAttackButtonGroup(attack_list)
-        self.createSurf(attack_list)
+        self.createSurf()
 
     # Getters
     def getSurf(self):
@@ -60,6 +60,7 @@ class AttackButtons(pygame.sprite.Sprite):
         # Getting and interpreting button output.
         button_outputs = ButtonOutputGetter().getOutputs(self.getAttackButtonGroup(), 
                                                          pygame_events, relative_mouse_pos)
+        print(button_outputs)
         # If a button was pressed, return its output.
         if button_outputs:
             button_output = button_outputs[0]
