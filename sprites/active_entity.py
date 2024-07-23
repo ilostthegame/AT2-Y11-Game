@@ -15,9 +15,10 @@ class ActiveEntity(Entity, ABC):
         (Inherited)
         surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar
             Size: 64 x 64, transparent
+        rect (pygame.Rect): Rectangle representing entity's position
         xcoord (int): X coordinate of entity in world
         ycoord (int): Y coordinate of entity in world
-            
+        
         entity_image (pygame.Surface): Surface representing entity's sprite image. 
             Size: 32 x 48, transparent
         name (str): Name of entity
@@ -132,6 +133,7 @@ class ActiveEntity(Entity, ABC):
         """Blits the entity_image, healthbar and weapon onto the entity's Surface."""
         surf = self.getSurf()
         surf.fill((0,0,0,0)) # Renders as transparent.
+        self.updateHealthbar()
         surf.blit(self.getEntityImage(), (0, 0))
         surf.blit(self.getHealthbar().getSurf(), (0, 48))
         surf.blit(self.getWeapon().getSurf(), (32, 0))
@@ -140,9 +142,10 @@ class ActiveEntity(Entity, ABC):
 
     def updateHealthbar(self):
         """Updates healthbar attributes, and its surface."""
-        self.getHealthbar().setEntityMaxHealth(self.getMaxHealth())
-        self.getHealthbar().setEntityHealth(self.getHealth())
-        self.getHealthbar().updateSurf()
+        healthbar = self.getHealthbar()
+        healthbar.setEntityMaxHealth(self.getMaxHealth())
+        healthbar.setEntityHealth(self.getHealth())
+        healthbar.updateSurf()
 
     def useAttack(self, attack: Attack, target) -> list[str]:
         """Runs an attack.

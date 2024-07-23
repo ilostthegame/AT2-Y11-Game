@@ -11,6 +11,7 @@ from sprites.npc import Npc
 from typing import Optional, Union
 from pathfinder import Pathfinder
 from attack import Attack
+from sprites.entity import Entity
 from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
 
 class Enemy(ActiveEntity):
@@ -21,6 +22,7 @@ class Enemy(ActiveEntity):
         surf (pygame.Surface): Pygame surface for the enemy, onto which 
                                to blit the enemy image, weapon and healthbar.
             Size: 64 x 64, transparent.
+        rect (pygame.Rect): Rectangle representing entity's position
         image (pygame.Surface): Surface representing enemy's sprite image. 
             Size: 32 x 48, transparent
         name (str): Name of enemy
@@ -75,7 +77,7 @@ class Enemy(ActiveEntity):
     # Methods
     def action(self,
                character,
-               coords_to_tile: dict[tuple[int, int], Tile]) -> Optional[list[str]]:
+               coords_to_tile: dict[tuple[int, int], Tile]) -> list[Optional[str]]:
         """Runs a single turn's action for the enemy.
 
         Attempts to attack character. If all its attacks are out of range,
@@ -87,7 +89,7 @@ class Enemy(ActiveEntity):
         attacks = self.getShuffledAttacks() # randomised order attacks
         # Checks whether any attack is in range.
         # If so, perform the attack, and return its results.
-        obstructed_coords = getObstructedCoords(coords_to_tile, (ActiveEntity,Npc,Portal))
+        obstructed_coords = getObstructedCoords(coords_to_tile, Entity)
         for attack in attacks:
             if attack.isInRange(self_coords, character_coords, obstructed_coords):
                 events = self.useAttack(attack, character)
@@ -95,7 +97,7 @@ class Enemy(ActiveEntity):
         # If no attack was in range, enemy does movement.
         if self.getMovementPattern() == 'direct':
             self.moveToCharacter(coords_to_tile, character_coords)
-        return None
+        return []
 
     def getShuffledAttacks(self) -> list[Attack]:
         """Returns a list containing enemy's attacks in random order"""
@@ -122,13 +124,12 @@ class Enemy(ActiveEntity):
         pathfinder = Pathfinder()
         self_coords = (self.getXcoord(), self.getYcoord())
         # Finds path which doesn't pass through other enemies
-        path = pathfinder.findPath(coords_to_tile, [Character,Enemy,Npc,Portal], self_coords, character_coords)
+        path = pathfinder.findPath(coords_to_tile, (Character,Enemy,Npc,Portal), self_coords, character_coords)
         # If no such path, finds a path which can pass through other enemies
         if path == None:
-            path = pathfinder.findPath(coords_to_tile, [Character,Npc,Portal], self_coords, character_coords)
-        # If no path found still, raises an Exception.
-        if path == None:
-            raise Exception('Path cannot be found between enemy and player')
+            path = pathfinder.findPath(coords_to_tile, (Character,Npc,Portal), self_coords, character_coords)
+        if path == 'path not found':
+            pass
         else: 
             self.move(path[0], coords_to_tile)
     
@@ -144,6 +145,7 @@ class Enemy(ActiveEntity):
         if is_enterable:
             self.setXcoord(destination_coords[0])
             self.setYcoord(destination_coords[1])
+            self.updateRect()
             # Changes coords_to_tile to reflect movement.
             coords_to_tile[current_coords].setOccupiedBy(None)
             coords_to_tile[destination_coords].setOccupiedBy(self)

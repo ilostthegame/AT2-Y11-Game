@@ -154,32 +154,10 @@ class GameWorld(GameState):
                     self.characterMoveAction(key_to_direction[key])
         elif self.getInternalState() == 'attack_target_selection':
             if 1 in mouse_presses: # Left mouse button.
-                # Tries to locate the clicked enemy.
+                # Locate the clicked enemy (if exists), and attacks it.
                 for enemy in self.getEnemyGroup():
-                    if enemy.getSurf().get_rect().collidepoint(mouse_pos): 
+                    if enemy.getRect().collidepoint(mouse_pos): 
                         self.characterAttackAction(enemy)
-        return
-
-    def checkSidebarInteraction(self,
-                                pygame_events: list[pygame.event.Event],
-                                mouse_pos: tuple[int, int]) -> None:
-        """Checks if user has pressed any buttons in sidebar, 
-        and runs subsequent functions.
-        """
-        # Checking the attack button handlers for attack selection/deselection.
-        if self.getInternalState() == 'main':
-            attack_buttons = self.getSidebar().getAttackButtons()
-            # Getting the selected attack, if any.
-            selected_attack_index = attack_buttons.getAttackSelected(pygame_events, mouse_pos)
-            if selected_attack_index:
-                self.handleAttackSelection(selected_attack_index)
-        elif self.getInternalState() == 'attack_target_selection':
-            attack_info_display = self.getSidebar().getAttackInfoDisplay()
-            if attack_info_display.isBackPressed(pygame_events, mouse_pos):
-                self.handleAttackDeselection()
-        # Checking the game event display for page turns.
-        game_event_display = self.getSidebar().getGameEventDisplay()
-        game_event_display.updatePage(pygame_events, mouse_pos)
         return
     
     def characterMoveAction(self, direction: str) -> None:
@@ -198,7 +176,8 @@ class GameWorld(GameState):
             # all_events is all events caused by enemies.
             # The character event is added to this list.
             all_events = self.doEnemyActions()
-            all_events.append(character_caused_event)
+            if character_caused_event != None:
+                all_events.append(character_caused_event)
             self.handleEndOfTurn(all_events)
         return
 
@@ -223,6 +202,28 @@ class GameWorld(GameState):
             all_events = character_caused_events + enemy_caused_events
             self.handleEndOfTurn(all_events)
         return
+    
+    def checkSidebarInteraction(self,
+                                pygame_events: list[pygame.event.Event],
+                                mouse_pos: tuple[int, int]) -> None:
+        """Checks if user has pressed any buttons in sidebar, 
+        and runs subsequent functions.
+        """
+        # Checking the attack button handlers for attack selection/deselection.
+        if self.getInternalState() == 'main':
+            attack_buttons = self.getSidebar().getAttackButtons()
+            # Getting the selected attack, if any.
+            selected_attack_index = attack_buttons.getAttackSelected(pygame_events, mouse_pos)
+            if selected_attack_index != None:
+                self.handleAttackSelection(selected_attack_index)
+        elif self.getInternalState() == 'attack_target_selection':
+            attack_info_display = self.getSidebar().getAttackInfoDisplay()
+            if attack_info_display.isBackPressed(pygame_events, mouse_pos):
+                self.handleAttackDeselection()
+        # Checking the game event display for page turns.
+        game_event_display = self.getSidebar().getGameEventDisplay()
+        game_event_display.updatePage(pygame_events, mouse_pos)
+        return
 
     def doEnemyActions(self) -> list[Optional[str]]:
         """Handles the actions of all enemies on the board.
@@ -231,9 +232,10 @@ class GameWorld(GameState):
         Returns a list of game events representing the actions by each enemy.
         """
         enemy_caused_events = list()
+        coords_to_tile = self.getBoard().getCoordsToTile()
         # Does enemy action for each enemy, and adds events to enemy_caused_events
         for enemy in self.getEnemyGroup():
-            events = enemy.action()
+            events = enemy.action(self.getCharacter(), coords_to_tile)
             enemy_caused_events.extend(events)
         return enemy_caused_events
 
@@ -280,12 +282,12 @@ class GameWorld(GameState):
         """Removes enemy from enemy_group and from board."""
         coords = (enemy.getXcoord(), enemy.getYcoord())
         coords_to_tile = self.getBoard().getCoordsToTile()
-        coords_to_tile[coords] = None
+        coords_to_tile[coords].setOccupiedBy(None)
         enemy.kill()
     
     def tileDamage(self,
                    coords_to_tile: dict[tuple[int, int], Tile]) -> list[str]:
-        """Computes tile damage.
+        """Computes tile damage for all tiles.
         
         Returns a list of events caused.
         """
@@ -297,12 +299,11 @@ class GameWorld(GameState):
             if tile_damage != 0 and isinstance(occupying_entity, ActiveEntity) == True:
                 damage_taken = occupying_entity.takeDamage(tile_damage)
                 events.append(f"{occupying_entity.getName()} took"
-                              f"{damage_taken} from a {tile.getName()} tile!")
+                              f" {damage_taken} damage from a {tile.getName()} tile!")
                 if not occupying_entity.getIsAlive():
-                    events.append(f'{occupying_entity} fainted!')
+                    events.append(f'{occupying_entity.getName()} fainted!')
         return events
 
-    
     def handleAttackSelection(self, selected_attack_index: int) -> None:
         """Handles events if an attack is selected in AttackButtons.
         
@@ -344,6 +345,7 @@ class GameWorld(GameState):
         self.setNpcGroup(npc_group)
         self.setPortalGroup(portal_group)
         self.setNumEnemies(len(enemy_group))
+        self.getCharacter().updateRect()
         return
     
     def updateSidebarInfo(self, events: list[str]) -> None:
@@ -370,24 +372,21 @@ class GameWorld(GameState):
         for enemy in self.getEnemyGroup():
             enemy.updateSurf()
         sidebar.updateSurf(self.getInternalState())
-        # Highlight all enemies of character's selected attack
-        highlighted_tiles = []
+        # Surfaces that highlight all enemies of character's selected attack.
+        highlight_to_rect = {} # Dictionary mapping squares to their position.
         for enemy in character.getEnemiesInRange():
             # Creates a transparent yellow square at the position of the enemy.
-            tile_pos = (enemy.getXcoord()*64, enemy.getYcoord()*64)
-            highlighted_square = pygame.Surface((64, 64), SRCALPHA)
-            highlighted_square.fill((255, 255, 0, 0.7))
-            highlighted_square.get_rect().topleft = tile_pos
-            highlighted_tiles.append(highlighted_square)
+            square = pygame.Surface((64, 64), SRCALPHA)
+            square.fill((255, 255, 0, 180))
+            highlight_to_rect[square] = enemy.getRect()
         # Blitting all surfaces onto main_surf.
         main_surf.fill((0, 0, 0))
         main_surf.blit(board.getSurf(), (0, 0))
         main_surf.blit(sidebar.getSurf(), (768, 0))
-        main_surf.blit(character.getSurf(), (character.getXcoord()*64, character.getYcoord()*64))
+        main_surf.blit(character.getSurf(), character.getRect())
         for entity in (self.getNpcGroup().sprites() + self.getEnemyGroup().sprites() + 
                        self.getPortalGroup().sprites()):
-            entity_screen_pos = (entity.getXcoord()*64, entity.getYcoord()*64)
-            main_surf.blit(entity.getSurf(), entity_screen_pos)
-        for tile_overlay in highlighted_tiles:
-            main_surf.blit(tile_overlay, tile_overlay.get_rect)
+            main_surf.blit(entity.getSurf(), entity.getRect())
+        for square in highlight_to_rect.keys():
+            main_surf.blit(square, highlight_to_rect[square])
         return

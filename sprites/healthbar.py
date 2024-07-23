@@ -46,5 +46,5 @@ class Healthbar(pygame.sprite.Sprite):
         surf = self.getSurf()
         length = int(self.getEntityHealth()/self.getEntityMaxHealth() * 62) # calculates length of healthbar to be filled based on percent.
         pygame.draw.rect(surf, (50, 50, 50), (0, 0, 64, 16)) # draw background of healthbar
-        pygame.draw.rect(surf, (0, 50, 200), (1, 1, length, 14)) # draw health indicator
+        pygame.draw.rect(surf, (255, 10, 10), (1, 1, length, 14)) # draw health indicator
         self.setSurf(surf)

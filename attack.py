@@ -105,7 +105,7 @@ class Attack:
         else: # Handling case where the tiles are vertical from another.
             lower_y_value = min(origin_coords[1], target_coords[1])
             upper_y_value = max(origin_coords[1], target_coords[1])
-            for y in range(lower_y_value, upper_y_value):
+            for y in range(lower_y_value, upper_y_value+1):
                 intersected_coords.add((origin_coords[0], y))
 
         # Removing origin and target coords from the set.

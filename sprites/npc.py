@@ -13,6 +13,7 @@ class Npc(Entity):
 
         (Inherited)
         surf (pygame.Surface): Image of npc. Size: 64 x 64, transparent.
+        rect (pygame.Rect): Rectangle representing entity's position
         xcoord (int): Board xcoord of npc.
         ycoord (int): Board ycoord of npc.
     """

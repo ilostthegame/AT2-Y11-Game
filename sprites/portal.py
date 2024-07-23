@@ -13,6 +13,7 @@ class Portal(Entity):
 
         (Inherited)
         surf (pygame.Surface): Represents portal's image. Size: 64 x 64, transparent.
+        rect (pygame.Rect): Rectangle representing entity's position
         xcoord (int): Board xcoord of portal.
         ycoord (int): Board ycoord of portal.
     """

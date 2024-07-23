@@ -3,7 +3,7 @@ Double exclamation mark (!!) marks the ID of enemy, e.g. !!00
 ID is separated from enemy object information by tilde (~)
 Enemy object information is found on same line, separated by forward slashes (/)
 Template for enemy object as below:
-!!{ID}~{image_name}/{name}/{strength}/{defence}/{health}/{health_regen}/{weapon_id}/{movement_pattern}/{exp_yield}/{gold_yield}
+!!{ID}~{image_name}/{name}/{strength}/{defence}/{health}/{health_regen}/{weapon_id}/{movement_pattern}/{exp_yield}/
 
 General:
 !!G1~goblin/Goblin/10/10/50/2/Mc/direct/50
@@ -14,9 +14,9 @@ General:
 !!K4~tks_student_1/The Kings School Student 4/
 !!K5~tks_student_1/The Kings School Student 5/
 Music centre:
-!!VP~violin_player/Violin Player/5/20/60/1/VI/still/30
+!!VP~violin_player/Violin Player/5/20/60/1/VI/direct/30
 !!vP~viola_player/Viola Player
 !!CP~cello_player/Cello Player
 !!DP~double_bass_player/Double Bass Player
 Ianni isle:
-!!RI~rocco_ianni/Rocco Ianni/10/100000/200/100/WC/direct/10000000000
+!!RI~rocco_ianni/Rocco Ianni/10/100/200/100/WC/direct/10000000000

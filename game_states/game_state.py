@@ -17,12 +17,12 @@ class GameState(ABC):
         self.setMainSurf(pygame.Surface((1200, 768)))
 
     # Getters
-    def getMainSurf(self):
-        return self.__surf
+    def getMainSurf(self) -> pygame.Surface:
+        return self.__main_surf
 
     # Setters
-    def setMainSurf(self, surf):
-        self.__surf = surf
+    def setMainSurf(self, main_surf):
+        self.__main_surf = main_surf
     
     # Methods
     @abstractmethod

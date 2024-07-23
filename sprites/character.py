@@ -17,8 +17,10 @@ class Character(ActiveEntity):
 
     Attributes:
         (Inherited)
-        surf (pygame.Surface): Pygame surface for the entity, onto which to blit the entity image, weapon and healthbar.
+        surf (pygame.Surface): Pygame surface for the entity, onto which to 
+                               blit the entity image, weapon and healthbar.
             Size: 64 x 64, transparent.
+        rect (pygame.Rect): Rectangle representing entity's position
         image (pygame.Surface): Surface representing entity's sprite image.
             Size: 32 x 48, transparent.
         name (str): Name of character.
@@ -118,20 +120,21 @@ class Character(ActiveEntity):
         occupying_entity = coords_to_tile[destination_coords].getOccupiedBy()
         # If occupied by Npc, return its message.
         if isinstance(occupying_entity, Npc):
-            message = f"{occupying_entity.getName()}: '{occupying_entity.getDialogue}'"
-            return list(message)
+            message = f"{occupying_entity.getName()} says: '{occupying_entity.getDialogue()}'"
+            return message
         # If occupied by Portal, either move onto portal, or return error message.
-        elif occupying_entity == Portal:
+        elif isinstance(occupying_entity, Portal):
             if num_enemies == 0:
                 occupying_entity.setIsActivated(True)
-                return list("You entered the portal! You feel yourself being teleported.")
+                return "You entered the portal! You feel yourself being teleported."
             else:
-                return list("You try to enter the portal, but there are still enemies remaining.")
+                return "You try to enter the portal, but there are still enemies remaining."
         # Tile is unobstructed and has no entities.
         else:
-            # Sets own coordinates
+            # Sets own coordinates/screen position.
             self.setXcoord(destination_coords[0])
             self.setYcoord(destination_coords[1])
+            self.updateRect()
             # Changes coords_to_tile to reflect movement.
             coords_to_tile[current_coords].setOccupiedBy(None)
             coords_to_tile[destination_coords].setOccupiedBy(self)
@@ -151,8 +154,8 @@ class Character(ActiveEntity):
 
     def calcEnemiesInRange(self, 
                            coords_to_tile: dict[tuple[int, int], Tile],
-                           enemy_group: pygame.sprite.Group) -> list:
-        """Returns a list of all enemies in range of selected attack."""
+                           enemy_group: pygame.sprite.Group):
+        """Sets enemies_in_range to a list of all enemies in range of selected attack."""
         enemies_in_range = []
         self_coords = (self.getXcoord(), self.getYcoord())
         selected_attack = self.getSelectedAttack()
@@ -161,7 +164,7 @@ class Character(ActiveEntity):
             enemy_coords = (enemy.getXcoord(), enemy.getYcoord())
             if selected_attack.isInRange(self_coords, enemy_coords, obstructed_coords):
                 enemies_in_range.append(enemy)
-        return enemies_in_range
+        self.setEnemiesInRange(enemies_in_range)
 
     def gainExp(self, exp): # TODO make this have game event
         """
@@ -190,7 +193,7 @@ class Character(ActiveEntity):
         level_increase = self.getLevel() - original_level
         attack_increase = level_increase * 2
         defence_increase = level_increase * 2
-        self.setAttack(self.getAttack() + attack_increase)
+        self.setStrength(self.getStrength() + attack_increase)
         self.setDefence(self.getDefence() + defence_increase)
         return (level_increase, attack_increase, defence_increase)
 

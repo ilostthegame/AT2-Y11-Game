@@ -6,7 +6,11 @@ Template for attack object as below:
 !!{ID}~{name}/{power}/{accuracy}/{range}
 
 !!Sl~Slash/30/80/1
-!!Ch~Chop/50/50/1
+!!Ch~Chop/50000000/100/10
 !!Ha~Hack/60/40/1
 
+Violin attack:
+!!so~Song/10/60/3
+
+Whiteboard cleaner:
 !!Co~Corrode/200/100/30

@@ -11,7 +11,7 @@ Character weapons:
 !!Cl~club/Club/
 
 Music centre:
-!!VI~violin/Violin/
+!!VI~violin/Violin/so
 !!Vi~viola/Viola/
 !!Ce~cello/Cello/
 !!Db~double_bass/Double Bass/

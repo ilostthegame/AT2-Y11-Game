@@ -33,6 +33,7 @@ class GameOver(GameState):
         """Creates the game_over screen surface."""
         main_surf = self.getMainSurf()
         font = pygame.font.Font(None, 64)
+        main_surf.fill((255, 255, 255))
         main_surf.blit(font.render("GAME OVER", True, (0,0,0)), (500, 200))
         main_surf.blit(font.render("Press any key to exit", True, (0,0,0)), (300, 400))
         return
