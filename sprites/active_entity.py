@@ -187,8 +187,6 @@ class ActiveEntity(Entity, ABC):
         defence = self.getDefence()
         damage_taken = ceil((0.99)**defence * damage)
         self.setHealth(self.getHealth() - damage_taken)
-        if not self.getIsAlive():
-            self.kill()
         return damage_taken
     
     def regenerate(self) -> None:

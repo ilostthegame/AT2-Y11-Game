@@ -29,7 +29,8 @@ class Tile(pygame.sprite.Sprite):
                  damage: int = 0):
         super().__init__()
         surf = pygame.Surface((64, 64))
-        pygame.draw.rect(surf, colour, (0, 0, 64, 64)) 
+        pygame.draw.rect(surf, (128, 128, 128), (0,0, 64, 64))
+        pygame.draw.rect(surf, colour, (1, 1, 62, 62)) 
         self.setName(name)
         self.setSurf(surf)
         self.setAccessible(accessible)

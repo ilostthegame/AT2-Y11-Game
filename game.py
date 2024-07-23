@@ -48,7 +48,7 @@ class Game:
         self.setGameOver(GameOver())
 
         # Temporary GameWorld initialisation. Can edit character's stuff here for testing.
-        character = Character(pygame.image.load(GAME_ASSETS['character']).convert_alpha(), 'Bob', 'Sw')
+        character = Character(pygame.image.load(GAME_ASSETS['character']).convert_alpha(), 'Bob', 'WC')
         game_world = GameWorld('Dining Hall', character)
         game_world.initialiseLevel()
         self.setGameWorld(game_world)

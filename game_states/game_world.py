@@ -177,7 +177,7 @@ class GameWorld(GameState):
             # The character event is added to this list.
             all_events = self.doEnemyActions()
             if character_caused_event != None:
-                all_events.append(character_caused_event)
+                all_events.insert(0, character_caused_event)
             self.handleEndOfTurn(all_events)
         return
 
@@ -258,12 +258,13 @@ class GameWorld(GameState):
         # Does tile damage to each entity.
         tile_damage_events = self.tileDamage(coords_to_tile)
         events.extend(tile_damage_events)
-        # Checking for alive status of character/enemies.
-        if not character.getIsAlive():
-            self.setInternalState('game_over')
+        # Removes all dead enemies from board that died to tile damage.
         for enemy in enemy_group:
             if not enemy.getIsAlive():
                 self.removeEnemy(enemy)
+        # Checking for alive status of character.
+        if not character.getIsAlive():
+            self.setInternalState('game_over')
         # Regenerating all entities.
         self.getCharacter().regenerate()
         for enemy in self.getEnemyGroup():

@@ -4,5 +4,8 @@ ID is separated from portal object destination by tilde (~)
 Template for npc object as below:
 !!{ID}~{image_name}/{destination}
 
-!!D1~portal_1/Dining Hall 1
-!!D2~portal_2/Dining Hall 2
+!!D1~portal_2/Music Centre 1
+!!D2~portal_2/some other world
+!!M1~portal_2/Music Centre 2
+!!M2~portal_2/Music Centre 3
+!!M3~portal_2/Music Centre 4

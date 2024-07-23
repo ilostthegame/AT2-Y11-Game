@@ -39,3 +39,6 @@ class WorldInit(GameState): # TODO unfinished
         """
         pass
         initial_character = Character('placeholder_image', 'placeholder_name', 'placeholder_weapon_id')
+
+    # font = pygame.font.Font(None, 32)
+    # font.render("Hello Rocco.")

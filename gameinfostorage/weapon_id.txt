@@ -5,15 +5,17 @@ Weapon object information is found on same line, separated by forward slashes (/
 Template for weapon object as below:
 !!{ID}~{image_name}/{name}/{*attack_ids}
 
-Character weapons:
-!!Sw~sword/Sword/Sl/Ch/Ha
-!!Mc~mace/Mace/
-!!Cl~club/Club/
+Character weapons: (done)
+!!Sw~sword/Sword/Sl/Di/Ha/Lu
+!!Bo~bow/Bow/Sh/LR/SS/Ts
+!!Da~daggers/Daggers/Fs/Bs/Ss/TD
 
 Music centre:
-!!VI~violin/Violin/so
-!!Vi~viola/Viola/
-!!Ce~cello/Cello/
-!!Db~double_bass/Double Bass/
+!!VI~violin/Violin/Vi/Dv/Tc/Tu
+!!Vi~viola/Viola/Vi/Dv/Tc/Tu
+!!Ce~cello/Cello/Vi/Dv/Tc/Tu
+!!Db~double_bass/Double Bass/Vi/Dv/Tc/Tu
 
-!!WC~whiteboard_cleaner/Whiteboard Cleaner/Co
+
+Ianni Isle:
+!!WC~whiteboard_cleaner/Whiteboard Cleaner/rs/js
