@@ -216,7 +216,7 @@ class GameWorld(GameState):
         if character_caused_events != False:
             # Checks if character killed enemy.
             if not target.getIsAlive():
-                target.kill() # Removes from enemy_group
+                self.removeEnemy(target)
                 character.gainExp(target.getExpYield()) # TODO make this return events
             self.handleAttackDeselection()
             enemy_caused_events = self.doEnemyActions()
@@ -235,8 +235,6 @@ class GameWorld(GameState):
         for enemy in self.getEnemyGroup():
             events = enemy.action()
             enemy_caused_events.extend(events)
-            # TODO check that character is alive at each of each iteration.
-            # if dead, run a game over screen.
         return enemy_caused_events
 
     def handleEndOfTurn(self, events: list[str]) -> None:
@@ -263,7 +261,7 @@ class GameWorld(GameState):
             self.setInternalState('game_over')
         for enemy in enemy_group:
             if not enemy.getIsAlive():
-                enemy.kill()
+                self.removeEnemy(enemy)
         # Regenerating all entities.
         self.getCharacter().regenerate()
         for enemy in self.getEnemyGroup():
@@ -277,6 +275,13 @@ class GameWorld(GameState):
                 self.initialiseLevel()
         # Updating Sidebar information.
         self.updateSidebarInfo(events)
+
+    def removeEnemy(self, enemy: Enemy) -> None:
+        """Removes enemy from enemy_group and from board."""
+        coords = (enemy.getXcoord(), enemy.getYcoord())
+        coords_to_tile = self.getBoard().getCoordsToTile()
+        coords_to_tile[coords] = None
+        enemy.kill()
     
     def tileDamage(self,
                    coords_to_tile: dict[tuple[int, int], Tile]) -> list[str]:

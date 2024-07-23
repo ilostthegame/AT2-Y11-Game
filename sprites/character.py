@@ -129,8 +129,12 @@ class Character(ActiveEntity):
                 return list("You try to enter the portal, but there are still enemies remaining.")
         # Tile is unobstructed and has no entities.
         else:
+            # Sets own coordinates
             self.setXcoord(destination_coords[0])
             self.setYcoord(destination_coords[1])
+            # Changes coords_to_tile to reflect movement.
+            coords_to_tile[current_coords].setOccupiedBy(None)
+            coords_to_tile[destination_coords].setOccupiedBy(self)
             return None
 
     def attack(self, enemy) -> Optional[list[str]] | False:

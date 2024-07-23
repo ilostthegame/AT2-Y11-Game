@@ -144,3 +144,7 @@ class Enemy(ActiveEntity):
         if is_enterable:
             self.setXcoord(destination_coords[0])
             self.setYcoord(destination_coords[1])
+            # Changes coords_to_tile to reflect movement.
+            coords_to_tile[current_coords].setOccupiedBy(None)
+            coords_to_tile[destination_coords].setOccupiedBy(self)
+        return
