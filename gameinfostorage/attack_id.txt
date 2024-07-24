@@ -45,10 +45,10 @@ Melee attacks:
 !!
 
 String instrument attacks:
-!!Vi~Vivaldi's Four Seasons - Autumn/50/100/4
-!!Dv~Dvorak's American - 1st Movement/50/100/4
-!!Tc~Tchaikovsky's 1812/70/100/6
-!!Tu~Tuning/40/100/4
+!!Vi~Vivaldi's Four Seasons - Autumn/20/100/4
+!!Dv~Dvorak's American - 1st Movement/20/100/4
+!!Tc~Tchaikovsky's 1812/30/100/4
+!!Tu~Tuning/10/100/4
 
 Whiteboard cleaner attacks:
 !!rs~Regular Spray/200/90/3

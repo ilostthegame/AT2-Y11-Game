@@ -11,12 +11,26 @@ Character weapons:
 !!Dg~daggers/Daggers/Fs/Bs/Ss/TD
 !!Sb~spellbook/Spellbook/Zp/Ib/Fb/Th
 
+Turning circle:
+Bus Keys
+Rock
+Gazette
+SB&W insight
+Rugby ball
+
 Music centre:
 !!VI~violin/Violin/Vi/Dv/Tc/Tu
 !!Vi~viola/Viola/Vi/Dv/Tc/Tu
 !!Ce~cello/Cello/Vi/Dv/Tc/Tu
 !!Db~double_bass/Double Bass/Vi/Dv/Tc/Tu
 
+South block:
+Phone
+Laptop
+Vape
+Zhang's homework
+Dr Du homework
+Fists
 
-Ianni Isle:
+Ianni's classroom:
 !!WC~whiteboard_cleaner/Whiteboard Cleaner/rs/js

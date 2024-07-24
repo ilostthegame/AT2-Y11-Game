@@ -14,9 +14,9 @@ General:
 !!K4~tks_student_1/The Kings School Student 4/
 !!K5~tks_student_1/The Kings School Student 5/
 Music centre:
-!!VP~violin_player/Violin Player/10/10/40/VI/direct/100
-!!vP~viola_player/Viola Player/8/15/50/Vi/direct/100
-!!CP~cello_player/Cello Player/15/12/60/Ce/direct/200
-!!DP~double_bass_player/Double Bass Player/12/15/100/Db/direct/200
+!!VP~violin_player/Violin Player/5/10/40/VI/direct/100
+!!vP~viola_player/Viola Player/3/15/50/Vi/direct/100
+!!CP~cello_player/Cello Player/10/12/60/Ce/direct/200
+!!DP~double_bass_player/Double Bass Player/6/15/100/Db/direct/200
 Ianni isle:
 !!RI~rocco_ianni/Rocco Ianni/10/100/200/WC/direct/10000

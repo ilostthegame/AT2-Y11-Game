@@ -283,7 +283,8 @@ class GameWorld(GameState):
         for portal in self.getPortalGroup():
             if portal.getIsActivated():
                 self.setLevelName(portal.getDestination())
-                self.initialiseLevel()
+                init_events = self.initialiseLevel()
+                events.extend(init_events)
         # Updating Sidebar information.
         self.updateSidebarInfo(events)
 
@@ -342,11 +343,12 @@ class GameWorld(GameState):
         self.getCharacter().setEnemiesInRange([])
         return
 
-    def initialiseLevel(self) -> None:
+    def initialiseLevel(self) -> list[str]:
         """Initialises level contents based on level_name
         
         Sets the enemy/npc/portal/quest_item sprite groups, 
         Board, and num_enemies_remaining.
+        Returns list of events representing the enemies spotted.
         """
         level_contents = LevelInitialiser().getLevelContents(self.getLevelName(), self.getCharacter())
         board, enemy_group, npc_group, portal_group, quest_item_group = level_contents
@@ -357,8 +359,12 @@ class GameWorld(GameState):
         self.setQuestItemGroup(quest_item_group)
         self.setNumEnemies(len(enemy_group))
         self.getCharacter().updateRect()
+        # Creating events for each enemy.
+        events = []
+        for enemy in self.getEnemyGroup():
+            events.append(f"You spotted a {enemy.getName()} wielding a {enemy.getWeapon().getName()}")
         self.saveGame()
-        return
+        return events
     
     def updateSidebarInfo(self, events: list[str]) -> None:
         """Updates DataDisplay and GameEventDisplay."""

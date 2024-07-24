@@ -205,8 +205,7 @@ class Character(ActiveEntity):
         # Level up character while character has enough exp to level up.
         while self.getExp() >= required_exp:
             self.setLevel(self.getLevel() + 1)
-            hp_incr, str_incr, def_incr = self.updateStats() # TODO TODO TODO make it so when enemy dies to lava 
-            # character will also gain exp.
+            hp_incr, str_incr, def_incr = self.updateStats() 
             events.append(f"Level up! +{hp_incr} Health! +{str_incr} Strength! "
                           f"+{def_incr} Defence!")
             self.setExp(self.getExp() - required_exp) # Subtract used exp.
@@ -217,6 +216,7 @@ class Character(ActiveEntity):
         """Updates max_health/health, attack, defence upon level up.
 
         Returns tuple (max_health_increase, strength_increase, defence_increase).
+        Updates health regen based on max health.
         """
         health_increase = 20
         strength_increase = 5
@@ -225,6 +225,7 @@ class Character(ActiveEntity):
         self.setHealth(self.getHealth() + health_increase)
         self.setStrength(self.getStrength() + strength_increase)
         self.setDefence(self.getDefence() + defence_increase)
+        self.setHealthRegen(int(self.getMaxHealth() / 20))
         return (health_increase, strength_increase, defence_increase)
 
     def calcRequiredExp(self):
