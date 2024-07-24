@@ -21,9 +21,11 @@ class GameOver(GameState):
             pygame_events: list[pygame.event.Event]) -> str:
         """Main run method for GameOver.
 
+        Deletes all contents in save file.
         Returns 'title_screen' once a mouse button/key is pressed.
         Else, returns 'game_over'.
         """
+        # Wait for mouse/key press.
         for event in pygame_events:
             if event.type == MOUSEBUTTONDOWN or event.type == KEYDOWN:
                 return 'title_screen'

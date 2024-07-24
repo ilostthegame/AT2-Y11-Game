@@ -53,24 +53,24 @@ class Character(ActiveEntity):
     __quest_item_names = None
 
     # Constructor
-    def __init__(self,  # TODO all of this stuff should not be optional arguments. 
-                        # Leave this for temporary testing before world_init is added.
+    def __init__(self,
                  image: pygame.Surface, 
                  name: str,
                  weapon_id: str, 
-                 strength: int = 25, 
-                 defence: int = 25, 
-                 max_health: int = 100000, 
-                 health: int = 100000, 
-                 is_alive: bool = True, 
-                 xcoord: int = 0, 
-                 ycoord: int = 0, 
-                 level: int = 1, 
-                 exp: int = 0,
-                 health_regen: int = 10000):
+                 strength: int, 
+                 defence: int, 
+                 max_health: int, 
+                 health: int, 
+                 level: int, 
+                 exp: int,
+                 health_regen: int,
+                 is_alive: bool = True):
+        # Note that xcoord and ycoord are set to 0 in constructor.
+        # This is unimportant, as character's xcoord, ycoord will be set
+        # by the GameWorld's level initialisation.
         super().__init__(image, name, strength, defence, max_health, health,
-                         Weapon(weapon_id, xcoord, ycoord),
-                         is_alive, xcoord, ycoord, Healthbar(health, max_health)) 
+                         Weapon(weapon_id, 0, 0),
+                         is_alive, 0, 0, Healthbar(health, max_health)) 
         self.setLevel(level)
         self.setExp(exp)
         self.setSelectedAttack(None)
@@ -234,3 +234,10 @@ class Character(ActiveEntity):
     def regenerate(self) -> None:
         """Regenerates health based on health_regen"""
         self.setHealth(self.getHealth() + self.getHealthRegen())
+
+    def getStats(self) -> None:
+        """Returns a list of character's stats for saving purposes."""
+        stats = [self.getStrength(), self.getDefence(), self.getHealth()]
+        stats.extend((self.getMaxHealth(), self.getHealthRegen(), self.getExp()))
+        stats.extend((self.getLevel(), self.getWeapon().getId(), self.getQuestItemNames()))
+        return stats
