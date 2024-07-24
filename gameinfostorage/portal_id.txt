@@ -1,11 +1,38 @@
 Interpretation of file:
 Double exclamation mark (!!) marks the ID of portal, e.g. !!00
 ID is separated from portal object destination by tilde (~)
-Template for npc object as below:
-!!{ID}~{image_name}/{destination}
+Template for portal object as below:
+!!{ID}~{image_name}/{destination}/{requirement}
+'requirement' is the required quest item to enter portal. May be 'None'
+TODO need different portal sprites - right now its just portal_2.
 
-!!D1~portal_2/Music Centre 1
-!!D2~portal_2/some other world
-!!M1~portal_2/Music Centre 2
-!!M2~portal_2/Music Centre 3
-!!M3~portal_2/Music Centre 4
+Dining Hall
+!!D1~portal_2/Turning Circle 1/None
+!!D2~portal_2/Music Centre 1/Stone of Puzzling Longevity
+!!D3~portal_2/South Block 1/Gem of Persistent Tranquility
+!!D4~portal_2/Ianni Isle 1/Jewel of Vibrant Colours
+
+Turning Circle
+!!T1~portal_2/Turning Circle 2/None
+!!T2~portal_2/Turning Circle 3/None
+!!T3~portal_2/Turning Circle 4/None
+!!T4~portal_2/Turning Circle 5/None
+!!T5~portal_2/Dining Hall/Stone of Puzzling Longevity
+
+Music Centre
+!!M1~portal_2/Music Centre 2/None
+!!M2~portal_2/Music Centre 3/None
+!!M3~portal_2/Music Centre 4/None
+!!M4~portal_2/Music Centre 5/None
+!!M5~portal_2/Dining Hall/Gem of Persistent Tranquility
+
+South Block
+!!S1~portal_2/South Block 2/None
+!!S2~portal_2/South Block 3/None
+!!S3~portal_2/South Block 4/None
+!!S4~portal_2/South Block 5/None
+!!S5~portal_2/Dining Hall/Jewel of Vibrant Colours
+
+Ianni's Classroom
+!!I1~portal_2/Ianni's Classroom 2/None
+!!I2~portal_2/Dining Hall/Crystal Of Eternal Light

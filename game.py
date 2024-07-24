@@ -49,7 +49,7 @@ class Game:
 
         # Temporary GameWorld initialisation. Can edit character's stuff here for testing.
         character = Character(pygame.image.load(GAME_ASSETS['character']).convert_alpha(), 'Bob', 'Sw')
-        game_world = GameWorld('Music Centre 1', character)
+        game_world = GameWorld('Dining Hall', character)
         game_world.initialiseLevel()
         self.setGameWorld(game_world)
 
