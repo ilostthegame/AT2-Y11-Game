@@ -10,8 +10,8 @@ from sprites.button import Button
 class WorldInit(GameState):
     """Class for world initialisation game state.
     
-    Initialises Character and GameWorld objects
-    Loaded when New Game is selected in TitleScreen
+    Initialises GameWorld objects, and included Character.
+    Loaded when New Game is selected in TitleScreen.
 
     Attributes:
         weapon_select_buttons (pygame.sprite.Group): Group containing buttons for weapon selection.
@@ -46,12 +46,11 @@ class WorldInit(GameState):
         self.__initialised_game_world = initialised_game_world
 
     # Methods
-
     def run(self, 
             pygame_events: list[pygame.event.Event], 
             mouse_pos: tuple[int, int]) -> str:
         """
-        Runs all functions to initialise the game world
+        Runs all functions to initialise the game world.
         To be called each iteration of game loop while state == 'world_init'.
         Returns the next state game is to enter.
         """
@@ -60,7 +59,7 @@ class WorldInit(GameState):
         if button_outputs:
             # Instantiating character and gameworld
             chosen_weapon = button_outputs[0]
-            character = self.instantiateCharacterCharacter(chosen_weapon)
+            character = self.instantiateCharacter(chosen_weapon)
             game_world = self.instantiateGameWorld(character)
             self.setInitialisedGameWorld(game_world)
             return 'game_world'
@@ -74,7 +73,7 @@ class WorldInit(GameState):
     def instantiateCharacter(self, weapon_id: str) -> Character:
         """Instantiates and returns initial character object."""
         character_image = pygame.image.load(GAME_ASSETS['character'])
-        character = Character(character_image, 'Player', weapon_id)
+        character = Character(character_image, 'Player', weapon_id, 20, 20, 100, 100, 1, 0, 2)
         return character
 
     def createSurf(self) -> None:
@@ -83,8 +82,8 @@ class WorldInit(GameState):
         main_surf.fill((187, 211, 250))
         # Creates text surfaces
         font = pygame.font.Font(None, 64)
-        welcome_text = font.render("Hello, player.")
-        instruct_text = font.render("Please choose a weapon.")
+        welcome_text = font.render("Hello, player.", True, (0,0,0))
+        instruct_text = font.render("Please choose a weapon.", True, (0,0,0))
         # Setting position of text surface
         welcome_text_rect = welcome_text.get_rect()
         welcome_text_rect.center = (600, 80)
@@ -95,7 +94,7 @@ class WorldInit(GameState):
         main_surf.blit(instruct_text, instruct_text_rect)
         # Blitting button surfaces.
         for button in self.getWeaponSelectButtons():
-            main_surf.blit(button, button.getRect())
+            main_surf.blit(button.getSurf(), button.getRect())
 
     def createButtons(self) -> None:
         """Creates the weapon selection buttons, and adds to weapon_select_buttons."""

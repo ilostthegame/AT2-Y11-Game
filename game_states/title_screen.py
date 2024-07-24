@@ -8,7 +8,7 @@ from button_output_getter import ButtonOutputGetter
 class TitleScreen(GameState):
     """Class for title screen game state.
     
-    Loaded when game is initialised, and from 'save_and_exit' from GameMenu
+    Loaded when game is initialised, and from selecting Save and Exit from GameMenu.
 
     Attributes:
         button_group (pygame.sprite.Group): Sprite group that contains buttons:
@@ -25,7 +25,6 @@ class TitleScreen(GameState):
     # Constructor
     def __init__(self):
         super().__init__()
-        self.setButtonGroup(pygame.sprite.Group())
         self.initialiseButtons()
         self.createSurf()
 
@@ -61,7 +60,7 @@ class TitleScreen(GameState):
             
     def initialiseButtons(self) -> None:
         """Creates title screen buttons and adds them to button_group."""
-        button_group = self.getButtonGroup()
+        button_group = pygame.sprite.Group()
         new_game_button = Button(pygame.Surface((256, 128)), 'New Game', 32,
                                  (200, 100, 0), 'new_game', (600, 250), '1')
         quit_button = Button(pygame.Surface((256, 128)), 'Quit', 32,
@@ -90,7 +89,7 @@ class TitleScreen(GameState):
     
     def savedGameExist(self) -> bool:
         """Returns True/False for whether a saved gamefile exists."""
-        with open('gameinfostorage/save_info.txt', 'rb') as file:
+        with open('gameinfostorage/save_info.txt', 'r') as file:
             if file.readlines() == []:
                 return False
             else:

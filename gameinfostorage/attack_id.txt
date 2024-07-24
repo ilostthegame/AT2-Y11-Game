@@ -6,28 +6,28 @@ Template for attack object as below:
 !!{ID}~{name}/{power}/{accuracy}/{range}
 
 Sword attacks:
-!!Sl~Slice/50/80/2
-!!Di~Dice/80/60/2
-!!Ha~Hack/150/40/2
+!!Sl~Slice/70/80/2
+!!Di~Dice/110/60/2
+!!Ha~Hack/220/40/2
 !!Lu~Lunge/40/80/3
 
 Bow attacks:
-!!Sh~Shoot/30/80/6
-!!PS~Powerful Shot/60/70/4
-!!SS~Sharpshot/20/80/12
+!!Sh~Shoot/50/80/6
+!!PS~Powerful Shot/100/60/4
+!!SS~Sharpshot/40/75/12
 !!Ts~Trickshot/300/20/6
 
 Daggers attacks:
-!!Fs~Frontstab/80/90/1
-!!Bs~Backstab/160/70/1
+!!Fs~Frontstab/80/95/1
+!!Bs~Backstab/160/65/1
 !!Ss~Sidestab/110/80/1
 !!TD~Throw Dagger/50/50/5
 
 Spellbook attacks:
-!!Zp~Zap/30/75/4
-!!Fb~Firebolt/100/50/6
-!!Ib~Icebolt/80/60/3
-!!Ts~Thunder strike/200/20/100
+!!Zp~Zap/40/80/5
+!!Ib~Icebolt/120/50/3
+!!Fb~Firebolt/180/30/5
+!!Ts~Thunder strike/300/15/100
 
 
 Hammer attacks:

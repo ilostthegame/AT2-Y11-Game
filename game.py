@@ -9,7 +9,6 @@ from assets import load_assets, GAME_ASSETS
 from pygame.locals import *
 from sprites.character import Character
 from sprites.healthbar import Healthbar
-import pickle
 from typing import Optional
 
 load_assets()
@@ -127,12 +126,11 @@ class Game:
         while self.getIsRunning() == True:
             pygame_events = pygame.event.get()
             mouse_pos = pygame.mouse.get_pos()
-
             # Event handler for if game is closed
             for event in pygame_events: 
                 if event.type == QUIT:
                     self.setIsRunning(False)
-            
+
             # Runs corresponding function to state
             state = self.getState()
             match state:
@@ -145,21 +143,21 @@ class Game:
                 case 'game_world':
                     main_surf = self.runGameWorld(pygame_events, mouse_pos)
                 case 'game_menu':
-                    main_surf = self.runGameMenu() 
+                    main_surf = self.runGameMenu(pygame_events, mouse_pos) 
                 case 'game_over':
                     main_surf = self.runGameOver(pygame_events)
                 case 'quit':
                     self.setIsRunning(False)
                 case _:
                     raise ValueError(f"State ({state}) is unknown")
-            
+                
             # Sends main_surf to display.
             screen = self.getScreen()
             screen.fill((255, 255, 255))
             screen.blit(main_surf, (0, 0))
             pygame.display.flip()
             self.getClock().tick(60) # Keeps framerate constant at 60fps.
-        self.handleExit() # On loop end, saves game and exits.
+        pygame.quit() # On loop end.
 
     def runTitleScreen(self, pygame_events: list[pygame.event.Event], mouse_pos: tuple[int, int]) -> pygame.Surface:
         """
@@ -168,10 +166,8 @@ class Game:
         """
         title_screen = self.getTitleScreen()
         next_state = title_screen.run(pygame_events, mouse_pos)
-        main_surf = title_screen.getMainSurf()
-
         self.setState(next_state)
-        return main_surf
+        return title_screen.getMainSurf()
     
     def runWorldInit(self, 
                      pygame_events: list[pygame.event.Event], 
@@ -184,15 +180,20 @@ class Game:
         """
         world_init = self.getWorldInit()
         next_state = world_init.run(pygame_events, mouse_pos)
-        main_surf = world_init.getMainSurf()
         # Sets the instantiated GameWorld object if it exists.
         if next_state == 'game_world':
             self.setGameWorld(world_init.getInitialisedGameWorld())
         self.setState(next_state)
-        return main_surf
+        return world_init.getMainSurf()
 
     def runWorldLoad(self):
-        pass
+        """Loads GameWorld object from file. Immediately enters game_world state."""
+        world_load = self.getWorldLoad()
+        next_state = world_load.run()
+        # Sets the instantiated GameWorld object.
+        self.setGameWorld(world_load.getInitialisedGameWorld())
+        self.setState(next_state)
+        return world_load.getMainSurf()
 
     def runGameWorld(self, 
                      pygame_events: list[pygame.event.Event], 
@@ -203,21 +204,23 @@ class Game:
         """
         game_world = self.getGameWorld()
         next_state = game_world.run(pygame_events, mouse_pos)
-        main_surf = game_world.getMainSurf()
-
         self.setState(next_state)
-        return main_surf
+        return game_world.getMainSurf()
 
     def runGameMenu(self, 
-                     pygame_events: list[pygame.event.Event], 
-                     mouse_pos: tuple[int, int]) -> pygame.Surface:
-        """
-        TODO
-        """
-        pass
+                    pygame_events: list[pygame.event.Event], 
+                    mouse_pos: tuple[int, int]) -> pygame.Surface:
+        """Runs game menu."""
+        game_menu = self.getGameMenu()
+        next_state = game_menu.run(pygame_events, mouse_pos)
+        self.setState(next_state)
+        # Re-initialises TitleScreen if entered
+        if next_state == 'title_screen':
+            self.setTitleScreen(TitleScreen())
+        return game_menu.getMainSurf()
     
     def runGameOver(self, pygame_events) -> pygame.Surface:
-        """Run method for GameOver
+        """Run method for GameOver.
         
         Deletes GameWorld object and savefile.
         """
@@ -228,13 +231,8 @@ class Game:
         # Runs game over screen.
         game_over_state = self.getGameOver()
         next_state = game_over_state.run(pygame_events)
-        main_surf = game_over_state.getMainSurf()
         self.setState(next_state)
-        return main_surf
-
-    def handleExit(self) -> None:
-        """To run when game loop is exited. Saves game, and quits pygame."""
-        with open('gameinfostorage/save_info.txt', 'wb') as file:
-            pickle.dump(self.getGameWorld(), file)
-        pygame.quit()
-
+        # Re-initialises TitleScreen if entered
+        if next_state == 'title_screen':
+            self.setTitleScreen(TitleScreen())
+        return game_over_state.getMainSurf()

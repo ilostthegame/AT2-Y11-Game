@@ -17,8 +17,8 @@ from sprites.quest_item import QuestItem
 
 class GameWorld(GameState):
     """Class representing the game world.
-    
-    Loaded after completion of WorldInit and WorldLoad.
+
+    To be instantiated by WorldInit or WorldLoad.
 
     Attributes:
         sidebar (Sidebar): In-game sidebar
@@ -357,6 +357,7 @@ class GameWorld(GameState):
         self.setQuestItemGroup(quest_item_group)
         self.setNumEnemies(len(enemy_group))
         self.getCharacter().updateRect()
+        self.saveGame()
         return
     
     def updateSidebarInfo(self, events: list[str]) -> None:
@@ -403,3 +404,18 @@ class GameWorld(GameState):
         for square in highlight_to_rect.keys():
             main_surf.blit(square, highlight_to_rect[square])
         return
+    
+    def saveGame(self) -> None:
+        """Saves game to save file. To be run on level initialisation."""
+        with open('gameinfostorage/save_info.txt', 'w') as file:
+            file.write(self.getLevelName() + '\n')
+            character_stats = self.getCharacter().getStats()
+            for stat in character_stats:
+                if isinstance(stat, int): # Numerical stats
+                    file.write(str(stat) + '\n')
+                elif isinstance(stat, str): # Weapon
+                    file.write(stat + '\n')
+                elif isinstance(stat, set): # Quest items.
+                    for item in stat:
+                        file.write(item + '\n')
+            

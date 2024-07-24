@@ -8,8 +8,8 @@ Template for weapon object as below:
 Character weapons:
 !!Sw~sword/Sword/Sl/Di/Ha/Lu
 !!Bo~bow/Bow/Sh/PS/SS/Ts
-!!Da~daggers/Daggers/Fs/Bs/Ss/TD
-!!Sb~spellbook/Spellbook/Zp/Fb/Ib/Th
+!!Dg~daggers/Daggers/Fs/Bs/Ss/TD
+!!Sb~spellbook/Spellbook/Zp/Ib/Fb/Th
 
 Music centre:
 !!VI~violin/Violin/Vi/Dv/Tc/Tu
