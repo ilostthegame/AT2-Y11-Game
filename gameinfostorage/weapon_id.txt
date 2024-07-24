@@ -2,12 +2,12 @@ Interpretation of file:
 Double exclamation mark (!!) marks the ID of weapon, e.g. !!00
 ID is separated from weapon object information by tilde (~)
 Weapon object information is found on same line, separated by forward slashes (/)
-Template for weapon object as below:
-!!{ID}~{image_name}/{name}/{*attack_ids}
+Template for weapon object as below: TODO add descriptions
+!!{ID}~{image_name}/{name}/{description}/{*attack_ids}
 
 Character weapons: (done)
 !!Sw~sword/Sword/Sl/Di/Ha/Lu
-!!Bo~bow/Bow/Sh/LR/SS/Ts
+!!Bo~bow/Bow/Sh/PS/SS/Ts
 !!Da~daggers/Daggers/Fs/Bs/Ss/TD
 
 Music centre:

@@ -3,16 +3,17 @@ from game_states.game_state import GameState
 from assets import GAME_ASSETS
 from pygame.locals import *
 from sprites.enemy import Enemy
-from sprites.portal import Portal
-from sprites.npc import Npc
 from sprites.sidebar.sidebar import Sidebar
 from sprites.tile import Tile
 from sprites.board import Board
 from sprites.character import Character
 from level_initialiser import LevelInitialiser
 from typing import Optional, Any
-from sprites.entity import Entity
 from sprites.active_entity import ActiveEntity
+from sprites.portal import Portal
+from sprites.npc import Npc
+from sprites.entity import Entity
+from sprites.quest_item import QuestItem
 
 class GameWorld(GameState):
     """Class representing the game world.
@@ -28,6 +29,7 @@ class GameWorld(GameState):
         npc_group (pygame.sprite.Group): Group containing all npc sprites 
         enemy_group (pygame.sprite.Group): Group containing all enemy sprites
         portal_group (pygame.sprite.Group): Group containing all portal sprites
+        quest_item_group (pygame.sprite.Group): Group containing all quest item sprites
         num_enemies (int): The number of remaining enemies in enemy_group.
 
         (Inherited)
@@ -43,6 +45,7 @@ class GameWorld(GameState):
     __npc_group = None
     __enemy_group = None
     __portal_group = None
+    __quest_item_group = None
     __internal_state = None
     __num_enemies = None
 
@@ -68,12 +71,14 @@ class GameWorld(GameState):
         return self.__character
     def getBoard(self) -> Board:
         return self.__board
-    def getNpcGroup(self) -> pygame.sprite.Sprite:
+    def getNpcGroup(self) -> pygame.sprite.Group:
         return self.__npc_group
-    def getEnemyGroup(self) -> pygame.sprite.Sprite:
+    def getEnemyGroup(self) -> pygame.sprite.Group:
         return self.__enemy_group
-    def getPortalGroup(self) -> pygame.sprite.Sprite:
+    def getPortalGroup(self) -> pygame.sprite.Group:
         return self.__portal_group
+    def getQuestItemGroup(self) -> pygame.sprite.Group:
+        return self.__quest_item_group
     def getInternalState(self) -> str:
         return self.__internal_state
     def getNumEnemies(self) -> int:
@@ -94,6 +99,8 @@ class GameWorld(GameState):
         self.__enemy_group = enemy_group
     def setPortalGroup(self, portal_group):
         self.__portal_group = portal_group
+    def setQuestItemGroup(self, quest_item_group):
+        self.__quest_item_group = quest_item_group
     def setInternalState(self, internal_state):
         self.__internal_state = internal_state
     def setNumEnemies(self, num_enemies):
@@ -338,14 +345,16 @@ class GameWorld(GameState):
     def initialiseLevel(self) -> None:
         """Initialises level contents based on level_name
         
-        Sets the enemy/npc/portal sprite groups, Board, and num_enemies_remaining.
+        Sets the enemy/npc/portal/quest_item sprite groups, 
+        Board, and num_enemies_remaining.
         """
         level_contents = LevelInitialiser().getLevelContents(self.getLevelName(), self.getCharacter())
-        board, enemy_group, npc_group, portal_group = level_contents
+        board, enemy_group, npc_group, portal_group, quest_item_group = level_contents
         self.setBoard(board)
         self.setEnemyGroup(enemy_group)
         self.setNpcGroup(npc_group)
         self.setPortalGroup(portal_group)
+        self.setQuestItemGroup(quest_item_group)
         self.setNumEnemies(len(enemy_group))
         self.getCharacter().updateRect()
         return
@@ -386,9 +395,11 @@ class GameWorld(GameState):
         main_surf.blit(board.getSurf(), (0, 0))
         main_surf.blit(sidebar.getSurf(), (768, 0))
         main_surf.blit(character.getSurf(), character.getRect())
+        # All entities (npcs/enemies/portals/quest items)
         for entity in (self.getNpcGroup().sprites() + self.getEnemyGroup().sprites() + 
-                       self.getPortalGroup().sprites()):
+                       self.getPortalGroup().sprites() + self.getQuestItemGroup().sprites()):
             main_surf.blit(entity.getSurf(), entity.getRect())
+        # Highlighted squares (in range of attack).
         for square in highlight_to_rect.keys():
             main_surf.blit(square, highlight_to_rect[square])
         return

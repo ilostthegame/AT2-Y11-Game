@@ -13,6 +13,7 @@ from pathfinder import Pathfinder
 from attack import Attack
 from sprites.entity import Entity
 from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
+from sprites.quest_item import QuestItem
 
 class Enemy(ActiveEntity):
     """Class representing an enemy entity.
@@ -123,10 +124,10 @@ class Enemy(ActiveEntity):
         pathfinder = Pathfinder()
         self_coords = (self.getXcoord(), self.getYcoord())
         # Finds path which doesn't pass through other enemies
-        path = pathfinder.findPath(coords_to_tile, (Character,Enemy,Npc,Portal), self_coords, character_coords)
+        path = pathfinder.findPath(coords_to_tile, Entity, self_coords, character_coords)
         # If no such path, finds a path which can pass through other enemies
         if path == None:
-            path = pathfinder.findPath(coords_to_tile, (Character,Npc,Portal), self_coords, character_coords)
+            path = pathfinder.findPath(coords_to_tile, (Character,Npc,Portal,QuestItem), self_coords, character_coords)
         if path == 'path not found':
             pass
         else: 
@@ -139,7 +140,7 @@ class Enemy(ActiveEntity):
         current_coords = (self.getXcoord(), self.getYcoord())
         destination_coords = getDestinationCoords(current_coords, direction)
         # Checking whether the destination coordinates can be entered.
-        obstructed_coords = getObstructedCoords(coords_to_tile, (ActiveEntity,Npc,Portal))
+        obstructed_coords = getObstructedCoords(coords_to_tile, Entity)
         is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, destination_coords)
         if is_enterable:
             self.setXcoord(destination_coords[0])

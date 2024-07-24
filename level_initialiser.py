@@ -5,8 +5,9 @@ from sprites.npc import Npc
 from sprites.portal import Portal
 from sprites.board import Board
 from sprites.character import Character
-from typing import Optional
+from typing import Optional # TODO have handling where it checks that number of times character has been located == 1.
 from sprites.entity import Entity
+from sprites.quest_item import QuestItem
 
 class LevelInitialiser:
     """Class containing methods to initialise a level's board and entities."""
@@ -14,12 +15,13 @@ class LevelInitialiser:
     def getLevelContents(self, 
                          level_name: str,
                          character: Character
-                         ) -> tuple[Board, pygame.sprite.Group, pygame.sprite.Group, pygame.sprite.Group]:
+                         ) -> tuple[Board, pygame.sprite.Group, pygame.sprite.Group, 
+                                    pygame.sprite.Group, pygame.sprite.Group]:
         """
         Main method for getting the level's board and entities.
         Parses the level code, gets Board and entity sprite groups, and draws board surface.
         Returns tuple containing level contents: 
-            (board, enemy sprite group, npc sprite group, portal sprite group).
+            (board, enemy group, npc group, portal group, quest item group).
         """
         tile_info_list = self.parseLevelCode(level_name)
         level_contents = self.interpretTileInfo(tile_info_list, character)
@@ -44,8 +46,8 @@ class LevelInitialiser:
                     # Splits the 12x12 grid code into level_info.
                     level_code_lines = [file_lines[starting_pos + i] for i in range(12)] # The lines which contain the code.
                     tile_info_list = [(tile_code, int(xcoord), int(ycoord)) 
-                                 for ycoord, code_line in enumerate(level_code_lines) 
-                                 for xcoord, tile_code in enumerate(code_line.split())]
+                                      for ycoord, code_line in enumerate(level_code_lines) 
+                                      for xcoord, tile_code in enumerate(code_line.split())]
                     return tile_info_list
         # If no marker is found within the file, raises ValueError.
         raise ValueError(f"Level name ({level_name}) cannot be found in file 'world_gen.txt'.")
@@ -53,7 +55,8 @@ class LevelInitialiser:
     def interpretTileInfo(self, 
                           tile_info_list: list[tuple[str, int, int]],
                           character: Character
-                          ) -> tuple[Board, pygame.sprite.Group, pygame.sprite.Group, pygame.sprite.Group]:
+                          ) -> tuple[Board, pygame.sprite.Group, pygame.sprite.Group, 
+                                     pygame.sprite.Group, pygame.sprite.Group]:
         """
         Interprets the list of tuples representing tile information.
 
@@ -66,15 +69,24 @@ class LevelInitialiser:
         npc sprite group and portal sprite group.
         """
         board = Board()
-        enemy_group, npc_group, portal_group = pygame.sprite.Group(), pygame.sprite.Group(), pygame.sprite.Group()
+        enemy_group, npc_group = pygame.sprite.Group(), pygame.sprite.Group()
+        portal_group, quest_item_group = pygame.sprite.Group(), pygame.sprite.Group()
+        num_located_character = 0 # Number of times character has been located.
 
+        # Iterating through all tiles and adding their info to the board.
         for tile_info in tile_info_list:
             tile_type, entity_type, entity_id = tile_info[0].split('_')
             xcoord, ycoord = tile_info[1], tile_info[2]
-            entity_on_tile = self.interpretEntityType(entity_type, entity_id, xcoord, ycoord, 
-                                                      character, enemy_group, npc_group, portal_group)
+            entity_on_tile = self.interpretEntityType(entity_type, entity_id, xcoord, ycoord, character, 
+                                                      enemy_group, npc_group, portal_group, quest_item_group)
             self.addTileToBoard(board, tile_type, entity_on_tile, xcoord, ycoord)
-        return board, enemy_group, npc_group, portal_group
+            # Checking if it was a character added to the board.
+            if isinstance(entity_on_tile, Character):
+                num_located_character += 1
+
+        if num_located_character != 1:
+            raise ValueError(f"Character exists on {num_located_character} tiles.")
+        return board, enemy_group, npc_group, portal_group, quest_item_group
 
     def interpretEntityType(self, 
                             entity_type: str, 
@@ -84,11 +96,14 @@ class LevelInitialiser:
                             character: Character,
                             enemy_group: pygame.sprite.Group,
                             npc_group: pygame.sprite.Group, 
-                            portal_group: pygame.sprite.Group) -> Optional[Entity]:
+                            portal_group: pygame.sprite.Group,
+                            quest_item_group: pygame.sprite.Group) -> Optional[Entity]:
         """Creates/modifies an entity object based on entity_type on a tile.
+        Adds the entity to its sprite group.
 
-        If entity is a character, modifies its coordinates.
-        If entity is an enemy/portal/npc, creates an instance of it.
+        If entity is a character, changes its coordinates.
+        If entity is an enemy/portal/npc/quest item, creates an instance of it,
+        and adds it to its respective group.
         Returns the entity object that was created/modified.
         """
         match entity_type:
@@ -105,6 +120,9 @@ class LevelInitialiser:
             case 'P':
                 entity = Portal(entity_id, xcoord, ycoord)
                 portal_group.add(entity)
+            case 'Q':
+                entity = QuestItem(entity_id, xcoord, ycoord)
+                quest_item_group.add(entity)
             case '0':
                 entity = None
             case _:

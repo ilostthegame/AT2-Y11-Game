@@ -11,6 +11,7 @@ from sprites.npc import Npc
 from sprites.portal import Portal
 from sprites.entity import Entity
 from movement_helper_funcs import getObstructedCoords, checkTileEnterable, getDestinationCoords
+from sprites.quest_item import QuestItem
 
 class Character(ActiveEntity):
     """Class representing a character entity.
@@ -28,7 +29,6 @@ class Character(ActiveEntity):
         defence (int): Defence stat.
         max_health (int): Maximum health stat.
         health (int): Current health stat.
-        
         weapon (Weapon): Currently held weapon.
         is_alive (bool): Whether entity is alive: health above 0 or not.
         xcoord (int): X coordinate of entity in world.
@@ -41,6 +41,7 @@ class Character(ActiveEntity):
         enemies_in_range (list[Optional[Enemy]]): The list of enemies in range
             of the currently selected attack (empty when no attack selected).
         health_regen (int): How much health regenerates each turn.
+        quest_item_names (set[str]): Set of owned quest items' names
     """
     
     # Attributes
@@ -49,6 +50,7 @@ class Character(ActiveEntity):
     __selected_attack = None
     __enemies_in_range = None
     __health_regen = None
+    __quest_item_names = None
 
     # Constructor
     def __init__(self,  # TODO all of this stuff should not be optional arguments. 
@@ -74,6 +76,7 @@ class Character(ActiveEntity):
         self.setSelectedAttack(None)
         self.setEnemiesInRange([])
         self.setHealthRegen(health_regen)
+        self.setQuestItemNames(set())
 
     # Getters
     def getLevel(self) -> int:
@@ -82,10 +85,12 @@ class Character(ActiveEntity):
         return self.__exp
     def getSelectedAttack(self) -> Attack:
         return self.__selected_attack
-    def getEnemiesInRange(self):
+    def getEnemiesInRange(self) -> list:
         return self.__enemies_in_range
-    def getHealthRegen(self):
+    def getHealthRegen(self) -> int:
         return self.__health_regen
+    def getQuestItemNames(self) -> set[str]:
+        return self.__quest_item_names
     
     # Setters
     def setLevel(self, level):
@@ -98,6 +103,8 @@ class Character(ActiveEntity):
         self.__enemies_in_range = enemies_in_range
     def setHealthRegen(self, health_regen):
         self.__health_regen = health_regen
+    def setQuestItemNames(self, quest_item_names):
+        self.__quest_item_names = quest_item_names
 
     def moveOrInteract(self,
                        direction: str, 
@@ -124,18 +131,30 @@ class Character(ActiveEntity):
         is_enterable = checkTileEnterable(coords_to_tile, obstructed_coords, destination_coords)
         if not is_enterable:
             return False
+        # Handling the destination tile being occupied by different entities.
         occupying_entity = coords_to_tile[destination_coords].getOccupiedBy()
         # If occupied by Npc, return its message.
         if isinstance(occupying_entity, Npc):
             message = f"{occupying_entity.getName()} says: '{occupying_entity.getDialogue()}'"
             return message
-        # If occupied by Portal, either move onto portal, or return error message.
+        # If occupied by Portal, attempt to enter the portal
         elif isinstance(occupying_entity, Portal):
-            if num_enemies == 0:
-                occupying_entity.setIsActivated(True)
-                return "You entered the portal! You feel yourself being teleported."
+            event = occupying_entity.handleEnterAttempt(num_enemies, self.getQuestItemNames())
+            return event
+        # If occupied by a Quest Item, obtain the quest item.
+        elif isinstance(occupying_entity, QuestItem):
+            # If already owned, return error message.
+            if occupying_entity.getName() in self.getQuestItemNames():
+                event = (f"You already have a {occupying_entity.getName()}. "
+                          "Leave some for other adventurers.")
             else:
-                return "You try to enter the portal, but there are still enemies remaining."
+                # Adds to owned quest items.
+                event = f"You picked up the {occupying_entity.getName()}"
+                self.getQuestItemNames().add(occupying_entity.getName()) 
+                # Removes quest item from board.
+                coords_to_tile[destination_coords].setOccupiedBy(None)
+                occupying_entity.kill()
+            return event
         # Tile is unobstructed and has no entities.
         else:
             # Sets own coordinates/screen position.

@@ -1,0 +1,11 @@
+Interpretation of file:
+Double exclamation mark (!!) marks the ID of quest item, e.g. !!00
+ID is separated from quest item object information by tilde (~)
+Quest item object information is found on same line, separated by forward slashes (/)
+Template for quest item object as below:
+!!{ID}~{image_name}/{name}
+
+!!SP~stone_of_puzzling_longevity/Stone of Puzzling Longevity
+!!GP~gem_of_persistent_tranquility/Gem of Persistent Tranquility
+!!JV~jewel_of_vibrant_colours/Jewel of Vibrant Colours
+!!CE~crystal_of_eternal_light/Crystal Of Eternal Light

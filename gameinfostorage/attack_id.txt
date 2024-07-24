@@ -6,22 +6,22 @@ Template for attack object as below:
 !!{ID}~{name}/{power}/{accuracy}/{range}/{description}
 
 Sword attacks:
-!!Sl~Slice/30/80/1/An accurate move.
-!!Di~Dice/50/60/1/A less accurate move.
-!!Ha~Hack/60/40/1/An inaccurate move.
-!!Lu~Lunge/20/80/2/A long ranged move.
+!!Sl~Slice/50/80/2/An accurate move.
+!!Di~Dice/80/60/2/A less accurate move.
+!!Ha~Hack/150/40/2/An inaccurate move.
+!!Lu~Lunge/40/80/3/A long ranged move.
 
 Bow attacks:
-!!Sh~Shoot/15/90/5/A regular bowshot.
-!!LR~Long Range Shot/10/80/10/A long ranged, but weaker bowshot.
-!!SS~Sharpshot/20/100/3/An extremely accurate bowshot.
-!!Ts~Trickshot/80/20/5/Style points == damage.
+!!Sh~Shoot/30/80/6/A regular bowshot.
+!!PS~Powerful Shot/60/70/4/A powerful bowshot.
+!!SS~Sharpshot/20/80/12/A long ranged, but weaker bowshot.
+!!Ts~Trickshot/300/20/6/The cringe destroys your enemies.
 
 Daggers attacks:
-!!Fs~Frontstab/25/90/1/A stab from the front.
-!!Bs~Backstab/35/80/1/A stab from the back.
-!!Ss~Sidestab/30/95/1/A stab from the side.
-!!TD~Throw Dagger/20/80/5/Where are you getting all these daggers?
+!!Fs~Frontstab/80/90/1/A stab from the front.
+!!Bs~Backstab/160/70/1/A stab from the back.
+!!Ss~Sidestab/110/80/1/A stab from the side.
+!!TD~Throw Dagger/50/50/5/Where are you getting all these daggers?
 
 
 Hammer attacks:
@@ -45,7 +45,7 @@ String instrument attacks:
 !!Tu~Tuning/40/100/4/Make sure to applaud.
 
 Whiteboard cleaner attacks:
-!!rs~Regular Spray/150/90/3/
-!!js~Jet spray/250/50/5/Long ranged, powerful spray
+!!rs~Regular Spray/200/90/3/
+!!js~Jet spray/400/50/5/Long ranged, powerful spray
 
 
