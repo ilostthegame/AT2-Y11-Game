@@ -25,9 +25,6 @@ class GameOver(GameState):
         Returns 'title_screen' once a mouse button/key is pressed.
         Else, returns 'game_over'.
         """
-        # Deletes all contents of save file.
-        with open('gameinfostorage/save_info.txt', 'w') as file:
-            pass
         # Wait for mouse/key press.
         for event in pygame_events:
             if event.type == MOUSEBUTTONDOWN or event.type == KEYDOWN:

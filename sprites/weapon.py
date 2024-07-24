@@ -28,7 +28,7 @@ class Weapon(pygame.sprite.Sprite):
     # Constructor
     def __init__(self, weapon_id: str, entity_xcoord: int, entity_ycoord: int):
         # Getting and unpacking file info
-        attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/weapon_id.txt', weapon_id) # [image, name, *attacks]
+        attribute_list = FileIdInterpreter().interpretFileInfo('gameinfostorage/weapon_id.txt', weapon_id)
         image_name, name = attribute_list[0], attribute_list[1]
         
         # Setting weapon object attributes.
