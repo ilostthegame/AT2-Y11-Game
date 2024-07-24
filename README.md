@@ -26,3 +26,5 @@ Sword - A medium ranged, heavy damage focused weapon.
 Bow - A long ranged but less powerful weapon.
 Daggers - An accurate weapon with low range.
 Spellbook - A high range, heavy damage weapon with low accuracy.
+## Saving
+Game autosaves each time you enter a new level.
