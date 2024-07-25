@@ -73,7 +73,7 @@ class WorldInit(GameState):
     def instantiateCharacter(self, weapon_id: str) -> Character:
         """Instantiates and returns initial character object."""
         character_image = pygame.image.load(GAME_ASSETS['character'])
-        character = Character(character_image, 'Player', weapon_id, 50, 50, 100, 100, 1, 0, 5)
+        character = Character(character_image, 'Player', weapon_id, 10, 10, 100, 100, 1, 0, 5)
         return character
 
     def createSurf(self) -> None:

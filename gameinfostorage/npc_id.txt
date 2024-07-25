@@ -7,7 +7,7 @@ Template for npc object as below:
 
 !!H1~helpful_student/Helpful Student/The enemies don't give you exp if the lava kills them.
 !!tr~traumatised_student/Traumatised Student/Don't enter the portals it's dangerous.
-!!lp~lava_pit_guy/Lava Pit Guy/Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! 
+!!lp~lava_pit_guy/Lava Pit Guy/Lava is cool!
 !!hs~hungry_student/Hungry Student/Can i eat the crystal of eternal light?
 !!Is~ishaan/Ishaan/I like papadums.
 !!rr~ryan/Ryan/You should cheese yourself.

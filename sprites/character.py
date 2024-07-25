@@ -219,13 +219,13 @@ class Character(ActiveEntity):
         Updates health regen based on max health.
         """
         health_increase = 20
-        strength_increase = 5
-        defence_increase = 5
+        strength_increase = 10
+        defence_increase = 10
         self.setMaxHealth(self.getMaxHealth() + health_increase)
         self.setHealth(self.getHealth() + health_increase)
         self.setStrength(self.getStrength() + strength_increase)
         self.setDefence(self.getDefence() + defence_increase)
-        self.setHealthRegen(int(self.getMaxHealth() / 20))
+        self.setHealthRegen(int(self.getMaxHealth() / 50))
         return (health_increase, strength_increase, defence_increase)
 
     def calcRequiredExp(self):

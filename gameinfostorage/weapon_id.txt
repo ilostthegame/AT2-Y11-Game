@@ -9,7 +9,7 @@ Character weapons:
 !!Sw~sword/Sword/Sl/Di/Ha/Lu
 !!Bo~bow/Bow/Sh/PS/SS/Ts
 !!Dg~daggers/Daggers/Fs/Bs/Ss/TD
-!!Sb~spellbook/Spellbook/Zp/Ib/Fb/Th
+!!Sb~spellbook/Spellbook/Zp/Ib/Fb/TS
 
 Turning circle:
 !!bk~bus_keys/Bus Keys/sc/ji
@@ -32,7 +32,7 @@ South block:
 !!la~laptop/Laptop/tl
 !!Zh~zhangs_homework/Zhang's homework/hc
 !!Dd~dr_du_homework/Dr Du homework/hm
-!!Va/vape/Vape/va
+!!Va~vape/Vape/va
 
 Ianni's classroom:
 !!WC~whiteboard_cleaner/Whiteboard Cleaner/rs/js

@@ -6,28 +6,28 @@ Template for enemy object as below:
 !!{ID}~{image_name}/{name}/{strength}/{defence}/{health}/{weapon_id}/{movement_pattern}/{exp_yield}
 
 Turning circle:
-!!bd~bus_driver/Bus Driver/7/7/70/bk/direct/50
-!!te~teacher/Teacher/5/5/50/si/direct/30
-!!bo~boarder/Boarder/10/10/100/rb/direct/80
-!!pS~preppie/Preppie/3/1/10/st/direct/5
-!!pR~preppie/Preppie/3/1/10/ro/direct/5
+!!bd~bus_driver/Bus Driver/8/5/70/bk/direct/50
+!!te~teacher/Teacher/7/3/50/si/direct/50
+!!bo~boarder/Boarder/15/10/100/rb/direct/80
+!!pS~preppie/Preppie/5/1/10/st/direct/10
+!!pR~preppie/Preppie/5/1/10/ro/direct/10
 
 Music centre:
-!!VP~violin_player/Violin Player/10/4/40/VI/direct/80
-!!vP~viola_player/Viola Player/7/6/60/Vi/direct/80
-!!CP~cello_player/Cello Player/10/12/100/Ce/still/200
-!!DP~double_bass_player/Double Bass Player/6/16/150/Db/still/200
-!!TP~trombone_player/Trombone Player/20/20/200/Tb/direct/500
-!!tP~trumpet_player/Trumpet Player/15/25/200/Tp/direct/500
-!!PP~piano_player/Piano Player/30/20/500/Pi/direct/2000
+!!VP~violin_player/Violin Player/13/4/80/VI/direct/100
+!!vP~viola_player/Viola Player/9/6/100/Vi/direct/100
+!!CP~cello_player/Cello Player/16/12/150/Ce/still/300
+!!DP~double_bass_player/Double Bass Player/12/16/200/Db/still/300
+!!TP~trombone_player/Trombone Player/25/20/200/Tb/direct/600
+!!tP~trumpet_player/Trumpet Player/20/25/200/Tp/direct/600
+!!PP~piano_player/Piano Player/70/50/1000/Pi/direct/2000
 
 South block:
-!!K1~tks_student_1/The Kings School Student 1/10/20/200/ph/direct/300
-!!K2~tks_student_1/The Kings School Student 2/20/10/200/la/direct/400
-!!K3~tks_student_1/The Kings School Student 3/30/20/400/Zh/direct/1200
-!!K4~tks_student_1/The Kings School Student 4/40/20/400/Dd/direct/1500
-!!K5~tks_student_1/The Kings School Student 5/70/30/1000/Va/direct/5000
+!!K1~tks_student_1/The Kings School Student 1/15/20/400/ph/direct/600
+!!K2~tks_student_2/The Kings School Student 2/25/15/400/la/direct/800
+!!K3~tks_student_3/The Kings School Student 3/60/35/800/Zh/direct/2000
+!!K4~tks_student_4/The Kings School Student 4/65/40/800/Dd/direct/2500
+!!K5~tks_student_5/The Kings School Student 5/90/50/2500/Va/direct/15000
 
 Ianni's classroom:
-!!RI~rocco_ianni/Rocco Ianni/200/200/5000/WC/direct/100000
-!!MI~minianni/Minianni/50/50/1000/AH/direct/10000
+!!RI~rocco_ianni/Rocco Ianni/200/100/10000/WC/direct/100000
+!!MI~minianni/Minianni/50/50/3000/AH/direct/20000

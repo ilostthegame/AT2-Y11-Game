@@ -1,9 +1,13 @@
 Dining Hall
-50
-50
-100
-100
-5
-0
-1
-Sw
+390
+390
+860
+860
+17
+9445
+39
+Sb
+Stone of Puzzling Longevity
+Gem of Persistent Tranquility
+Jewel of Radiant Vitality
+Crystal Of Eternal Light

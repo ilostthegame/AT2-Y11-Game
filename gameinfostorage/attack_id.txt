@@ -7,59 +7,59 @@ Template for attack object as below:
 
 Character weapons:
 Sword attacks:
-!!Sl~Slice/70/80/2
-!!Di~Dice/110/60/2
-!!Ha~Hack/220/40/2
-!!Lu~Lunge/40/80/3
+!!Sl~Slice/150/80/2
+!!Di~Dice/200/65/2
+!!Ha~Hack/300/50/2
+!!Lu~Lunge/100/80/4
 
 Bow attacks:
-!!Sh~Shoot/30/80/6
-!!PS~Powerful Shot/60/60/4
-!!SS~Sharpshot/20/75/12
-!!Ts~Trickshot/200/20/6
+!!Sh~Shoot/80/90/6
+!!PS~Powerful Shot/160/60/4
+!!SS~Sharpshot/70/80/12
+!!Ts~Trickshot/700/20/6
 
 Daggers attacks:
-!!Fs~Frontstab/90/95/1
-!!Bs~Backstab/180/65/1
-!!Ss~Sidestab/120/80/1
-!!TD~Throw Dagger/50/50/5
+!!Fs~Frontstab/200/95/1
+!!Bs~Backstab/400/65/1
+!!Ss~Sidestab/280/80/1
+!!TD~Throw Dagger/80/50/5
 
 Spellbook attacks:
-!!Zp~Zap/30/80/5
-!!Ib~Icebolt/120/40/3
-!!Fb~Firebolt/180/25/5
-!!Ts~Thunder strike/300/15/100
+!!Zp~Zap/70/80/5
+!!Ib~Icebolt/180/55/3
+!!Fb~Firebolt/220/40/5
+!!TS~Thunder strike/1500/10/100
 
 Turning circle:
-!!sc~Scratch/20/90/1
-!!ji~Jingle/5/90/3
+!!sc~Scratch/20/90/2
+!!ji~Jingle/5/90/2
 !!wh~Whack/15/80/2
 !!sm~Smack/15/80/2
-!!pc~Paper Cut/50/60/1
-!!ki~Kick/40/40/6
-!!rt~Rugby Tackle/80/40/1
+!!pc~Paper Cut/50/60/2
+!!ki~Kick/40/40/2
+!!rt~Rugby Tackle/80/40/2
 !!po~Poke/10/80/2
 !!tr~Throw Rock/30/50/5
 
 Music center:
-!!Vi~Vivaldi's Four Seasons - Autumn/20/100/4
-!!Dv~Dvorak's American - 1st Movement/20/100/4
-!!Tc~Tchaikovsky's 1812/30/100/4
-!!Jz~Jazz music/60/80/4
-!!LC~La Campanella/160/20/4
-!!FE~Fur Elise/80/50/4
-!!Tu~Tuning/10/100/4
+!!Vi~Vivaldi's Four Seasons - Autumn/50/100/4
+!!Dv~Dvorak's American - 1st Movement/50/100/4
+!!Tc~Tchaikovsky's 1812/60/100/4
+!!Jz~Jazz music/80/80/4
+!!LC~La Campanella/200/20/4
+!!FE~Fur Elise/120/50/4
+!!Tu~Tuning/40/100/4
 
 South block:
 !!tp~Throw Phone/100/70/7
 !!tl~Throw Laptop/200/40/3
 !!hc~Hard Chem problem/100/50/3
 !!hm~Hard Math Problem/120/50/3
-!!va~Vape/200/90/1
+!!va~Vape/200/90/2
 
 Ianni's classroom:
 Whiteboard cleaner attacks:
 !!rs~Regular Spray/200/90/3
-!!js~Jet spray/400/50/6
+!!js~Jet spray/400/50/3
 Aquarium hourglass:
-!!hy~Hypnotise/100/90/1
+!!hy~Hypnotise/100/90/2

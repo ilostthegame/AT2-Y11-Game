@@ -128,7 +128,7 @@ class Enemy(ActiveEntity):
         # Finds path which doesn't pass through other enemies
         path = pathfinder.findPath(coords_to_tile, Entity, self_coords, character_coords)
         # If no such path, finds a path which can pass through other enemies
-        if path == None:
+        if path == 'path not found':
             path = pathfinder.findPath(coords_to_tile, (Character,Npc,Portal,QuestItem), self_coords, character_coords)
         if path == 'path not found':
             pass
