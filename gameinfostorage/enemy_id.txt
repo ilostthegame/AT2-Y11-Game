@@ -9,7 +9,8 @@ Turning circle:
 !!bd~bus_driver/Bus Driver/7/7/70/bk/direct/50
 !!te~teacher/Teacher/5/5/50/si/direct/30
 !!bo~boarder/Boarder/10/10/100/rb/direct/80
-!!pr~preppie_Preppie/3/1/10/st/direct/5
+!!pS~preppie/Preppie/3/1/10/st/direct/5
+!!pR~preppie/Preppie/3/1/10/ro/direct/5
 
 Music centre:
 !!VP~violin_player/Violin Player/10/4/40/VI/direct/80

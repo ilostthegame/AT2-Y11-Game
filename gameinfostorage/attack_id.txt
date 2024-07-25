@@ -39,6 +39,7 @@ Turning circle:
 !!ki~Kick/40/40/6
 !!rt~Rugby Tackle/80/40/1
 !!po~Poke/10/80/2
+!!tr~Throw Rock/30/50/5
 
 Music center:
 !!Vi~Vivaldi's Four Seasons - Autumn/20/100/4

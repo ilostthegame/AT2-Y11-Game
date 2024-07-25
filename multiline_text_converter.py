@@ -1,17 +1,8 @@
-# Module containing class TextRectException and 
-# a function for creating multi-line text.
+# Module containing a function for creating multi-line text.
 # Code taken from Stack Overflow.
 # https://stackoverflow.com/questions/32590131/pygame-blitting-text-with-an-escape-character-or-newline
 
 import pygame
-
-class TextRectException:
-    def __init__(self, message=None):
-            self.message = message
-
-    def __str__(self):
-        return self.message
-
 
 def multiLineSurface(string: str, font: pygame.font.Font, rect: pygame.rect.Rect, fontColour: tuple, BGColour: tuple, justification=0):
     """Returns a surface containing the passed text string, reformatted
@@ -33,7 +24,7 @@ def multiLineSurface(string: str, font: pygame.font.Font, rect: pygame.rect.Rect
     Returns
     -------
     Success - a surface object with the text rendered onto it.
-    Failure - raises a TextRectException if the text won't fit onto the surface.
+    Failure - raises an Exception if the text won't fit onto the surface.
     """
 
     finalLines = []
@@ -46,7 +37,7 @@ def multiLineSurface(string: str, font: pygame.font.Font, rect: pygame.rect.Rect
             # if any of our words are too long to fit, return.
             for word in words:
                 if font.size(word)[0] >= rect.width:
-                    raise TextRectException("The word " + word + " is too long to fit in the rect passed.")
+                    raise Exception("The word " + word + " is too long to fit in the rect passed.")
             # Start a new line
             accumulatedLine = ""
             for word in words:
@@ -67,7 +58,7 @@ def multiLineSurface(string: str, font: pygame.font.Font, rect: pygame.rect.Rect
     accumulatedHeight = 0
     for line in finalLines:
         if accumulatedHeight + font.size(line)[1] >= rect.height:
-            raise TextRectException("Once word-wrapped, the text string was too tall to fit in the rect.")
+            raise Exception("Once word-wrapped, the text string was too tall to fit in the rect.")
         if line != "":
             tempSurface = font.render(line, 1, fontColour)
         if justification == 0:
@@ -77,6 +68,6 @@ def multiLineSurface(string: str, font: pygame.font.Font, rect: pygame.rect.Rect
         elif justification == 2:
             surface.blit(tempSurface, (rect.width - tempSurface.get_width(), accumulatedHeight))
         else:
-            raise TextRectException("Invalid justification argument: " + str(justification))
+            raise Exception("Invalid justification argument: " + str(justification))
         accumulatedHeight += font.size(line)[1]
     return surface

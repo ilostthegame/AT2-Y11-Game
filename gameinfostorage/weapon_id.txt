@@ -15,7 +15,8 @@ Turning circle:
 !!bk~bus_keys/Bus Keys/sc/ji
 !!si~sbw_insight/SB&W insight/wh/sm/pc
 !!rb~rugby_ball/Rugby ball/ki/rt
-!!st~stick_Stick/po
+!!st~stick/Stick/po
+!!ro~rock/Rock/tr
 
 Music centre:
 !!VI~violin/Violin/Vi/Dv/Tu

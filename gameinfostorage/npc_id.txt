@@ -5,23 +5,23 @@ Npc object information is found on same line, separated by forward slashes (/)
 Template for npc object as below:
 !!{ID}~{image_name}/{name}/{dialogue}
 
-!!H1~helpful_student_1/Helpful Student 1/The enemies don't give you exp if the lava kills them.
+!!H1~helpful_student/Helpful Student/The enemies don't give you exp if the lava kills them.
 !!tr~traumatised_student/Traumatised Student/Don't enter the portals it's dangerous.
-!!lp~lava_pit_guy/Lava Pit Guy/Lava is cool!
+!!lp~lava_pit_guy/Lava Pit Guy/Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! Lava is cool! 
 !!hs~hungry_student/Hungry Student/Can i eat the crystal of eternal light?
 !!Is~ishaan/Ishaan/I like papadums.
 !!rr~ryan/Ryan/You should cheese yourself.
-!!mx~mengxi/Meng Xi/hi
-!!KS~kaladin/Kaladin Stormblessed/Life before death. Strength before weakness. Journey before destination.
+!!mx~mengxi/Meng Xi/uhhhhhhhhh
+!!KS~kaladin_stormblessed/Kaladin Stormblessed/Life before death. Strength before weakness. Journey before destination.
 
 !!rg~random_guy/Random Guy/Yeah beat up those preppies.
 !!ki~kindegartener/Kindegartener/pwease don't take away my wock nooo
 !!hw~headphone_wearer/Headphone Wearer/These musicians can't hurt me haha.
 
-!!p1~portal_guardian_1/Portal Guardian 1/The Turning Circle is a good starting point for brave adventurers. Those who pass its trials earn the Stone of Puzzling Longevity. 
-!!p2~portal_guardian_2/Portal Guardian 2/This portal leads to the Music Centre, full of the traumatic sounds of TKS musicians. You may find the Gem of Persistent Tranquility here.
-!!p3~portal_guardian_3/Portal Guardian 3/Only the mightiest of adventurers have successfully traversed the South Block. Behind this portal, will lie the Jewel of Radiant Vibrance. 
-!!p4~portal_guardian_4/Portal Guardian 4/Legends say the Crystal of Eternal Light is found in Ianni's classroom. Take care, for a dangerous boss guards the crystal.
+!!p1~portal_guardian/Portal Guardian 1/The Turning Circle is a good starting point for brave adventurers. Those who pass its trials earn the Stone of Puzzling Longevity. 
+!!p2~portal_guardian/Portal Guardian 2/This portal leads to the Music Centre, full of the traumatic sounds of TKS musicians. You may find the Gem of Persistent Tranquility here.
+!!p3~portal_guardian/Portal Guardian 3/Only the mightiest of adventurers have successfully traversed the South Block. Behind this portal, will lie the Jewel of Radiant Vibrance. 
+!!p4~portal_guardian/Portal Guardian 4/Legends say the Crystal of Eternal Light is found in Ianni's classroom. Take care, for a dangerous boss guards the crystal.
 
-!!fa~failed_adventurer_Failed Adventurer/Ianni's too powerful D:
-!!HF~hayden_foxwell/Hayden Foxwell/Make sure your uniforms are well adjusted. (make speech longer. Put guarding the crystal of eternal light.)
+!!fa~failed_adventurer/Failed Adventurer/Ianni's too powerful D:
+!!HF~hayden_foxwell/Hayden Foxwell/Make sure your uniforms are well adjusted.
