@@ -1,0 +1,10 @@
+Dining Hall
+50
+50
+100
+100
+5
+0
+1
+Sw
+Stone of Puzzling Longevity

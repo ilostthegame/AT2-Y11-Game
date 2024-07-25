@@ -28,7 +28,7 @@ class GameOver(GameState):
         # Wait for mouse/key press.
         for event in pygame_events:
             if event.type == MOUSEBUTTONDOWN or event.type == KEYDOWN:
-                return 'title_screen'
+                return 'world_load'
         return 'game_over'
 
     def createSurf(self) -> None:
@@ -36,8 +36,8 @@ class GameOver(GameState):
         main_surf = self.getMainSurf()
         font = pygame.font.Font(None, 64)
         main_surf.fill((255, 255, 255))
-        main_surf.blit(font.render("GAME OVER", True, (0,0,0)), (500, 200))
-        main_surf.blit(font.render("Press any key to exit", True, (0,0,0)), (300, 400))
+        main_surf.blit(font.render("GAME OVER", True, (0,0,0)), (450, 200))
+        main_surf.blit(font.render("Press any key to return to last save.", True, (0,0,0)), (225, 400))
         return
     
 

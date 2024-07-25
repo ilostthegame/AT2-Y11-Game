@@ -12,25 +12,27 @@ Character weapons:
 !!Sb~spellbook/Spellbook/Zp/Ib/Fb/Th
 
 Turning circle:
-Bus Keys
-Rock
-Gazette
-SB&W insight
-Rugby ball
+!!bk~bus_keys/Bus Keys/sc/ji
+!!si~sbw_insight/SB&W insight/wh/sm/pc
+!!rb~rugby_ball/Rugby ball/ki/rt
+!!st~stick_Stick/po
 
 Music centre:
-!!VI~violin/Violin/Vi/Dv/Tc/Tu
-!!Vi~viola/Viola/Vi/Dv/Tc/Tu
-!!Ce~cello/Cello/Vi/Dv/Tc/Tu
-!!Db~double_bass/Double Bass/Vi/Dv/Tc/Tu
+!!VI~violin/Violin/Vi/Dv/Tu
+!!Vi~viola/Viola/Vi/Dv/Tu
+!!Ce~cello/Cello/Vi/Dv/Tu
+!!Db~double_bass/Double Bass/Vi/Dv/Tu
+!!Tb~trombone/Trombone/Tc/Jz/Tu
+!!Tp~trumpet/Trumpet/Tc/Jz/Tu
+!!Pi~piano/Piano/LC/FE
 
 South block:
-Phone
-Laptop
-Vape
-Zhang's homework
-Dr Du homework
-Fists
+!!ph~phone/Phone/tp
+!!la~laptop/Laptop/tl
+!!Zh~zhangs_homework/Zhang's homework/hc
+!!Dd~dr_du_homework/Dr Du homework/hm
+!!Va/vape/Vape/va
 
 Ianni's classroom:
 !!WC~whiteboard_cleaner/Whiteboard Cleaner/rs/js
+!!AH~aquarium_hourglass/Aquarium Hourglass/hy

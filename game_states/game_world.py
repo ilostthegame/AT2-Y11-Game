@@ -363,7 +363,9 @@ class GameWorld(GameState):
         events = []
         for enemy in self.getEnemyGroup():
             events.append(f"You spotted a {enemy.getName()} wielding a {enemy.getWeapon().getName()}")
-        self.saveGame()
+        # Saving game if level is Dining Hall
+        if self.getLevelName() == 'Dining Hall':
+            self.saveGame()
         return events
     
     def updateSidebarInfo(self, events: list[str]) -> None:
@@ -412,7 +414,7 @@ class GameWorld(GameState):
         return
     
     def saveGame(self) -> None:
-        """Saves game to save file. To be run on level initialisation."""
+        """Saves game to save file. To be run when entering Dining Hall."""
         with open('gameinfostorage/save_info.txt', 'w') as file:
             file.write(self.getLevelName() + '\n')
             character_stats = self.getCharacter().getStats()

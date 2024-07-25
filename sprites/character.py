@@ -83,7 +83,7 @@ class Character(ActiveEntity):
         return self.__level
     def getExp(self) -> int:
         return self.__exp
-    def getSelectedAttack(self) -> Attack:
+    def getSelectedAttack(self) -> Optional[Attack]:
         return self.__selected_attack
     def getEnemiesInRange(self) -> list:
         return self.__enemies_in_range
@@ -192,7 +192,7 @@ class Character(ActiveEntity):
                 enemies_in_range.append(enemy)
         self.setEnemiesInRange(enemies_in_range)
 
-    def gainExp(self, exp) -> list[Optional[str]]:
+    def gainExp(self, exp: int) -> list[Optional[str]]:
         """Increases exp, and levels up if possible.
 
         Runs updateStats() for each level up.

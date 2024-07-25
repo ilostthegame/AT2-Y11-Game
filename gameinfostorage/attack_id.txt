@@ -5,6 +5,7 @@ Attack object information is found on same line, separated by forward slashes (/
 Template for attack object as below:
 !!{ID}~{name}/{power}/{accuracy}/{range}
 
+Character weapons:
 Sword attacks:
 !!Sl~Slice/70/80/2
 !!Di~Dice/110/60/2
@@ -12,46 +13,52 @@ Sword attacks:
 !!Lu~Lunge/40/80/3
 
 Bow attacks:
-!!Sh~Shoot/50/80/6
-!!PS~Powerful Shot/100/60/4
-!!SS~Sharpshot/40/75/12
-!!Ts~Trickshot/300/20/6
+!!Sh~Shoot/30/80/6
+!!PS~Powerful Shot/60/60/4
+!!SS~Sharpshot/20/75/12
+!!Ts~Trickshot/200/20/6
 
 Daggers attacks:
-!!Fs~Frontstab/80/95/1
-!!Bs~Backstab/160/65/1
-!!Ss~Sidestab/110/80/1
+!!Fs~Frontstab/90/95/1
+!!Bs~Backstab/180/65/1
+!!Ss~Sidestab/120/80/1
 !!TD~Throw Dagger/50/50/5
 
 Spellbook attacks:
-!!Zp~Zap/40/80/5
-!!Ib~Icebolt/120/50/3
-!!Fb~Firebolt/180/30/5
+!!Zp~Zap/30/80/5
+!!Ib~Icebolt/120/40/3
+!!Fb~Firebolt/180/25/5
 !!Ts~Thunder strike/300/15/100
 
+Turning circle:
+!!sc~Scratch/20/90/1
+!!ji~Jingle/5/90/3
+!!wh~Whack/15/80/2
+!!sm~Smack/15/80/2
+!!pc~Paper Cut/50/60/1
+!!ki~Kick/40/40/6
+!!rt~Rugby Tackle/80/40/1
+!!po~Poke/10/80/2
 
-Hammer attacks:
-!!Sm~Smash/50/60/1
-!!Ba~Bash/60/50/1
-!!Wh~Whack/70/40/1
-!!sm~Smack/20/90/1
-
-
-
-Melee attacks:
-!!Jab
-!!Hook
-!!Uppercut
-!!
-
-String instrument attacks:
+Music center:
 !!Vi~Vivaldi's Four Seasons - Autumn/20/100/4
 !!Dv~Dvorak's American - 1st Movement/20/100/4
 !!Tc~Tchaikovsky's 1812/30/100/4
+!!Jz~Jazz music/60/80/4
+!!LC~La Campanella/160/20/4
+!!FE~Fur Elise/80/50/4
 !!Tu~Tuning/10/100/4
 
+South block:
+!!tp~Throw Phone/100/70/7
+!!tl~Throw Laptop/200/40/3
+!!hc~Hard Chem problem/100/50/3
+!!hm~Hard Math Problem/120/50/3
+!!va~Vape/200/90/1
+
+Ianni's classroom:
 Whiteboard cleaner attacks:
 !!rs~Regular Spray/200/90/3
-!!js~Jet spray/400/50/5
-
-
+!!js~Jet spray/400/50/6
+Aquarium hourglass:
+!!hy~Hypnotise/100/90/1

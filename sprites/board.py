@@ -24,9 +24,9 @@ class Board(pygame.sprite.Sprite):
         self.setCoordsToTile(dict())
 
     # Getters
-    def getSurf(self):
+    def getSurf(self) -> pygame.Surface:
         return self.__surf
-    def getCoordsToTile(self):
+    def getCoordsToTile(self) -> dict[tuple[int, int], Tile]:
         return self.__coords_to_tile
 
     # Setters

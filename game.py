@@ -187,7 +187,10 @@ class Game:
         return world_init.getMainSurf()
 
     def runWorldLoad(self):
-        """Loads GameWorld object from file. Immediately enters game_world state."""
+        """Loads GameWorld object from file. Immediately enters game_world state.
+        
+        Sets game_world attribute to be the loaded GameWorld object.
+        """
         world_load = self.getWorldLoad()
         next_state = world_load.run()
         # Sets the instantiated GameWorld object.
@@ -219,20 +222,11 @@ class Game:
             self.setTitleScreen(TitleScreen())
         return game_menu.getMainSurf()
     
-    def runGameOver(self, pygame_events) -> pygame.Surface:
-        """Run method for GameOver.
-        
-        Deletes GameWorld object and savefile.
-        """
-        # Deletes gamewworld/savefile.
-        self.setGameWorld(None)
-        with open('gameinfostorage/save_info.txt', 'w') as file:
-            pass
+    def runGameOver(self, 
+                    pygame_events: list[pygame.event.Event]) -> pygame.Surface:
+        """Run method for GameOver."""
         # Runs game over screen.
         game_over_state = self.getGameOver()
         next_state = game_over_state.run(pygame_events)
         self.setState(next_state)
-        # Re-initialises TitleScreen if entered
-        if next_state == 'title_screen':
-            self.setTitleScreen(TitleScreen())
         return game_over_state.getMainSurf()

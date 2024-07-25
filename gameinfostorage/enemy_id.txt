@@ -3,20 +3,30 @@ Double exclamation mark (!!) marks the ID of enemy, e.g. !!00
 ID is separated from enemy object information by tilde (~)
 Enemy object information is found on same line, separated by forward slashes (/)
 Template for enemy object as below:
-!!{ID}~{image_name}/{name}/{strength}/{defence}/{health}/{weapon_id}/{movement_pattern}/{exp_yield}/{description}
+!!{ID}~{image_name}/{name}/{strength}/{defence}/{health}/{weapon_id}/{movement_pattern}/{exp_yield}
 
-General:
-!!G1~goblin/Goblin/10/10/50/Mc/direct/50
-!!O1~orc/Orc/30/5/25/Cl/direct/50
-!!K1~tks_student_1/The Kings School Student 1/
-!!K2~tks_student_1/The Kings School Student 2/
-!!K3~tks_student_1/The Kings School Student 3/
-!!K4~tks_student_1/The Kings School Student 4/
-!!K5~tks_student_1/The Kings School Student 5/
+Turning circle:
+!!bd~bus_driver/Bus Driver/7/7/70/bk/direct/50
+!!te~teacher/Teacher/5/5/50/si/direct/30
+!!bo~boarder/Boarder/10/10/100/rb/direct/80
+!!pr~preppie_Preppie/3/1/10/st/direct/5
+
 Music centre:
-!!VP~violin_player/Violin Player/5/10/40/VI/direct/100
-!!vP~viola_player/Viola Player/3/15/50/Vi/direct/100
-!!CP~cello_player/Cello Player/10/12/60/Ce/direct/200
-!!DP~double_bass_player/Double Bass Player/6/15/100/Db/direct/200
-Ianni isle:
-!!RI~rocco_ianni/Rocco Ianni/10/100/200/WC/direct/10000
+!!VP~violin_player/Violin Player/10/4/40/VI/direct/80
+!!vP~viola_player/Viola Player/7/6/60/Vi/direct/80
+!!CP~cello_player/Cello Player/10/12/100/Ce/still/200
+!!DP~double_bass_player/Double Bass Player/6/16/150/Db/still/200
+!!TP~trombone_player/Trombone Player/20/20/200/Tb/direct/500
+!!tP~trumpet_player/Trumpet Player/15/25/200/Tp/direct/500
+!!PP~piano_player/Piano Player/30/20/500/Pi/direct/2000
+
+South block:
+!!K1~tks_student_1/The Kings School Student 1/10/20/200/ph/direct/300
+!!K2~tks_student_1/The Kings School Student 2/20/10/200/la/direct/400
+!!K3~tks_student_1/The Kings School Student 3/30/20/400/Zh/direct/1200
+!!K4~tks_student_1/The Kings School Student 4/40/20/400/Dd/direct/1500
+!!K5~tks_student_1/The Kings School Student 5/70/30/1000/Va/direct/5000
+
+Ianni's classroom:
+!!RI~rocco_ianni/Rocco Ianni/200/200/5000/WC/direct/100000
+!!MI~minianni/Minianni/50/50/1000/AH/direct/10000

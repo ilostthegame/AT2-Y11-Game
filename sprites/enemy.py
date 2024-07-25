@@ -97,6 +97,8 @@ class Enemy(ActiveEntity):
         # If no attack was in range, enemy does movement.
         if self.getMovementPattern() == 'direct':
             self.moveToCharacter(coords_to_tile, character_coords)
+        elif self.getMovementPattern() == 'still':
+            pass
         return []
 
     def getShuffledAttacks(self) -> list[Attack]:
