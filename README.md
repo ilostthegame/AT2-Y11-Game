@@ -22,9 +22,25 @@ Attacks can be used by first pressing an attack button on the sidebar (on the ri
 
 If there are no targets ain range, or you simply are considering another action, you may press the Back button to deselect the attack.
 ## Weapons
-Sword - A medium ranged, heavy damage focused weapon. RECOMMENDED
-Bow - A long ranged, accurate but less powerful weapon. RECOMMENDED
-Daggers - An accurate weapon with low range.
-Spellbook - A high range, heavy damage weapon with low accuracy.
+### Sword
+- Damage: High
+- Range: Medium
+- Accuracy: Medium
+
+### Bow
+- Damage: Low
+- Range: High
+- Accuracy: High
+
+### Daggers
+- Damage: High
+- Range: Low
+- Accuracy: High
+
+### Spellbook
+- Damage: High
+- Range: High
+- Accuracy: Low
+
 ## Saving
 Game autosaves each time you enter Dining Hall.
