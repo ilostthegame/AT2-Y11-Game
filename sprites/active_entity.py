@@ -177,6 +177,6 @@ class ActiveEntity(Entity, ABC):
         If dead, kill()'s self. 
         Returns the damage taken."""
         defence = self.getDefence()
-        damage_taken = ceil((0.99)**defence * damage)
+        damage_taken = ceil((0.995)**defence * damage)
         self.setHealth(self.getHealth() - damage_taken)
         return damage_taken

@@ -6,28 +6,28 @@ Template for enemy object as below:
 !!{ID}~{image_name}/{name}/{strength}/{defence}/{health}/{weapon_id}/{movement_pattern}/{exp_yield}
 
 Turning circle:
-!!bd~bus_driver/Bus Driver/8/5/70/bk/direct/50
-!!te~teacher/Teacher/7/3/50/si/direct/50
+!!bd~bus_driver/Bus Driver/8/6/70/bk/direct/50
+!!te~teacher/Teacher/12/3/50/si/direct/50
 !!bo~boarder/Boarder/15/10/100/rb/direct/80
-!!pS~preppie/Preppie/5/1/10/st/direct/10
-!!pR~preppie/Preppie/5/1/10/ro/direct/10
+!!pS~preppie/Preppie/7/3/15/st/direct/10
+!!pR~preppie/Preppie/7/3/15/ro/direct/10
 
 Music centre:
 !!VP~violin_player/Violin Player/13/4/80/VI/direct/100
 !!vP~viola_player/Viola Player/9/6/100/Vi/direct/100
 !!CP~cello_player/Cello Player/16/12/150/Ce/still/300
 !!DP~double_bass_player/Double Bass Player/12/16/200/Db/still/300
-!!TP~trombone_player/Trombone Player/25/20/200/Tb/direct/600
-!!tP~trumpet_player/Trumpet Player/20/25/200/Tp/direct/600
-!!PP~piano_player/Piano Player/70/50/1000/Pi/direct/2000
+!!TP~trombone_player/Trombone Player/25/15/200/Tb/direct/600
+!!tP~trumpet_player/Trumpet Player/20/20/200/Tp/direct/600
+!!PP~piano_player/Piano Player/65/30/1000/Pi/direct/3000
 
 South block:
-!!K1~tks_student_1/The Kings School Student 1/15/20/400/ph/direct/600
-!!K2~tks_student_2/The Kings School Student 2/25/15/400/la/direct/800
-!!K3~tks_student_3/The Kings School Student 3/60/35/800/Zh/direct/2000
-!!K4~tks_student_4/The Kings School Student 4/65/40/800/Dd/direct/2500
-!!K5~tks_student_5/The Kings School Student 5/90/50/2500/Va/direct/15000
+!!K1~tks_student_1/The Kings School Student 1/20/20/400/ph/direct/500
+!!K2~tks_student_2/The Kings School Student 2/25/15/400/la/direct/500
+!!K3~tks_student_3/The Kings School Student 3/40/35/800/Zh/direct/2000
+!!K4~tks_student_4/The Kings School Student 4/50/40/800/Dd/direct/2500
+!!K5~tks_student_5/The Kings School Student 5/70/40/1500/Va/direct/15000
 
 Ianni's classroom:
-!!RI~rocco_ianni/Rocco Ianni/200/100/10000/WC/direct/100000
-!!MI~minianni/Minianni/50/50/3000/AH/direct/20000
+!!RI~rocco_ianni/Rocco Ianni/250/50/4000/WC/direct/50000
+!!MI~minianni/Minianni/80/40/2000/AH/direct/8000

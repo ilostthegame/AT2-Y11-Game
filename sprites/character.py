@@ -242,3 +242,7 @@ class Character(ActiveEntity):
         stats.extend((self.getMaxHealth(), self.getHealthRegen(), self.getExp()))
         stats.extend((self.getLevel(), self.getWeapon().getId(), self.getQuestItemNames()))
         return stats
+
+    def healToFull(self) -> None:
+        """Heals character to full health"""
+        self.setHealth(self.getMaxHealth())

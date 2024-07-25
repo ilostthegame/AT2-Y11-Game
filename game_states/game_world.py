@@ -359,6 +359,7 @@ class GameWorld(GameState):
         self.setQuestItemGroup(quest_item_group)
         self.setNumEnemies(len(enemy_group))
         self.getCharacter().updateRect()
+        self.getCharacter().healToFull()
         # Creating events for each enemy.
         events = []
         for enemy in self.getEnemyGroup():

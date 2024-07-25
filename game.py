@@ -23,6 +23,8 @@ class Game:
             in ['title_screen', 'world_init', 'world_load', 'game_world', 'game_menu', 'quit']
         is_running (bool): Whether game loop is to continue iteration.
         clock (pygame.time.Clock): Clock to track framerate
+        music1 (pygame.mixer.Sound): Happy music.
+        music2 (pygame.mixer.Sound): Epic music.
 
         GameState instances:
         title_screen (TitleScreen): Title screen.
@@ -33,7 +35,6 @@ class Game:
         game_over (GameOver): Game over screen.
         
     """
-
     # Attributes
     __screen = None
     __state = None
@@ -45,19 +46,8 @@ class Game:
     __world_init = None
     __world_load = None
     __game_over = None
-
-    # Constructor
-    def __init__(self, screen, state, is_running, clock, title_screen, game_world, game_menu, world_init, world_load, game_over):
-        self.setScreen(screen)
-        self.setState(state)
-        self.setIsRunning(is_running)
-        self.setClock(clock)
-        self.setTitleScreen(title_screen)
-        self.setGameWorld(game_world)
-        self.setGameMenu(game_menu)
-        self.setWorldInit(world_init)
-        self.setWorldLoad(world_load)
-        self.setGameOver(game_over)
+    __music1 = None
+    __music2 = None
 
     # Constructor
     def __init__(self, 
@@ -73,6 +63,9 @@ class Game:
         self.setWorldInit(WorldInit())
         self.setWorldLoad(WorldLoad())
         self.setGameWorld(None)
+        self.setMusic1(pygame.mixer.Sound('music/epic song 1.wav'))
+        self.setMusic2(pygame.mixer.Sound('music/more epic song.wav'))
+        self.getMusic1().play(-1)
 
     # Getters
     def getScreen(self) -> pygame.Surface:
@@ -95,6 +88,10 @@ class Game:
         return self.__world_load
     def getGameOver(self) -> GameOver:
         return self.__game_over
+    def getMusic1(self) -> pygame.mixer.Sound:
+        return self.__music1
+    def getMusic2(self) -> pygame.mixer.Sound:
+        return self.__music2
 
     # Setters
     def setScreen(self, screen):
@@ -117,6 +114,10 @@ class Game:
         self.__world_load = world_load
     def setGameOver(self, game_over):
         self.__game_over = game_over
+    def setMusic1(self, music1):
+        self.__music1 = music1
+    def setMusic2(self, music2):
+        self.__music2 = music2
 
     # Methods
     def runMainLoop(self) -> None:
@@ -183,6 +184,8 @@ class Game:
         # Sets the instantiated GameWorld object if it exists.
         if next_state == 'game_world':
             self.setGameWorld(world_init.getInitialisedGameWorld())
+            pygame.mixer.stop()
+            self.getMusic2().play(-1)
         self.setState(next_state)
         return world_init.getMainSurf()
 
@@ -195,6 +198,8 @@ class Game:
         next_state = world_load.run()
         # Sets the instantiated GameWorld object.
         self.setGameWorld(world_load.getInitialisedGameWorld())
+        pygame.mixer.stop()
+        self.getMusic2().play(-1)
         self.setState(next_state)
         return world_load.getMainSurf()
 
@@ -220,6 +225,8 @@ class Game:
         # Re-initialises TitleScreen if entered
         if next_state == 'title_screen':
             self.setTitleScreen(TitleScreen())
+            pygame.mixer.stop()
+            self.getMusic1().play(-1)
         return game_menu.getMainSurf()
     
     def runGameOver(self, 
