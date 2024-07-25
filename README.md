@@ -22,22 +22,22 @@ Attacks can be used by first pressing an attack button on the sidebar (on the ri
 
 If there are no targets ain range, or you simply are considering another action, you may press the Back button to deselect the attack.
 ## Weapons
-### Sword
+### Sword (RECOMMENDED)
 - Damage: High
 - Range: Medium
 - Accuracy: Medium
 
-### Bow
+### Bow (RECOMMENDED)
 - Damage: Low
 - Range: High
 - Accuracy: High
 
-### Daggers
+### Daggers (NOT RECOMMENDED) - hard to use
 - Damage: High
 - Range: Low
 - Accuracy: High
 
-### Spellbook
+### Spellbook (NOT RECOMMENDED) - too op
 - Damage: High
 - Range: High
 - Accuracy: Low
