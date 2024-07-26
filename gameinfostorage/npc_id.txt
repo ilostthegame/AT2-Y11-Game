@@ -12,6 +12,7 @@ Template for npc object as below:
 !!Is~ishaan/Ishaan/I like papadums.
 !!rr~ryan/Ryan/You should cheese yourself.
 !!mx~mengxi/Meng Xi/uhhhhhhhhh
+!!hy~hugo/Hugo/big forehead
 !!KS~kaladin_stormblessed/Kaladin Stormblessed/Life before death. Strength before weakness. Journey before destination.
 
 !!rg~random_guy/Random Guy/Yeah beat up those preppies.
