@@ -1,10 +1,11 @@
 Dining Hall
-80
-80
-240
-240
-4
-130
+160
+160
+400
+400
 8
+1530
+16
 Bo
+Gem of Persistent Tranquility
 Stone of Puzzling Longevity
