@@ -14,7 +14,7 @@ Sword attacks:
 
 Bow attacks:
 !!Sh~Shoot/60/95/6
-!!PS~Powerful Shot/120/70/4
+!!PS~Powerful Shot/120/75/4
 !!SS~Sharpshot/55/90/12
 !!Ts~Trickshot/400/25/6
 
@@ -46,8 +46,8 @@ Music center:
 !!Dv~Dvorak's American - 1st Movement/50/100/4
 !!Tc~Tchaikovsky's 1812/60/100/4
 !!Jz~Jazz music/60/80/4
-!!LC~La Campanella/200/40/4
-!!FE~Fur Elise/120/60/4
+!!LC~La Campanella/160/40/4
+!!FE~Fur Elise/100/60/4
 !!Tu~Tuning/40/100/4
 
 South block:

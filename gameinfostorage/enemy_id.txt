@@ -19,7 +19,7 @@ Music centre:
 !!DP~double_bass_player/Double Bass Player/12/16/200/Db/still/300
 !!TP~trombone_player/Trombone Player/25/15/200/Tb/direct/600
 !!tP~trumpet_player/Trumpet Player/20/20/200/Tp/direct/600
-!!PP~piano_player/Piano Player/65/30/1000/Pi/direct/3000
+!!PP~piano_player/Piano Player/50/30/1000/Pi/direct/3000
 
 South block:
 !!K1~tks_student_1/The Kings School Student 1/20/20/400/ph/direct/500
