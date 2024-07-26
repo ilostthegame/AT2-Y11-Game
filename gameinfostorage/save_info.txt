@@ -1,11 +1,13 @@
 Dining Hall
-160
-160
-400
-400
-8
-1530
-16
+350
+350
+780
+780
+15
+2480
+35
 Bo
-Gem of Persistent Tranquility
 Stone of Puzzling Longevity
+Jewel of Radiant Vitality
+Gem of Persistent Tranquility
+Crystal Of Eternal Light
